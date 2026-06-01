@@ -173,7 +173,9 @@ body {
   background: var(--card); border-radius: var(--radius); padding: 14px;
   box-shadow: var(--shadow); height: fit-content; position: sticky; top: 56px;
 }
-#answer-sheet h3, .sheet-top { display: flex; justify-content: space-between; align-items: center; }
+#answer-sheet h3 { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; font-weight: 600; }
+.sheet-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sheet-close-btn { color: #333 !important; font-size: 20px; padding: 6px 10px; -webkit-tap-highlight-color: transparent; }
 #sheet-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin-bottom: 10px; }
 .sheet-cell {
   width: 100%; aspect-ratio: 1; border-radius: 4px;
