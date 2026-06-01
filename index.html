@@ -102,8 +102,9 @@
     </main>
 
     <aside id="answer-sheet">
-      <div class="sheet-top desktop-only">
+      <div class="sheet-top">
         <h3>📋 答题卡</h3>
+        <button class="btn btn-icon mobile-only" onclick="toggleSheet()" style="color:var(--text);">✕</button>
       </div>
       <div id="sheet-grid"></div>
       <div class="sheet-legend">
@@ -114,6 +115,9 @@
       </div>
     </aside>
   </div>
+
+  <!-- 移动端答题卡遮罩 -->
+  <div id="sheet-overlay" class="mobile-only" onclick="toggleSheet()"></div>
 
   <!-- 移动端底部栏 -->
   <nav id="mobile-nav" class="mobile-only">
