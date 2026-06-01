@@ -175,7 +175,7 @@ body {
 }
 #answer-sheet h3 { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; font-weight: 600; }
 .sheet-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.sheet-close-btn { color: #333 !important; font-size: 20px; padding: 6px 10px; -webkit-tap-highlight-color: transparent; }
+.sheet-close-btn { display: none; color: #e65100; font-size: 15px; cursor: pointer; padding: 4px 8px; user-select: none; -webkit-tap-highlight-color: transparent; }
 #sheet-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin-bottom: 10px; }
 .sheet-cell {
   width: 100%; aspect-ratio: 1; border-radius: 4px;
@@ -247,6 +247,7 @@ body {
   .option-item { padding: 10px 12px; font-size: 13px; }
 
   /* 答题卡底部面板 */
+  .sheet-close-btn { display: inline; }
   #sheet-overlay {
     display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.4); z-index: 265;
