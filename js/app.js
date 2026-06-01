@@ -524,13 +524,14 @@ function toggleSidebar() {
 function toggleSheet() {
   const sheet = document.getElementById('answer-sheet');
   const overlay = document.getElementById('sheet-overlay');
-  const isOpen = sheet.classList.contains('open');
-  if (isOpen) {
+  if (sheet.classList.contains('open')) {
     sheet.classList.remove('open');
-    if (overlay) overlay.classList.remove('show');
+    sheet.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
   } else {
+    sheet.style.display = 'block';
     sheet.classList.add('open');
-    if (overlay) overlay.classList.add('show');
+    if (overlay) overlay.style.display = 'block';
   }
 }
 // 点击知识点标签跳转
