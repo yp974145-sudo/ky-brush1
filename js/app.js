@@ -523,6 +523,7 @@ function toggleSidebar() {
 }
 function toggleSheet() {
   document.getElementById('answer-sheet').classList.toggle('open');
+  document.getElementById('sheet-overlay').classList.toggle('show');
 }
 // 点击知识点标签跳转
 function jumpToTopic(topicKey) {
