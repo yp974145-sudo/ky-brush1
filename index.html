@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>考研刷题 - 408 · 数学 · 政治 · 英语</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+  <header id="header">
+    <button class="btn btn-icon mobile-only" id="btn-menu" onclick="toggleSidebar()" aria-label="菜单">☰</button>
+    <div class="logo">
+      <span class="logo-icon">📚</span>
+      <span class="logo-text">考研刷题</span>
+    </div>
+    <div class="header-stats desktop-only">
+      <span class="stat-item">📝 <strong id="stat-total">0</strong></span>
+      <span class="stat-item correct">✅ <strong id="stat-correct">0</strong></span>
+      <span class="stat-item wrong">❌ <strong id="stat-wrong">0</strong></span>
+      <span class="stat-item">📊 <strong id="stat-rate">--</strong></span>
+    </div>
+    <div class="header-actions desktop-only">
+      <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题本 <span id="wrong-count" class="badge">0</span></button>
+      <button class="btn btn-outline" onclick="resetProgress()">🔄 重置</button>
+    </div>
+    <button class="btn btn-icon mobile-only" id="btn-sheet" onclick="toggleSheet()" aria-label="答题卡">📋</button>
+  </header>
+
+  <!-- 移动端筛选遮罩 -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div id="main">
+    <aside id="sidebar">
+      <div class="sidebar-header mobile-only">
+        <span>🔍 筛选</span>
+        <button class="btn btn-icon" onclick="toggleSidebar()">✕</button>
+      </div>
+      <div class="filter-section">
+        <h3>📂 科目组</h3>
+        <div id="group-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>📚 学科</h3>
+        <div id="subject-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>🏷 知识点</h3>
+        <div id="topic-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>📅 年份</h3>
+        <div id="year-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>⚡ 模式</h3>
+        <button class="btn btn-full" onclick="startRandom()">🎲 随机刷题</button>
+        <button class="btn btn-full" style="margin-top:6px;" onclick="reviewWrong()">🔁 重做错题</button>
+      </div>
+      <div class="filter-section stats-box">
+        <h3>📊 当前筛选</h3>
+        <div><span class="label">总题数：</span><strong id="filter-count">0</strong></div>
+        <div><span class="label">已完成：</span><strong id="filter-done">0</strong></div>
+        <div><span class="label">正确率：</span><strong id="filter-rate">--</strong></div>
+      </div>
+    </aside>
+
+    <main id="content">
+      <div id="welcome">
+        <div class="welcome-icon">🎯</div>
+        <h2>考研公共课刷题</h2>
+        <p>408计算机 · 数学一/二/三 · 政治 · 英语一/二</p>
+        <p class="welcome-sub">覆盖历年真题，支持单选/多选/填空</p>
+        <div class="quick-actions">
+          <button class="btn btn-primary" onclick="startRandom()">🎲 随机刷题</button>
+          <button class="btn btn-secondary" onclick="selectAllSubjects()">📝 全部浏览</button>
+        </div>
+      </div>
+
+      <div id="question-area" style="display:none;">
+        <div id="question-nav">
+          <span id="q-index"></span>
+          <span id="q-tag"></span>
+        </div>
+        <div id="question-body">
+          <div id="q-passage" style="display:none;"></div>
+          <div id="q-text"></div>
+          <pre id="q-code" style="display:none;"></pre>
+          <div id="q-options"></div>
+          <div id="q-fill" style="display:none;">
+            <input type="text" id="fill-answer" class="fill-input" placeholder="输入你的答案..." onkeydown="if(event.key==='Enter')submitAnswer()">
+          </div>
+        </div>
+        <div id="question-actions">
+          <button class="btn btn-primary" id="btn-submit" onclick="submitAnswer()">✓ 提交</button>
+          <button class="btn btn-mark-btn" id="btn-mark" onclick="toggleMark()">🏷 标记</button>
+          <button class="btn btn-secondary" id="btn-next" style="display:none;" onclick="nextQuestion()">→ 下一题</button>
+        </div>
+        <div id="result-area" style="display:none;"></div>
+      </div>
+    </main>
+
+    <aside id="answer-sheet">
+      <div class="sheet-top desktop-only">
+        <h3>📋 答题卡</h3>
+      </div>
+      <div id="sheet-grid"></div>
+      <div class="sheet-legend">
+        <span><span class="dot undone"></span>未答</span>
+        <span><span class="dot correct-dot"></span>对</span>
+        <span><span class="dot wrong-dot"></span>错</span>
+        <span><span class="dot marked"></span>标记</span>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 移动端底部栏 -->
+  <nav id="mobile-nav" class="mobile-only">
+    <button class="nav-btn" onclick="showQuestion(Math.max(0,currentIndex-1))" id="nav-prev">◀ 上一题</button>
+    <button class="nav-btn" onclick="toggleSheet()" id="nav-sheet">📋 答题卡</button>
+    <button class="nav-btn" onclick="showQuestion(Math.min(currentQuestions.length-1,currentIndex+1))" id="nav-next">下一题 ▶</button>
+  </nav>
+</div>
+
+<script src="js/subjects.js"></script>
+<script src="js/data-408.js"></script>
+<script src="js/data-math.js"></script>
+<script src="js/data-politics.js"></script>
+<script src="js/data-english.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
