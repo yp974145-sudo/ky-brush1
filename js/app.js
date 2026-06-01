@@ -522,8 +522,16 @@ function toggleSidebar() {
   document.getElementById('sidebar-overlay').classList.toggle('show');
 }
 function toggleSheet() {
-  document.getElementById('answer-sheet').classList.toggle('open');
-  document.getElementById('sheet-overlay').classList.toggle('show');
+  const sheet = document.getElementById('answer-sheet');
+  const overlay = document.getElementById('sheet-overlay');
+  const isOpen = sheet.classList.contains('open');
+  if (isOpen) {
+    sheet.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+  } else {
+    sheet.classList.add('open');
+    if (overlay) overlay.classList.add('show');
+  }
 }
 // 点击知识点标签跳转
 function jumpToTopic(topicKey) {
