@@ -244,9 +244,9 @@ const Stats = {
     const records = Storage.getCheckinRecords();
     const weeks = [];
     const today = new Date();
-    // 从今天往前推 84 天（12周）
+    // 显示最近 8 周
     const startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - 83);
+    startDate.setDate(startDate.getDate() - 55);
     // 对齐到周日
     startDate.setDate(startDate.getDate() - startDate.getDay());
 

@@ -585,6 +585,10 @@ body {
   width: 13px; height: 13px; border-radius: 2px;
   display: inline-block; flex-shrink: 0;
 }
+@media (max-width: 768px) {
+  .cal-cell { width: 11px; height: 11px; }
+  .calendar-months .cal-month-label { font-size: 7px; width: 11px; }
+}
 .cal-empty { background: transparent; }
 .cal-l0 { background: #ebedf0; }
 .cal-l1 { background: #c6e48b; }
