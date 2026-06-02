@@ -7,13 +7,26 @@
 let currentFilter = { groups: [], subjects: [], years: [], topics: [] };
 let currentQuestions = [], currentIndex = -1, selectedOption = null, selectedMulti = {};
 
-const QUESTION_BANK = [
-  ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
-  ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
-  ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
-  ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
-  ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : [])
-];
+// 动态题库：静态数据 + localStorage 导入的题目
+function getQuestionBank() {
+  const imported = [];
+  try {
+    const raw = localStorage.getItem('ky-imported-questions');
+    if (raw) imported.push(...JSON.parse(raw));
+  } catch(e) {}
+  return [
+    ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
+    ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
+    ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
+    ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
+    ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
+    ...imported
+  ];
+}
+
+// 全局使用函数获取最新题库
+function getBank() { return getQuestionBank(); }
+const QUESTION_BANK = getQuestionBank();
 
 // ---- Init ----
 function init() {
@@ -204,7 +217,7 @@ function applyFilter() {
     return [tp.subject];
   }).flat();
 
-  let filtered = QUESTION_BANK.filter(q => {
+  let filtered = getBank().filter(q => {
     const s = currentFilter.subjects.length === 0 || currentFilter.subjects.includes(q.subject);
     const y = currentFilter.years.length === 0 || currentFilter.years.includes(q.year);
     const t = currentFilter.topics.length === 0 || topicSubjects.includes(q.subject);
@@ -227,7 +240,7 @@ function startRandom() {
   currentFilter.subjects = Object.keys(SUBJECTS);
   currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
   renderGroupFilters(); renderSubjectFilters(); renderYearFilters(); renderTopicFilters();
-  currentQuestions = [...QUESTION_BANK];
+  currentQuestions = [...getBank()];
   shuffle(currentQuestions);
   currentIndex = -1; selectedOption = null; selectedMulti = {};
   Search.keyword = '';
@@ -237,7 +250,7 @@ function startRandom() {
 
 function reviewWrong() {
   mode = 'wrong';
-  currentQuestions = QUESTION_BANK.filter(q => Storage.isWrong(q.id));
+  currentQuestions = getBank().filter(q => Storage.isWrong(q.id));
   currentIndex = -1; selectedOption = null; selectedMulti = {};
   renderSheet(); updateFilterStats();
   if (currentQuestions.length > 0) showQuestion(0);
@@ -246,7 +259,7 @@ function reviewWrong() {
 
 function showFavorites() {
   mode = 'favorites';
-  currentQuestions = QUESTION_BANK.filter(q => Storage.isFavorite(q.id));
+  currentQuestions = getBank().filter(q => Storage.isFavorite(q.id));
   currentIndex = -1; selectedOption = null; selectedMulti = {};
   renderSheet(); updateFilterStats();
   if (currentQuestions.length > 0) showQuestion(0);
@@ -263,7 +276,7 @@ function startWrongRedo() {
   const count = Math.min(wrongIds.length, parseInt(prompt(`共 ${wrongIds.length} 道错题，抽几题重做？`, Math.min(10, wrongIds.length))) || 10);
   if (isNaN(count) || count <= 0) return;
 
-  const pool = QUESTION_BANK.filter(q => wrongIds.includes(q.id));
+  const pool = getBank().filter(q => wrongIds.includes(q.id));
   shuffle(pool);
   currentQuestions = pool.slice(0, count);
   currentIndex = -1; selectedOption = null; selectedMulti = {};
@@ -606,7 +619,8 @@ function renderSheet() {
 function updateAllStats() {
   const done = Storage.getSubmittedIds().length;
   let corr = 0;
-  QUESTION_BANK.forEach(q => {
+  const bank = getBank();
+  bank.forEach(q => {
     if (!Storage.isSubmitted(q.id)) return;
     const userAns = Storage.getAnswer(q.id);
     let isCorrect = false;
@@ -621,7 +635,7 @@ function updateAllStats() {
     }
     if (isCorrect) corr++;
   });
-  document.getElementById('stat-total').textContent = QUESTION_BANK.length;
+  document.getElementById('stat-total').textContent = bank.length;
   document.getElementById('stat-correct').textContent = corr;
   document.getElementById('stat-wrong').textContent = done - corr;
   document.getElementById('stat-rate').textContent = done > 0 ? Math.round(corr/done*100)+'%' : '--';
@@ -830,7 +844,7 @@ function renderMobileSearchResults() {
     container.innerHTML = '<div style="text-align:center;color:#999;padding:24px;">输入关键词开始搜索</div>';
     return;
   }
-  const results = QUESTION_BANK.filter(q => {
+  const results = getBank().filter(q => {
     if (q.id.toLowerCase().includes(kw)) return true;
     if (q.question.toLowerCase().includes(kw)) return true;
     if (q.options && q.options.some(o => o.toLowerCase().includes(kw))) return true;
@@ -855,7 +869,7 @@ function jumpToMobileSearchResult(qId, subject) {
   currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
   mode = 'filter';
   renderGroupFilters(); renderSubjectFilters(); renderTopicFilters(); renderYearFilters();
-  currentQuestions = QUESTION_BANK.filter(q => q.subject === subject);
+  currentQuestions = getBank().filter(q => q.subject === subject);
   const idx = currentQuestions.findIndex(q => q.id === qId);
   renderSheet(); updateFilterStats();
   showQuestion(idx >= 0 ? idx : 0);
