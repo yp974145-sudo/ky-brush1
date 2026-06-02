@@ -26,6 +26,19 @@ const Storage = {
     if (saved && saved.nickname && this._data._accounts[saved.nickname]) {
       this.switchTo(saved.nickname);
     }
+    // 确保至少有一个活跃账户（访客模式）
+    if (!this._currentUser) {
+      const keys = Object.keys(this._data._accounts);
+      if (keys.length > 0) {
+        this.switchTo(keys[0]);
+      } else {
+        // 创建一个访客账户以保证数据写入正常
+        this._data._accounts['__guest__'] = this._newAccount();
+        this._currentUser = '__guest__';
+        this._data._currentUser = '__guest__';
+        this._flush();
+      }
+    }
     return this._data;
   },
 
@@ -75,13 +88,15 @@ const Storage = {
 
   get(key) {
     const acc = this._acc();
-    return acc ? acc[key] : this._data[key];
+    if (acc) return acc[key];
+    // 无账户时返回根级别数据，没有则返回空对象
+    return this._data[key] || {};
   },
 
   set(key, val) {
     const acc = this._acc();
-    if (acc) acc[key] = val;
-    else this._data[key] = val;
+    if (acc) { acc[key] = val; }
+    else { this._data[key] = val; }
     this._flush();
     this._emit(key, val);
   },
