@@ -375,6 +375,18 @@ body {
   color: #f54a45; border-radius: 6px; font-size: 12px;
 }
 
+/* ---- 我的面板 ---- */
+.me-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.me-header h3 { font-size: 17px; }
+.me-close { cursor: pointer; font-size: 18px; color: #999; padding: 4px; }
+.me-form { display: flex; flex-direction: column; gap: 14px; }
+.me-error { padding: 8px 12px; background: #fff0f0; color: #f54a45; border-radius: 6px; font-size: 12px; }
+.me-hint { font-size: 11px; color: #bbb; text-align: center; margin: 0; }
+.me-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+.me-profile { text-align: center; padding: 4px 0 12px; }
+.me-actions { display: flex; flex-direction: column; gap: 6px; }
+.btn-me-action { justify-content: center; padding: 10px; font-size: 14px; border: 1px solid #ddd; color: #333; background: #fafafa; width: 100%; }
+
 /* ---- User Panel ---- */
 .user-info { text-align: center; padding: 12px 0; }
 .user-avatar { font-size: 48px; margin-bottom: 6px; }

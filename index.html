@@ -41,6 +41,7 @@
       <button class="btn btn-outline" onclick="resetProgress()">🔄 重置</button>
     </div>
     <button class="btn btn-icon mobile-only" id="btn-sheet" onclick="toggleSheet()" aria-label="答题卡">📋</button>
+    <button class="btn btn-icon mobile-only" id="btn-me" onclick="Auth.showMyPanel()" aria-label="我的" style="font-size:16px;">👤</button>
   </header>
 
   <!-- 移动端筛选遮罩 -->
@@ -143,7 +144,7 @@
 
   <!-- 移动端底部栏 -->
   <nav id="mobile-nav" class="mobile-only">
-    <button class="nav-btn" onclick="startExam()">⏱ 考试</button>
+    <button class="nav-btn" onclick="showQuestion(Math.max(0,currentIndex-1))" id="nav-prev">◀ 上一题</button>
     <button class="nav-btn" onclick="toggleSheet()" id="nav-sheet">📋 答题卡</button>
     <button class="nav-btn" onclick="showQuestion(Math.min(currentQuestions.length-1,currentIndex+1))" id="nav-next">下一题 ▶</button>
   </nav>
