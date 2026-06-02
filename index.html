@@ -48,6 +48,7 @@
           <button class="drop-item" onclick="ShareCard.show();closeHeaderMore()">📤 分享</button>
           <button class="drop-item" onclick="Planner.show();closeHeaderMore()">📋 学习规划器</button>
           <button class="drop-item" onclick="BankManager.show();closeHeaderMore()">📦 题库管理</button>
+          <button class="drop-item" onclick="toggleScratchpad();closeHeaderMore()">💻 代码草稿板</button>
           <button class="drop-item" onclick="KaoyanGuide.show();closeHeaderMore()">📅 考研指南</button>
           <button class="drop-item" onclick="toggleDarkMode();closeHeaderMore()">🌓 深色模式</button>
           <button class="drop-item" onclick="resetProgress();closeHeaderMore()">🔄 重置</button>
@@ -84,6 +85,10 @@
         <div id="year-filters"></div>
       </div>
       <div class="filter-section">
+        <h3>📝 题型</h3>
+        <div id="type-filters"></div>
+      </div>
+      <div class="filter-section">
         <h3>⚡ 模式</h3>
         <button class="btn btn-full" onclick="startRandom()">🎲 随机刷题</button>
         <button class="btn btn-full" style="margin-top:6px;" onclick="reviewWrong()">🔁 浏览错题</button>
@@ -94,6 +99,7 @@
         <button class="btn btn-full" style="margin-top:6px;background:#9C27B0;" onclick="Planner.show()">📋 学习规划器</button>
         <button class="btn btn-full" style="margin-top:6px;background:#607D8B;" onclick="BankManager.show()">📦 题库管理</button>
         <button class="btn btn-full" style="margin-top:6px;background:#1e1e2e;color:#cdd6f4;" onclick="showCodeQuestions()">💻 编程题 (18)</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#0d1117;color:#58a6ff;border:1px solid #30363d;" onclick="toggleScratchpad()">💻 代码草稿板</button>
       </div>
       <div class="filter-section stats-box">
         <h3>📊 当前筛选</h3>
@@ -163,6 +169,25 @@
   <!-- 移动端答题卡遮罩 -->
   <div id="sheet-overlay" onclick="toggleSheet()"></div>
 
+  <!-- 代码草稿板（底部滑出） -->
+  <div id="scratchpad-overlay" onclick="toggleScratchpad()"></div>
+  <div id="scratchpad">
+    <div class="scratch-handle"></div>
+    <div class="scratch-top">
+      <span>💻 代码草稿板</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <select id="scratch-lang" class="scratch-lang-select" onchange="Scratchpad._onLangChange()">
+          <option value="js">JavaScript</option>
+          <option value="c">C 语言</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="Scratchpad.run()">▶ 运行</button>
+        <button class="sheet-close-btn" onclick="toggleScratchpad()" aria-label="关闭">✕</button>
+      </div>
+    </div>
+    <textarea id="scratch-code" class="scratch-editor" placeholder="在这里写代码...&#10;&#10;// JavaScript 示例:&#10;console.log('Hello World');" spellcheck="false"></textarea>
+    <div id="scratch-output" class="scratch-output"></div>
+  </div>
+
   <!-- 移动端搜索面板 -->
   <div id="mobile-search-panel">
     <div class="ms-panel-top">
@@ -179,6 +204,7 @@
     <button class="nav-btn" onclick="showFavorites()">⭐ 收藏</button>
     <button class="nav-btn" onclick="toggleSheet()" id="nav-sheet">📋 答题卡</button>
     <button class="nav-btn" onclick="reviewWrong()">❌ 错题</button>
+    <button class="nav-btn" onclick="toggleScratchpad()">💻 草稿</button>
     <button class="nav-btn" onclick="Auth.showMyPanel()">👤 我的</button>
   </nav>
 </div>
@@ -204,6 +230,7 @@
 <script src="js/kaoyan-guide.js"></script>
 <script src="js/kaoyan-planner.js"></script>
 <script src="js/bank-manager.js"></script>
+<script src="js/scratchpad.js"></script>
 <script src="js/share-card.js"></script>
 <script src="js/code-editor.js"></script>
 <script src="js/app.js"></script>

@@ -4,7 +4,14 @@
 // ============================================================
 
 // ---- 全局状态 ----
-let currentFilter = { groups: [], subjects: [], years: [], topics: [] };
+let currentFilter = { groups: [], subjects: [], years: [], topics: [], types: [] };
+
+const QUESTION_TYPE_FILTERS = {
+  single: { name: '单选', icon: '○' },
+  multi: { name: '多选', icon: '☐' },
+  fill: { name: '填空', icon: '✎' },
+  code: { name: '编程', icon: '💻' },
+};
 let currentQuestions = [], currentIndex = -1, selectedOption = null, selectedMulti = {};
 
 // 动态题库：静态数据 + localStorage 导入的题目
@@ -42,6 +49,7 @@ function init() {
   renderSubjectFilters();
   renderYearFilters();
   renderTopicFilters();
+  renderTypeFilters();
   selectAllSubjects();
   updateAllStats();
 
@@ -146,10 +154,12 @@ function selectAllSubjects() {
   currentFilter.subjects = Object.keys(SUBJECTS);
   currentFilter.years = [];
   currentFilter.topics = [];
+  currentFilter.types = [];
   renderGroupFilters();
   renderSubjectFilters();
   renderYearFilters();
   renderTopicFilters();
+  renderTypeFilters();
   applyFilter();
 }
 
@@ -174,6 +184,29 @@ function renderYearFilters() {
     };
     c.appendChild(chip);
   });
+}
+
+// ---- Type Filters ----
+function renderTypeFilters() {
+  const c = document.getElementById('type-filters');
+  if (!c) return;
+  c.innerHTML = '';
+  Object.entries(QUESTION_TYPE_FILTERS).forEach(([k, v]) => {
+    const chip = document.createElement('span');
+    chip.className = 'filter-chip';
+    chip.textContent = v.icon + ' ' + v.name;
+    chip.onclick = () => toggleType(k);
+    if (currentFilter.types.includes(k)) chip.classList.add('active');
+    c.appendChild(chip);
+  });
+}
+
+function toggleType(key) {
+  const idx = currentFilter.types.indexOf(key);
+  if (idx >= 0) currentFilter.types.splice(idx, 1);
+  else currentFilter.types.push(key);
+  renderTypeFilters();
+  applyFilter();
 }
 
 // ---- Topic Filters ----
@@ -221,7 +254,8 @@ function applyFilter() {
     const s = currentFilter.subjects.length === 0 || currentFilter.subjects.includes(q.subject);
     const y = currentFilter.years.length === 0 || currentFilter.years.includes(q.year);
     const t = currentFilter.topics.length === 0 || topicSubjects.includes(q.subject);
-    return s && y && t;
+    const tp = currentFilter.types.length === 0 || currentFilter.types.includes(q.type);
+    return s && y && t && tp;
   });
 
   // 搜索二次过滤
