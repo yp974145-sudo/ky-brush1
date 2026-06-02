@@ -31,14 +31,19 @@
       <span class="stat-item">📊 <strong id="stat-rate">--</strong></span>
     </div>
     <div class="header-actions desktop-only">
-      <button class="btn btn-outline" onclick="startExam()">⏱ 模拟考试</button>
-      <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题本 <span id="wrong-count" class="badge">0</span></button>
-      <button class="btn btn-outline" onclick="showFavorites()">⭐ 收藏 <span id="fav-count" class="badge">0</span></button>
-      <button class="btn btn-outline" onclick="Stats.show()">📊 统计</button>
-      <button class="btn btn-outline" onclick="PlanUI.show()">📋 计划</button>
-      <button class="btn btn-outline" onclick="ShareCard.show()">📤 分享</button>
+      <button class="btn btn-outline" onclick="startExam()">⏱ 考试</button>
+      <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题 <span id="wrong-count" class="badge">0</span></button>
       <button class="btn btn-outline" id="btn-login-ui" onclick="Auth.showLoginModal()">登录</button>
-      <button class="btn btn-outline" onclick="resetProgress()">🔄 重置</button>
+      <div class="header-more-wrap">
+        <button class="btn btn-outline" onclick="toggleHeaderMore()">⋯ 更多</button>
+        <div class="header-more-drop" id="header-more-drop">
+          <button class="drop-item" onclick="showFavorites();closeHeaderMore()">⭐ 收藏 <span id="fav-count2" class="badge">0</span></button>
+          <button class="drop-item" onclick="Stats.show();closeHeaderMore()">📊 统计</button>
+          <button class="drop-item" onclick="PlanUI.show();closeHeaderMore()">📋 计划</button>
+          <button class="drop-item" onclick="ShareCard.show();closeHeaderMore()">📤 分享</button>
+          <button class="drop-item" onclick="resetProgress();closeHeaderMore()">🔄 重置</button>
+        </div>
+      </div>
     </div>
     <button class="btn btn-icon mobile-only" id="btn-sheet" onclick="toggleSheet()" aria-label="答题卡">📋</button>
     <button class="btn btn-icon mobile-only" id="btn-me" onclick="Auth.showMyPanel()" aria-label="我的" style="font-size:16px;">👤</button>
@@ -118,6 +123,7 @@
         <div id="question-actions">
           <button class="btn btn-primary" id="btn-submit" onclick="submitAnswer()">✓ 提交</button>
           <button class="btn btn-mark-btn" id="btn-mark" onclick="toggleMark()">🏷 标记</button>
+          <button class="btn btn-secondary mobile-only" id="btn-prev" style="display:none;" onclick="prevQuestion()">◀ 上一题</button>
           <button class="btn btn-secondary" id="btn-next" style="display:none;" onclick="nextQuestion()">→ 下一题</button>
         </div>
         <div id="result-area" style="display:none;"></div>
@@ -125,9 +131,10 @@
     </main>
 
     <aside id="answer-sheet">
+      <div class="sheet-handle"></div>
       <div class="sheet-top">
         <h3>📋 答题卡</h3>
-        <span onclick="toggleSheet()" class="sheet-close-btn">✕ 关闭</span>
+        <button class="sheet-close-btn" onclick="toggleSheet()" aria-label="关闭">✕</button>
       </div>
       <div id="sheet-grid"></div>
       <div class="sheet-legend">
@@ -142,23 +149,37 @@
   <!-- 移动端答题卡遮罩 -->
   <div id="sheet-overlay" onclick="toggleSheet()"></div>
 
+  <!-- 移动端搜索面板 -->
+  <div id="mobile-search-panel" class="mobile-only">
+    <div class="ms-panel-top">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="mobile-search-input" class="search-input" placeholder="搜题目、知识点、关键字..." autocomplete="off">
+      <button class="btn btn-icon" onclick="toggleMobileSearch()" style="color:var(--text);font-size:18px;">✕</button>
+    </div>
+    <div id="mobile-search-result" class="ms-panel-result"></div>
+  </div>
+
   <!-- 移动端底部栏 -->
   <nav id="mobile-nav" class="mobile-only">
-    <button class="nav-btn" onclick="showQuestion(Math.max(0,currentIndex-1))" id="nav-prev">◀ 上一题</button>
+    <button class="nav-btn nav-btn-search" onclick="toggleMobileSearch()">🔍 搜索</button>
+    <button class="nav-btn" onclick="showFavorites()">⭐ 收藏</button>
     <button class="nav-btn" onclick="toggleSheet()" id="nav-sheet">📋 答题卡</button>
-    <button class="nav-btn" onclick="showQuestion(Math.min(currentQuestions.length-1,currentIndex+1))" id="nav-next">下一题 ▶</button>
+    <button class="nav-btn" onclick="reviewWrong()">❌ 错题</button>
+    <button class="nav-btn" onclick="Auth.showMyPanel()">👤 我的</button>
   </nav>
 </div>
 
 <!-- 模拟考试面板（动态渲染） -->
 <div id="exam-panel" style="display:none;"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/subjects.js"></script>
 <script src="js/data-408.js"></script>
 <script src="js/data-math.js"></script>
 <script src="js/data-politics.js"></script>
 <script src="js/data-english.js"></script>
 <script src="js/storage.js"></script>
+<script src="js/supabase.js"></script>
 <script src="js/search.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/exam-mode.js"></script>

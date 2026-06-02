@@ -45,6 +45,9 @@ function init() {
 
   // 初始化学习计划
   Plan.init();
+
+  // 答题卡滑动
+  initSheetSwipe();
 }
 
 // ---- 打卡（每日自动） ----
@@ -378,6 +381,8 @@ function showQuestion(index) {
   };
 
   document.getElementById('btn-next').style.display = submitted ? 'inline-flex' : 'none';
+  const btnPrev = document.getElementById('btn-prev');
+  if (btnPrev) btnPrev.style.display = submitted ? 'inline-flex' : 'none';
 
   // Result
   const resultArea = document.getElementById('result-area');
@@ -502,6 +507,9 @@ function toggleMark() {
   showQuestion(currentIndex);
 }
 
+function prevQuestion() {
+  if (currentIndex > 0) showQuestion(currentIndex - 1);
+}
 function nextQuestion() {
   if (currentIndex < currentQuestions.length - 1) showQuestion(currentIndex + 1);
 }
@@ -565,6 +573,8 @@ function updateAllStats() {
   document.getElementById('stat-rate').textContent = done > 0 ? Math.round(corr/done*100)+'%' : '--';
   document.getElementById('wrong-count').textContent = Storage.getWrongIds().length;
   document.getElementById('fav-count').textContent = Storage.getFavoriteIds().length;
+  const fc2 = document.getElementById('fav-count2');
+  if (fc2) fc2.textContent = Storage.getFavoriteIds().length;
 }
 
 function updateFilterStats() {
@@ -647,23 +657,137 @@ function selectOptionUniversal(letter) {
   showQuestion(currentIndex);
 }
 
+// ---- Header Dropdown ----
+function toggleHeaderMore() {
+  const d = document.getElementById('header-more-drop');
+  d.classList.toggle('show');
+}
+function closeHeaderMore() {
+  const d = document.getElementById('header-more-drop');
+  if (d) d.classList.remove('show');
+}
+// 点击别处关闭下拉
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.header-more-wrap')) closeHeaderMore();
+});
+
 // ---- Start ----
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('show');
 }
+
+// 答题卡开关
 function toggleSheet() {
   const sheet = document.getElementById('answer-sheet');
+  if (sheet.classList.contains('open')) closeSheet();
+  else openSheet();
+}
+function openSheet() {
+  const sheet = document.getElementById('answer-sheet');
   const overlay = document.getElementById('sheet-overlay');
-  if (sheet.classList.contains('open')) {
-    sheet.classList.remove('open');
-    sheet.style.display = 'none';
-    if (overlay) overlay.style.display = 'none';
+  sheet.classList.add('open');
+  if (overlay) overlay.classList.add('show');
+}
+function closeSheet() {
+  const sheet = document.getElementById('answer-sheet');
+  const overlay = document.getElementById('sheet-overlay');
+  sheet.classList.remove('open');
+  sheet.style.transform = ''; // 清理滑动残留
+  if (overlay) overlay.classList.remove('show');
+}
+
+// 答题卡触摸下滑关闭
+function initSheetSwipe() {
+  const sheet = document.getElementById('answer-sheet');
+  let startY = 0, dragging = false;
+
+  sheet.addEventListener('touchstart', function(e) {
+    if (!sheet.classList.contains('open')) return;
+    const touchY = e.touches[0].clientY;
+    const sheetTop = sheet.getBoundingClientRect().top;
+    const grid = document.getElementById('sheet-grid');
+    const atTop = grid.scrollTop <= 0;
+    const inHeader = (touchY - sheetTop) < 80;
+    if (!inHeader && !atTop) return;
+    startY = touchY;
+    dragging = true;
+    sheet.style.transition = 'none';
+  }, { passive: false });
+
+  sheet.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy > 0) {
+      e.preventDefault();
+      sheet.style.transform = `translateY(${dy}px)`;
+    }
+  }, { passive: false });
+
+  sheet.addEventListener('touchend', function() {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    const dy = event.changedTouches[0].clientY - startY;
+    if (dy > 80) closeSheet();
+    else sheet.style.transform = '';
+  });
+}
+
+// ---- 移动端搜索面板 ----
+function toggleMobileSearch() {
+  const panel = document.getElementById('mobile-search-panel');
+  const input = document.getElementById('mobile-search-input');
+  const isOpen = panel.classList.contains('show');
+  if (isOpen) {
+    panel.classList.remove('show');
   } else {
-    sheet.style.display = 'block';
-    sheet.classList.add('open');
-    if (overlay) overlay.style.display = 'block';
+    panel.classList.add('show');
+    input.value = Search.getKeyword();
+    input.focus();
+    renderMobileSearchResults();
   }
+}
+
+function renderMobileSearchResults() {
+  const container = document.getElementById('mobile-search-result');
+  const input = document.getElementById('mobile-search-input');
+  if (!container) return;
+  const kw = input.value.trim().toLowerCase();
+  if (!kw) {
+    container.innerHTML = '<div style="text-align:center;color:#999;padding:24px;">输入关键词开始搜索</div>';
+    return;
+  }
+  const results = QUESTION_BANK.filter(q => {
+    if (q.id.toLowerCase().includes(kw)) return true;
+    if (q.question.toLowerCase().includes(kw)) return true;
+    if (q.options && q.options.some(o => o.toLowerCase().includes(kw))) return true;
+    if (q.analysis && q.analysis.toLowerCase().includes(kw)) return true;
+    return false;
+  }).slice(0, 50);
+  if (results.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#999;padding:24px;">没有找到匹配的题目</div>';
+    return;
+  }
+  container.innerHTML = results.map((q, i) => `
+    <div class="ms-result-item" onclick="jumpToMobileSearchResult('${q.id}', '${q.subject}')">
+      <span class="ms-result-idx">${i + 1}</span>
+      <span>${q.question.slice(0, 60)}...</span>
+      <span class="ms-result-meta">${SUBJECTS[q.subject]?.name || ''} · ${q.year}</span>
+    </div>
+  `).join('');
+}
+
+function jumpToMobileSearchResult(qId, subject) {
+  currentFilter.subjects = [subject];
+  currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
+  mode = 'filter';
+  renderGroupFilters(); renderSubjectFilters(); renderTopicFilters(); renderYearFilters();
+  currentQuestions = QUESTION_BANK.filter(q => q.subject === subject);
+  const idx = currentQuestions.findIndex(q => q.id === qId);
+  renderSheet(); updateFilterStats();
+  showQuestion(idx >= 0 ? idx : 0);
+  toggleMobileSearch();
 }
 
 function jumpToTopic(topicKey) {
