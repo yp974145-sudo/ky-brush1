@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>题库批量录入工具</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;padding:20px}
+h1{font-size:20px;margin-bottom:16px}
+.container{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel h2{font-size:15px;margin-bottom:12px;color:#333}
+textarea{width:100%;height:400px;font-family:"JetBrains Mono","Consolas",monospace;font-size:12px;border:2px solid #e0e0e0;border-radius:8px;padding:10px;resize:vertical;outline:none}
+textarea:focus{border-color:#3370ff}
+select,input{padding:8px 12px;border:2px solid #e0e0e0;border-radius:6px;font-size:13px;margin-right:8px;margin-bottom:8px}
+.btn{padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500}
+.btn-primary{background:#3370ff;color:#fff}
+.btn-secondary{background:#e0e0e0;color:#333}
+.btn-success{background:#00b96b;color:#fff}
+.result{font-size:12px;color:#666;margin-top:8px}
+.fmt-help{font-size:11px;color:#999;line-height:1.6;margin-top:8px;background:#f9f9f9;padding:10px;border-radius:6px}
+.fmt-help b{color:#333}
+</style>
+</head>
+<body>
+<h1>📝 考研题库批量录入工具</h1>
+<div class="container">
+  <div class="panel">
+    <h2>📥 粘贴题目文本</h2>
+    <div style="margin-bottom:8px">
+      <select id="defSubject">
+        <option value="ds">408-数据结构</option><option value="co">408-计组</option>
+        <option value="os">408-操作系统</option><option value="cn">408-计网</option>
+        <option value="ma1">数学一</option><option value="ma2">数学二</option><option value="ma3">数学三</option>
+        <option value="po">政治</option><option value="en1">英语一</option><option value="en2">英语二</option>
+      </select>
+      <select id="defTopic"><option value="">默认知识点(可选)</option></select>
+      <select id="defYear"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option></select>
+      <select id="defType"><option value="single">单选</option><option value="multi">多选</option><option value="fill">填空</option></select>
+      <select id="defDiff"><option value="medium">中等</option><option value="easy">简单</option><option value="hard">较难</option></select>
+    </div>
+    <textarea id="input" placeholder="粘贴题目，格式：
+2009-01 | 2009 | ds-1 | hard
+设n是非负整数，下面程序段的时间复杂度是：
+x=2; while(x&lt;n/2) x=2*x;
+A. O(log₂n)
+B. O(n)
+C. O(nlog₂n)
+D. O(n²)
+答案: A
+解析: x从2开始每次乘2
+
+---
+(用 --- 分隔每道题)"></textarea>
+    <button class="btn btn-primary" onclick="convert()">🔀 转换为JSON</button>
+    <span class="result" id="result"></span>
+    <div class="fmt-help">
+      <b>格式说明：</b><br>
+      第一行：<b>题目ID | 年份 | 知识点 | 难度</b>（年份/知识点/难度可省略，用上面的默认值）<br>
+      第二行起：<b>题目正文</b>（可多行）<br>
+      <b>A. xxx</b> / <b>B. xxx</b> / ... <b>E. xxx</b>（选项，每行一个）<br>
+      <b>答案: A</b>（多选用 答案: ABC）<br>
+      <b>解析: xxx</b>（可选）<br>
+      题目之间用 <b>---</b> 分隔<br>
+      <b>[代码]</b> 和 <b>[/代码]</b> 之间为代码块（可选）<br>
+      <b>[原文]</b> 和 <b>[/原文]</b> 之间为阅读原文（英语可选）
+    </div>
+  </div>
+  <div class="panel">
+    <h2>📤 JSON 输出</h2>
+    <textarea id="output" readonly placeholder="转换后的JSON会出现在这里"></textarea>
+    <button class="btn btn-success" onclick="copyOutput()">📋 复制JSON</button>
+    <span class="result" id="copyResult"></span>
+    <div style="margin-top:10px;font-size:12px;color:#666">
+      复制后粘贴到对应的 js/data-xxx.js 文件的数组末尾（在 ]; 之前）
+    </div>
+  </div>
+</div>
+
+<script>
+const TOPIC_MAP = {
+  ds:[['ds-1','绪论'],['ds-2','线性表'],['ds-3','栈和队列'],['ds-4','串'],['ds-5','树与二叉树'],['ds-6','图'],['ds-7','查找'],['ds-8','排序']],
+  co:[['co-1','概述'],['co-2','数据运算'],['co-3','存储系统'],['co-4','指令系统'],['co-5','CPU'],['co-6','总线'],['co-7','I/O']],
+  os:[['os-1','OS概述'],['os-2','进程'],['os-3','内存'],['os-4','文件'],['os-5','I/O']],
+  cn:[['cn-1','体系结构'],['cn-2','物理层'],['cn-3','链路层'],['cn-4','网络层'],['cn-5','传输层'],['cn-6','应用层']],
+  ma1:[['ma-1','极限'],['ma-2','微分'],['ma-3','积分'],['ma-4','多元微分'],['ma-5','多元积分'],['ma-6','微分方程'],['ma-7','级数'],['ma-8','线代'],['ma-9','概率']],
+  ma2:[['ma-1','极限'],['ma-2','微分'],['ma-3','积分'],['ma-4','多元微分'],['ma-6','微分方程'],['ma-8','线代']],
+  ma3:[['ma-1','极限'],['ma-2','微分'],['ma-3','积分'],['ma-4','多元微分'],['ma-6','微分方程'],['ma-7','级数'],['ma-8','线代'],['ma-9','概率']],
+  po:[['po-1','马原'],['po-2','毛中特'],['po-3','史纲'],['po-4','思修'],['po-5','时政']],
+  en1:[['en-1','完形'],['en-2','阅读'],['en-3','新题型'],['en-4','翻译'],['en-5','写作']],
+  en2:[['en-1','完形'],['en-2','阅读'],['en-3','新题型'],['en-4','翻译'],['en-5','写作']]
+};
+
+document.getElementById('defSubject').addEventListener('change',function(){
+  const s=this.value,t=document.getElementById('defTopic');
+  t.innerHTML='<option value="">默认知识点(可选)</option>';
+  (TOPIC_MAP[s]||[]).forEach(([k,v])=>{t.innerHTML+=`<option value="${k}">${v}</option>`});
+});
+document.getElementById('defSubject').dispatchEvent(new Event('change'));
+
+function parseOne(text, defaults) {
+  const lines = text.trim().split('\n').map(l=>l.trim()).filter(l=>l);
+  if (lines.length < 3) return null;
+  
+  // First line: id | year | topic | diff (all optional except id)
+  const first = lines[0];
+  let id='',year=defaults.year,topic=defaults.topic,diff=defaults.diff;
+  
+  // Check if first line is metadata
+  if (first.includes('|') || /^\d{4}-\d{2}/.test(first)) {
+    const parts = first.split('|').map(p=>p.trim());
+    id = parts[0];
+    if (parts[1] && /^\d{4}$/.test(parts[1])) year = parseInt(parts[1]);
+    if (parts[2] && parts[2].includes('-')) topic = parts[2];
+    if (parts[3] && ['easy','medium','hard'].includes(parts[3])) diff = parts[3];
+    lines.shift();
+  }
+  
+  let question='', code='', passage='', options=[], answer='', analysis='';
+  let mode = 'question';
+  
+  for (const line of lines) {
+    if (line === '[代码]') { mode='code'; continue; }
+    if (line === '[/代码]') { mode='question'; continue; }
+    if (line === '[原文]') { mode='passage'; continue; }
+    if (line === '[/原文]') { mode='question'; continue; }
+    
+    if (mode === 'code') { code += (code?'\n':'') + line; continue; }
+    if (mode === 'passage') { passage += (passage?'\n':'') + line; continue; }
+    
+    const optMatch = line.match(/^([A-E])[.．、]\s*(.+)/);
+    if (optMatch) { options.push(optMatch[1]+'. '+optMatch[2]); continue; }
+    
+    const ansMatch = line.match(/^答案[：:]\s*(.+)/);
+    if (ansMatch) { answer = ansMatch[1].trim().replace(/\s/g,''); continue; }
+    
+    const anaMatch = line.match(/^解析[：:]\s*(.+)/);
+    if (anaMatch) { analysis = anaMatch[1].trim(); continue; }
+    
+    if (line === '---') continue;
+    
+    if (mode === 'question') question += (question?'\n':'') + line;
+  }
+  
+  if (!id) return null;
+  if (!question) return null;
+  
+  const type = options.length > 0 ? (answer.length > 1 ? 'multi' : 'single') : defaults.type;
+  
+  const obj = { id, year, subject: defaults.subject, topic, type };
+  if (diff !== 'medium') obj.difficulty = diff;
+  obj.question = question.trim();
+  if (code) obj.code = code;
+  if (passage) obj.passage = passage;
+  if (options.length > 0) obj.options = options;
+  obj.answer = type === 'multi' ? answer.split('') : (type === 'fill' ? answer : answer.charAt(0));
+  if (analysis) obj.analysis = analysis;
+  
+  return obj;
+}
+
+function convert() {
+  const defs = {
+    subject: document.getElementById('defSubject').value,
+    topic: document.getElementById('defTopic').value || null,
+    year: parseInt(document.getElementById('defYear').value),
+    type: document.getElementById('defType').value,
+    diff: document.getElementById('defDiff').value
+  };
+  
+  const text = document.getElementById('input').value;
+  const blocks = text.split(/\n\s*---\s*\n/).filter(b=>b.trim());
+  const results = [];
+  let errors = 0;
+  
+  blocks.forEach((block,i) => {
+    const obj = parseOne(block, defs);
+    if (obj) {
+      // Generate ID if empty
+      if (!obj.id) obj.id = `${obj.year}-${String(i+1).padStart(2,'0')}-${obj.subject}`;
+      results.push(obj);
+    } else {
+      errors++;
+    }
+  });
+  
+  if (results.length === 0) {
+    document.getElementById('output').value = '// 没有成功解析的题目，请检查格式';
+    document.getElementById('result').textContent = '❌ 解析失败';
+    return;
+  }
+  
+  // Format as JS
+  const jsLines = results.map(q => {
+    const parts = [`  { id:'${q.id}', year:${q.year}, subject:'${q.subject}', topic:'${q.topic||''}', type:'${q.type}'`];
+    if (q.difficulty && q.difficulty !== 'medium') parts[0] += `, difficulty:'${q.difficulty}'`;
+    parts.push(`    question:'${q.question.replace(/'/g,"\\'").replace(/\n/g,'\\n')}',`);
+    if (q.code) parts.push(`    code:'${q.code.replace(/'/g,"\\'").replace(/\n/g,'\\n')}',`);
+    if (q.passage) parts.push(`    passage:'${q.passage.replace(/'/g,"\\'").replace(/\n/g,'\\n')}',`);
+    if (q.options) parts.push(`    options:[${q.options.map(o=>`'${o.replace(/'/g,"\\'")}'`).join(',')}],`);
+    const ansStr = Array.isArray(q.answer) ? `[${q.answer.map(a=>`'${a}'`).join(',')}]` : `'${q.answer}'`;
+    parts.push(`    answer:${ansStr},`);
+    if (q.analysis) parts.push(`    analysis:'${q.analysis.replace(/'/g,"\\'")}'`);
+    parts.push('  }');
+    return parts.join('\n');
+  });
+  
+  document.getElementById('output').value = jsLines.join(',\n') + ',';
+  document.getElementById('result').textContent = `✅ 成功解析 ${results.length} 道题` + (errors>0?`，${errors} 道格式错误`:'');
+}
+
+function copyOutput() {
+  const out = document.getElementById('output');
+  out.select(); document.execCommand('copy');
+  document.getElementById('copyResult').textContent = '✅ 已复制到剪贴板';
+}
+</script>
+</body>
+</html>

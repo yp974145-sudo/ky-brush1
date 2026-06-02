@@ -93,6 +93,7 @@ body {
 }
 .year-chip:hover { border-color: var(--primary); }
 .year-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+#year-filters { display: flex; flex-wrap: wrap; gap: 3px; max-height: 100px; overflow-y: auto; }
 #topic-filters { display: flex; flex-wrap: wrap; gap: 4px; max-height: 160px; overflow-y: auto; }
 .topic-chip {
   padding: 3px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;
