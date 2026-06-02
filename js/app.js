@@ -47,6 +47,15 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_POLITICS_2021 !== 'undefined' ? QUESTIONS_POLITICS_2021 : []),
     ...(typeof QUESTIONS_POLITICS_2026 !== 'undefined' ? QUESTIONS_POLITICS_2026 : []),
     ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
+    ...(typeof QUESTIONS_ENGLISH1_2017 !== 'undefined' ? QUESTIONS_ENGLISH1_2017 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2018 !== 'undefined' ? QUESTIONS_ENGLISH1_2018 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2019 !== 'undefined' ? QUESTIONS_ENGLISH1_2019 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2020 !== 'undefined' ? QUESTIONS_ENGLISH1_2020 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2024 !== 'undefined' ? QUESTIONS_ENGLISH1_2024 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2010 !== 'undefined' ? QUESTIONS_ENGLISH2_2010 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2017 !== 'undefined' ? QUESTIONS_ENGLISH2_2017 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2018 !== 'undefined' ? QUESTIONS_ENGLISH2_2018 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2024 !== 'undefined' ? QUESTIONS_ENGLISH2_2024 : []),
     ...imported
   ];
 }
