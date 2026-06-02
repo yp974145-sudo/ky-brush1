@@ -48,6 +48,12 @@ function init() {
 
   // 答题卡滑动
   initSheetSwipe();
+
+  // 题目左右滑动
+  initQuestionSwipe();
+
+  // 深色模式
+  initDarkMode();
 }
 
 // ---- 打卡（每日自动） ----
@@ -248,6 +254,50 @@ function showFavorites() {
 
 function toggleWrongBook() { reviewWrong(); }
 
+// ---- 错题重做 ----
+function startWrongRedo() {
+  const wrongIds = Storage.getWrongIds();
+  if (wrongIds.length === 0) { alert('🎉 没有错题！'); return; }
+
+  const count = Math.min(wrongIds.length, parseInt(prompt(`共 ${wrongIds.length} 道错题，抽几题重做？`, Math.min(10, wrongIds.length))) || 10);
+  if (isNaN(count) || count <= 0) return;
+
+  const pool = QUESTION_BANK.filter(q => wrongIds.includes(q.id));
+  shuffle(pool);
+  currentQuestions = pool.slice(0, count);
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  mode = 'wrong-redo';
+  window._wrongRedoStats = { total: currentQuestions.length, correct: 0, wrong: 0, fixed: [] };
+  renderSheet(); updateFilterStats(); showQuestion(0);
+}
+
+// 重做模式提交后处理
+function _handleWrongRedoSubmit(qId, isCorrect) {
+  if (mode !== 'wrong-redo') return;
+  if (isCorrect) {
+    window._wrongRedoStats.correct++;
+    // 从错题本移除
+    Storage.get('wrongBook')[qId] = false;
+    delete Storage.get('wrongBook')[qId];
+    Storage._flush();
+    window._wrongRedoStats.fixed.push(qId);
+  } else {
+    window._wrongRedoStats.wrong++;
+  }
+
+  // 检查是否全部做完
+  const answered = window._wrongRedoStats.correct + window._wrongRedoStats.wrong;
+  if (answered >= window._wrongRedoStats.total) {
+    setTimeout(() => {
+      const s = window._wrongRedoStats;
+      alert(`📊 错题重做完成！\n\n✅ 正确: ${s.correct}/${s.total}\n🎉 移出错题本: ${s.fixed.length} 题\n❌ 仍错误: ${s.wrong} 题`);
+      mode = 'filter';
+      updateAllStats();
+      selectAllSubjects();
+    }, 500);
+  }
+}
+
 // ---- Show Question ----
 function showQuestion(index) {
   if (index < 0 || index >= currentQuestions.length) return;
@@ -270,7 +320,7 @@ function showQuestion(index) {
     `${subjTag}
      <span class="tag" style="background:#f0f0f0;">${q.year}年</span>
      ${topicInfo ? `<span class="tag topic-clickable" style="background:#fff3e0;color:#e65100;border:1px solid #ffe0b2;cursor:pointer;" onclick="jumpToTopic('${q.topic}')" title="点击查看「${topicInfo.name}」全部题目">📌 ${Search.highlight(topicInfo.name)}</span>` : ''}
-     <span class="tag" style="background:${diff.bg};color:${diff.color};border:1px solid ${diff.color}40;">⬤ ${diff.label}</span>
+     <span class="tag" style="background:${diff.bg};color:${diff.color};border:1px solid ${diff.color}40;" title="${diff.label}">${diff.stars}</span>
      <span class="tag" style="background:#e8eaf6;color:#283593;border:1px solid #c5cae9;">${typeInfo.icon} ${typeInfo.name}</span>`;
 
   // Passage
@@ -484,6 +534,9 @@ function submitAnswer() {
 
   if (!isCorrect) Storage.addWrong(q.id);
 
+  // 错题重做追踪
+  _handleWrongRedoSubmit(q.id, isCorrect);
+
   // 学习计划进度追踪
   Plan.onQuestionSubmitted(q.id, isCorrect);
 
@@ -657,6 +710,24 @@ function selectOptionUniversal(letter) {
   showQuestion(currentIndex);
 }
 
+// ---- 深色模式 ----
+function initDarkMode() {
+  const saved = localStorage.getItem('ky-dark');
+  if (saved === '1' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark');
+  }
+  // 监听系统变化
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('ky-dark')) {
+      document.body.classList.toggle('dark', e.matches);
+    }
+  });
+}
+function toggleDarkMode() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('ky-dark', isDark ? '1' : '0');
+}
+
 // ---- Header Dropdown ----
 function toggleHeaderMore() {
   const d = document.getElementById('header-more-drop');
@@ -788,6 +859,35 @@ function jumpToMobileSearchResult(qId, subject) {
   renderSheet(); updateFilterStats();
   showQuestion(idx >= 0 ? idx : 0);
   toggleMobileSearch();
+}
+
+// ---- 题目左右滑动 ----
+function initQuestionSwipe() {
+  const area = document.getElementById('content');
+  let startX = 0, startY = 0, swiping = false;
+
+  area.addEventListener('touchstart', function(e) {
+    if (currentIndex < 0 || currentQuestions.length === 0) return;
+    if (Exam.state === 'running') return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    swiping = true;
+  }, { passive: true });
+
+  area.addEventListener('touchend', function(e) {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    // 水平滑动超过 60px，且水平大于垂直
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0 && currentIndex < currentQuestions.length - 1) {
+        showQuestion(currentIndex + 1);
+      } else if (dx > 0 && currentIndex > 0) {
+        showQuestion(currentIndex - 1);
+      }
+    }
+  });
 }
 
 function jumpToTopic(topicKey) {

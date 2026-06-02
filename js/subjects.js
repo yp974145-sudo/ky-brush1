@@ -28,9 +28,9 @@ const SUBJECT_GROUPS = {
 
 // 难度定义
 const DIFFICULTY = {
-  easy: { label: '简单', color: '#4CAF50', bg: '#e8f5e9' },
-  medium: { label: '中等', color: '#FF9800', bg: '#fff3e0' },
-  hard: { label: '较难', color: '#F44336', bg: '#ffebee' }
+  easy: { label: '简单', stars: '⭐', color: '#4CAF50', bg: '#e8f5e9' },
+  medium: { label: '中等', stars: '⭐⭐', color: '#FF9800', bg: '#fff3e0' },
+  hard: { label: '较难', stars: '⭐⭐⭐', color: '#F44336', bg: '#ffebee' }
 };
 
 const TOPICS = {

@@ -5,8 +5,8 @@
 // ============================================================
 
 const SUPABASE_CONFIG = {
-  url: 'https://YOUR-PROJECT.supabase.co',   // ← 换成你的项目 URL
-  key: 'YOUR-ANON-KEY',                       // ← 换成你的 anon key
+  url: 'https://mxtkkglvfkfwcqfuwnws.supabase.co',
+  key: 'sb_publishable_wewoxkAjlA9RW9_9O34x3g_hHEKFfSU',
 };
 
 const Cloud = {
@@ -36,15 +36,12 @@ const Cloud = {
 
   isReady() { return !!this._client; },
 
-  // ---- 登录 ----
+  // ---- 邮箱登录 ----
   async signUp(email, password) {
     if (!this._client) throw new Error('云同步未连接');
     const { data, error } = await this._client.auth.signUp({ email, password });
     if (error) throw error;
-    if (data.user) {
-      this._userId = data.user.id;
-      this._onLogin();
-    }
+    if (data.user) { this._userId = data.user.id; this._onLogin(); }
     return data;
   },
 
@@ -52,10 +49,23 @@ const Cloud = {
     if (!this._client) throw new Error('云同步未连接');
     const { data, error } = await this._client.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    if (data.user) {
-      this._userId = data.user.id;
-      this._onLogin();
-    }
+    if (data.user) { this._userId = data.user.id; this._onLogin(); }
+    return data;
+  },
+
+  // ---- 手机验证码登录 ----
+  async sendPhoneOTP(phone) {
+    if (!this._client) throw new Error('云同步未连接');
+    const { data, error } = await this._client.auth.signInWithOtp({ phone });
+    if (error) throw error;
+    return data;
+  },
+
+  async verifyPhoneOTP(phone, token) {
+    if (!this._client) throw new Error('云同步未连接');
+    const { data, error } = await this._client.auth.verifyOtp({ phone, token, type: 'sms' });
+    if (error) throw error;
+    if (data.user) { this._userId = data.user.id; this._onLogin(); }
     return data;
   },
 

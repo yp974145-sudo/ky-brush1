@@ -1,0 +1,18 @@
+{
+  "name": "考研刷题 - 408·数学·政治·英语",
+  "short_name": "考研刷题",
+  "description": "考研公共课刷题，覆盖408计算机、数学、政治、英语历年真题",
+  "start_url": "/408-brush/",
+  "scope": "/408-brush/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1a1a2e",
+  "background_color": "#f5f6f8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
