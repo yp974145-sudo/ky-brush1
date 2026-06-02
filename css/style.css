@@ -340,10 +340,16 @@ body {
     position: fixed; left: 0; right: 0; bottom: 48px; z-index: 270;
     max-height: 65vh; border-radius: 16px 16px 0 0;
     background: var(--card); box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-    transform: translateY(calc(100% + 48px)); transition: transform 0.3s ease;
+    transform: translateY(calc(100% + 48px));
+    transition: transform 0.3s ease, visibility 0s 0.3s;
     display: flex; flex-direction: column; padding: 0;
+    pointer-events: none; visibility: hidden;
   }
-  #answer-sheet.open { transform: translateY(0); }
+  #answer-sheet.open {
+    transform: translateY(0);
+    transition: transform 0.3s ease, visibility 0s 0s;
+    pointer-events: auto; visibility: visible;
+  }
   .sheet-handle {
     display: block; width: 36px; height: 5px; background: #d0d0d0;
     border-radius: 3px; margin: 10px auto 6px; flex-shrink: 0;

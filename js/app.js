@@ -774,13 +774,15 @@ function openSheet() {
   const overlay = document.getElementById('sheet-overlay');
   sheet.classList.add('open');
   if (overlay) overlay.classList.add('show');
+  document.body.style.overflow = 'hidden'; // 锁定背景滚动
 }
 function closeSheet() {
   const sheet = document.getElementById('answer-sheet');
   const overlay = document.getElementById('sheet-overlay');
   sheet.classList.remove('open');
-  sheet.style.transform = ''; // 清理滑动残留
+  sheet.style.transform = '';
   if (overlay) overlay.classList.remove('show');
+  document.body.style.overflow = ''; // 恢复滚动
 }
 
 // 答题卡触摸下滑关闭
