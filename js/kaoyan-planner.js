@@ -35,74 +35,64 @@ const Planner = {
     '408': {
       name: '408计算机', icon: '💻',
       topics: [
-        { id:'ds1', name:'数据结构绪论',       g1:3,g2:4,g3:4,g4:4 },
-        { id:'ds2', name:'线性表/链表',         g1:3,g2:4,g3:4,g4:4 },
-        { id:'ds3', name:'栈和队列',            g1:3,g2:4,g3:4,g4:4 },
-        { id:'ds4', name:'树与二叉树',          g1:2,g2:3,g3:4,g4:4 },
-        { id:'ds5', name:'图',                  g1:1,g2:2,g3:3,g4:4 },
-        { id:'ds6', name:'查找',                g1:1,g2:3,g3:4,g4:4 },
-        { id:'ds7', name:'排序',                g1:2,g2:3,g3:4,g4:4 },
-        { id:'co1', name:'计算机系统概述',      g1:2,g2:3,g3:4,g4:4 },
-        { id:'co2', name:'数据的表示与运算',    g1:3,g2:4,g3:4,g4:4 },
-        { id:'co3', name:'存储器层次结构',      g1:2,g2:3,g3:4,g4:4 },
-        { id:'co4', name:'指令系统',            g1:1,g2:2,g3:3,g4:4 },
-        { id:'co5', name:'中央处理器CPU',       g1:1,g2:2,g3:3,g4:4 },
-        { id:'co6', name:'总线与I/O系统',       g1:1,g2:2,g3:3,g4:4 },
-        { id:'os1', name:'操作系统概述',        g1:2,g2:3,g3:4,g4:4 },
-        { id:'os2', name:'进程管理',            g1:2,g2:3,g3:4,g4:4 },
-        { id:'os3', name:'内存管理',            g1:1,g2:2,g3:3,g4:4 },
-        { id:'os4', name:'文件管理',            g1:1,g2:2,g3:3,g4:4 },
-        { id:'os5', name:'I/O管理',             g1:1,g2:2,g3:3,g4:4 },
-        { id:'cn1', name:'计算机网络体系结构',  g1:2,g2:3,g3:4,g4:4 },
-        { id:'cn2', name:'物理层',              g1:2,g2:3,g3:4,g4:4 },
-        { id:'cn3', name:'数据链路层',          g1:1,g2:2,g3:3,g4:4 },
-        { id:'cn4', name:'网络层',              g1:1,g2:2,g3:3,g4:4 },
-        { id:'cn5', name:'传输层',              g1:1,g2:2,g3:3,g4:4 },
-        { id:'cn6', name:'应用层',              g1:1,g2:2,g3:3,g4:4 },
+        { id:'ds-1', name:'绪论与时间复杂度',   g1:3,g2:4,g3:4,g4:4 },
+        { id:'ds-2', name:'线性表/链表',        g1:3,g2:4,g3:4,g4:4 },
+        { id:'ds-3', name:'栈和队列',           g1:3,g2:4,g3:4,g4:4 },
+        { id:'ds-5', name:'树与二叉树',         g1:2,g2:3,g3:4,g4:4 },
+        { id:'ds-6', name:'图',                 g1:1,g2:2,g3:3,g4:4 },
+        { id:'ds-7', name:'查找',               g1:1,g2:3,g3:4,g4:4 },
+        { id:'ds-8', name:'排序',               g1:2,g2:3,g3:4,g4:4 },
+        { id:'co-1', name:'计算机系统概述',     g1:2,g2:3,g3:4,g4:4 },
+        { id:'co-2', name:'数据的表示与运算',   g1:3,g2:4,g3:4,g4:4 },
+        { id:'co-3', name:'存储器层次结构',     g1:2,g2:3,g3:4,g4:4 },
+        { id:'co-4', name:'指令系统',           g1:1,g2:2,g3:3,g4:4 },
+        { id:'co-5', name:'中央处理器CPU',      g1:1,g2:2,g3:3,g4:4 },
+        { id:'co-7', name:'总线与I/O系统',      g1:1,g2:2,g3:3,g4:4 },
+        { id:'os-1', name:'操作系统概述',       g1:2,g2:3,g3:4,g4:4 },
+        { id:'os-2', name:'进程与线程',         g1:2,g2:3,g3:4,g4:4 },
+        { id:'os-3', name:'内存管理',           g1:1,g2:2,g3:3,g4:4 },
+        { id:'os-4', name:'文件管理',           g1:1,g2:2,g3:3,g4:4 },
+        { id:'os-5', name:'I/O管理',            g1:1,g2:2,g3:3,g4:4 },
+        { id:'cn-1', name:'网络体系结构',       g1:2,g2:3,g3:4,g4:4 },
+        { id:'cn-2', name:'物理层',             g1:2,g2:3,g3:4,g4:4 },
+        { id:'cn-3', name:'数据链路层',         g1:1,g2:2,g3:3,g4:4 },
+        { id:'cn-4', name:'网络层',             g1:1,g2:2,g3:3,g4:4 },
+        { id:'cn-5', name:'传输层',             g1:1,g2:2,g3:3,g4:4 },
+        { id:'cn-6', name:'应用层',             g1:1,g2:2,g3:3,g4:4 },
       ]
     },
     'math': {
       name: '数学一/二/三', icon: '📐',
       topics: [
-        { id:'m1', name:'函数极限连续',   g1:3,g2:4,g3:4,g4:4 },
-        { id:'m2', name:'一元微分学',     g1:3,g2:4,g3:4,g4:4 },
-        { id:'m3', name:'一元积分学',     g1:3,g2:4,g3:4,g4:4 },
-        { id:'m4', name:'微分方程',       g1:2,g2:3,g3:4,g4:4 },
-        { id:'m5', name:'多元微分学',     g1:2,g2:3,g3:4,g4:4 },
-        { id:'m6', name:'二重积分',       g1:1,g2:3,g3:4,g4:4 },
-        { id:'m7', name:'无穷级数',       g1:1,g2:2,g3:4,g4:4 },
-        { id:'m8', name:'向量与空间几何', g1:1,g2:2,g3:3,g4:4 },
-        { id:'m9', name:'线性代数基础',   g1:3,g2:4,g3:4,g4:4 },
-        { id:'m10',name:'矩阵与向量',     g1:2,g2:3,g3:4,g4:4 },
-        { id:'m11',name:'线性方程组',     g1:2,g2:3,g3:4,g4:4 },
-        { id:'m12',name:'特征值与二次型', g1:1,g2:2,g3:4,g4:4 },
-        { id:'m13',name:'概率论基础',     g1:2,g2:3,g3:4,g4:4 },
-        { id:'m14',name:'随机变量与分布', g1:2,g2:3,g3:4,g4:4 },
-        { id:'m15',name:'数理统计',       g1:1,g2:2,g3:3,g4:4 },
+        { id:'ma-1', name:'极限与连续',    g1:3,g2:4,g3:4,g4:4 },
+        { id:'ma-2', name:'一元微分学',    g1:3,g2:4,g3:4,g4:4 },
+        { id:'ma-3', name:'一元积分学',    g1:3,g2:4,g3:4,g4:4 },
+        { id:'ma-6', name:'微分方程',      g1:1,g2:3,g3:4,g4:4 },
+        { id:'ma-4', name:'多元微分学',    g1:1,g2:2,g3:3,g4:4 },
+        { id:'ma-5', name:'重积分/曲面积分',g1:0,g2:2,g3:3,g4:4 },
+        { id:'ma-7', name:'无穷级数',      g1:0,g2:2,g3:3,g4:4 },
+        { id:'ma-8', name:'线性代数',      g1:2,g2:3,g3:4,g4:4 },
+        { id:'ma-9', name:'概率统计',      g1:1,g2:2,g3:3,g4:4 },
       ]
     },
     'politics': {
       name: '政治', icon: '📖',
       topics: [
-        { id:'p1', name:'马原：哲学',         g1:2,g2:3,g3:4,g4:4 },
-        { id:'p2', name:'马原：政经+科社',    g1:1,g2:2,g3:4,g4:4 },
-        { id:'p3', name:'毛中特',             g1:0,g2:2,g3:4,g4:4 },
-        { id:'p4', name:'史纲',               g1:0,g2:2,g3:4,g4:4 },
-        { id:'p5', name:'思修法基',           g1:0,g2:1,g3:3,g4:4 },
-        { id:'p6', name:'时政',               g1:0,g2:0,g3:2,g4:4 },
+        { id:'po-1', name:'马原',         g1:2,g2:3,g3:4,g4:4 },
+        { id:'po-2', name:'毛中特',       g1:0,g2:2,g3:4,g4:4 },
+        { id:'po-3', name:'史纲',         g1:0,g2:2,g3:4,g4:4 },
+        { id:'po-4', name:'思修法基',     g1:0,g2:1,g3:3,g4:4 },
+        { id:'po-5', name:'时政',         g1:0,g2:0,g3:2,g4:4 },
       ]
     },
     'english': {
       name: '英语一/二', icon: '📝',
       topics: [
-        { id:'e1', name:'考研词汇5500',       g1:3,g2:4,g3:4,g4:4 },
-        { id:'e2', name:'长难句分析',         g1:3,g2:4,g3:4,g4:4 },
-        { id:'e3', name:'阅读理解A',          g1:1,g2:3,g3:4,g4:4 },
-        { id:'e4', name:'阅读理解B（新题型）',g1:0,g2:2,g3:3,g4:4 },
-        { id:'e5', name:'翻译',               g1:0,g2:2,g3:3,g4:4 },
-        { id:'e6', name:'完形填空',           g1:0,g2:1,g3:3,g4:4 },
-        { id:'e7', name:'小作文',             g1:0,g2:1,g3:3,g4:4 },
-        { id:'e8', name:'大作文',             g1:0,g2:2,g3:4,g4:4 },
+        { id:'en-2', name:'阅读理解',      g1:1,g2:3,g3:4,g4:4 },
+        { id:'en-1', name:'完形填空',      g1:0,g2:1,g3:3,g4:4 },
+        { id:'en-3', name:'新题型',        g1:0,g2:2,g3:3,g4:4 },
+        { id:'en-4', name:'翻译',          g1:0,g2:2,g3:3,g4:4 },
+        { id:'en-5', name:'写作',          g1:0,g2:2,g3:4,g4:4 },
       ]
     },
   },
@@ -266,10 +256,13 @@ const Planner = {
 
       const topicsHTML = cur.topics.map(t => {
         const phase = currentPhase;
-        const goal = t[phase]; // 当前阶段目标程度
+        const goal = t[phase];
         const actual = this._getProgress(sk, t.id);
+        const isAuto = this._getManualProgress(sk, t.id) === 0;
+        const stats = this._getTopicStats(t.id);
         const goalLabel = this.levels[goal];
         const goalColor = this.levelColors[goal];
+        const accText = stats.total > 0 ? `${stats.correct}/${stats.total}` : '-';
 
         // 生成四个阶段的进度点
         const dotsHTML = ['g1','g2','g3','g4'].map(ph => {
@@ -286,6 +279,11 @@ const Planner = {
             <td>
               <span class="pl-goal-tag" style="background:${goalColor}20;color:${goalColor};border:1px solid ${goalColor}40">
                 🎯 ${goalLabel}
+              </span>
+            </td>
+            <td>
+              <span class="pl-acc-badge ${actual >= goal ? 'pl-acc-ok' : 'pl-acc-low'}" title="题库${stats.count}题，已做${stats.total}题">
+                ${isAuto ? '🤖' : '✋'} ${accText}
               </span>
             </td>
             <td>
@@ -307,7 +305,7 @@ const Planner = {
           <div class="pl-subj-title">${cur.icon} ${cur.name}</div>
           <div class="pl-table-wrap">
             <table class="pl-table">
-              <thead><tr><th>知识点</th><th>阶段目标</th><th>当前目标</th><th>我的程度（点击调整）</th></tr></thead>
+              <thead><tr><th>知识点</th><th>阶段目标</th><th>当前目标</th><th>正确率</th><th>我的程度（点击调整）</th></tr></thead>
               <tbody>${topicsHTML}</tbody>
             </table>
           </div>
@@ -353,8 +351,52 @@ const Planner = {
     return 'g4';
   },
 
-  // 获取/设置进度
+  // 从刷题数据自动计算知识点掌握程度
+  // 返回 { 'ds-1': 3, 'ds-5': 1, ... }
+  _computeAutoLevels() {
+    const bank = (typeof QUESTION_BANK !== 'undefined' ? QUESTION_BANK : []);
+    const stats = {}; // { topicId: { correct, total } }
+    bank.forEach(q => {
+      if (typeof Storage === 'undefined' || !Storage.isSubmitted(q.id)) return;
+      const tid = q.topic;
+      if (!stats[tid]) stats[tid] = { correct: 0, total: 0 };
+      stats[tid].total++;
+      const ans = Storage.getAnswer(q.id);
+      let ok = false;
+      if (q.type === 'multi') {
+        const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
+        const u = (Array.isArray(ans)?ans:[ans]).sort().join('');
+        ok = c === u;
+      } else if (q.type === 'fill') {
+        ok = String(ans||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      } else {
+        ok = ans === q.answer;
+      }
+      if (ok) stats[tid].correct++;
+    });
+
+    const result = {};
+    for (const [tid, s] of Object.entries(stats)) {
+      const acc = s.correct / s.total;
+      if (s.total < 3)       result[tid] = Math.min(2, Math.round(acc * 3)); // 数据不足
+      else if (acc < 0.3)    result[tid] = 1; // 了解
+      else if (acc < 0.55)   result[tid] = 2; // 理解
+      else if (acc < 0.8)    result[tid] = 3; // 掌握
+      else                   result[tid] = 4; // 熟练
+    }
+    return result;
+  },
+
+  // 获取/设置进度（优先自动判定，可手动覆盖）
   _getProgress(subjKey, topicId) {
+    const auto = this._computeAutoLevels();
+    const manual = this._getManualProgress(subjKey, topicId);
+    // 手动设置优先，否则用自动
+    if (manual > 0) return manual;
+    return auto[topicId] || 0;
+  },
+
+  _getManualProgress(subjKey, topicId) {
     try {
       const data = JSON.parse(localStorage.getItem('pl-progress') || '{}');
       return (data[subjKey] && data[subjKey][topicId]) || 0;
@@ -365,10 +407,32 @@ const Planner = {
     try {
       const data = JSON.parse(localStorage.getItem('pl-progress') || '{}');
       if (!data[subjKey]) data[subjKey] = {};
-      data[subjKey][topicId] = data[subjKey][topicId] === level ? 0 : level; // 点击同等级取消
+      data[subjKey][topicId] = data[subjKey][topicId] === level ? 0 : level;
       localStorage.setItem('pl-progress', JSON.stringify(data));
       this._renderPlan();
     } catch(e) {}
+  },
+
+  // 获取某知识点的答题统计
+  _getTopicStats(topicId) {
+    const bank = (typeof QUESTION_BANK !== 'undefined' ? QUESTION_BANK : []);
+    const qs = bank.filter(q => q.topic === topicId);
+    let total = 0, correct = 0;
+    qs.forEach(q => {
+      if (typeof Storage === 'undefined' || !Storage.isSubmitted(q.id)) return;
+      total++;
+      const ans = Storage.getAnswer(q.id);
+      let ok = false;
+      if (q.type === 'multi') {
+        const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
+        const u = (Array.isArray(ans)?ans:[ans]).sort().join('');
+        ok = c === u;
+      } else if (q.type === 'fill') {
+        ok = String(ans||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      } else { ok = ans === q.answer; }
+      if (ok) correct++;
+    });
+    return { total, correct, count: qs.length };
   },
 
   // ---- Storage ----

@@ -9,6 +9,7 @@ let currentQuestions = [], currentIndex = -1, selectedOption = null, selectedMul
 
 const QUESTION_BANK = [
   ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
+  ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
   ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
   ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
   ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : [])
