@@ -582,7 +582,7 @@ body {
 .stats-half { flex: 1; }
 
 /* ---- 打卡日历 ---- */
-.calendar-wrap { overflow-x: auto; max-height: 120px; overflow-y: auto; padding-bottom: 6px; }
+.calendar-wrap { overflow-x: auto; overflow-y: visible; padding-bottom: 6px; }
 .calendar-months { display: flex; padding-left: 0; margin-bottom: 2px; }
 .cal-months-inner { display: flex; }
 .cal-month-label {
