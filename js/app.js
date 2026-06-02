@@ -1,12 +1,11 @@
 // ============================================================
-// 考研刷题 - 核心逻辑 v2
+// 考研刷题 - 核心逻辑 v3
+// 整合 Storage / Search / Auth / Exam 模块
 // ============================================================
 
-// ---- 全局 ----
+// ---- 全局状态 ----
 let currentFilter = { groups: [], subjects: [], years: [], topics: [] };
 let currentQuestions = [], currentIndex = -1, selectedOption = null, selectedMulti = {};
-let userAnswers = {}, markedQuestions = {}, submittedQuestions = {}, wrongBook = {};
-let mode = 'filter';
 
 const QUESTION_BANK = [
   ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
@@ -17,27 +16,52 @@ const QUESTION_BANK = [
 
 // ---- Init ----
 function init() {
-  loadFromStorage();
+  Storage.init();
+
+  // 从 Storage 同步到全局变量（兼容旧代码）
+  window.userAnswers = Storage.get('userAnswers');
+  window.markedQuestions = Storage.get('markedQuestions');
+  window.submittedQuestions = Storage.get('submittedQuestions');
+  window.wrongBook = Storage.get('wrongBook');
+
   renderGroupFilters();
   renderSubjectFilters();
   renderYearFilters();
   renderTopicFilters();
   selectAllSubjects();
   updateAllStats();
+
+  // 初始化搜索
+  Search.init('search-input');
+
+  // 初始化登录
+  Auth.init('http://localhost:3456');
+
+  // 检查今日打卡
+  autoCheckin();
+
+  // 初始化每日一题
+  Daily.init();
+
+  // 初始化学习计划
+  Plan.init();
 }
 
-// ---- Storage ----
-function loadFromStorage() {
-  try {
-    const s = JSON.parse(localStorage.getItem('ky-brush') || '{}');
-    userAnswers = s.userAnswers || {};
-    markedQuestions = s.markedQuestions || {};
-    submittedQuestions = s.submittedQuestions || {};
-    wrongBook = s.wrongBook || {};
-  } catch(e) {}
+// ---- 打卡（每日自动） ----
+function autoCheckin() {
+  const today = new Date().toISOString().slice(0, 10);
+  const records = Storage.getCheckinRecords();
+  if (!records[today]) {
+    Storage.checkinToday();
+  }
 }
+
+// ---- 兼容旧代码的 saveToStorage ----
 function saveToStorage() {
-  localStorage.setItem('ky-brush', JSON.stringify({userAnswers, markedQuestions, submittedQuestions, wrongBook}));
+  Storage.set('userAnswers', window.userAnswers);
+  Storage.set('markedQuestions', window.markedQuestions);
+  Storage.set('submittedQuestions', window.submittedQuestions);
+  Storage.set('wrongBook', window.wrongBook);
 }
 
 // ---- Group Filters ----
@@ -58,7 +82,6 @@ function toggleGroup(key) {
   const idx = currentFilter.groups.indexOf(key);
   if (idx >= 0) currentFilter.groups.splice(idx, 1);
   else currentFilter.groups.push(key);
-  // 同步更新subjects
   currentFilter.subjects = Object.keys(SUBJECTS).filter(k =>
     currentFilter.groups.length === 0 || currentFilter.groups.includes(SUBJECTS[k].group)
   );
@@ -139,7 +162,6 @@ function renderTopicFilters() {
     c.innerHTML = '<span style="font-size:12px;color:#999;">选择单个学科后显示知识点</span>';
     return;
   }
-  // 数学二/三映射到数一的知识点体系
   const lookupSubj = (subj === 'ma2' || subj === 'ma3') ? 'ma1' : (subj === 'en2' ? 'en1' : subj);
   const topics = Object.entries(TOPICS).filter(([k, v]) => v.subject === lookupSubj);
   topics.forEach(([key, tp]) => {
@@ -160,21 +182,30 @@ function renderTopicFilters() {
 
 // ---- Filter ----
 function applyFilter() {
+  // 如果正在考试中，不干扰
+  if (Exam.state === 'running') return;
+
   mode = 'filter';
-  // 数学二/三的题目topic属于ma-*，与ma1共用知识点体系
   const topicSubjects = currentFilter.topics.map(t => {
     const tp = TOPICS[t];
     if (!tp) return t;
-    if (tp.subject === 'ma1') return ['ma1','ma2','ma3'];
-    if (tp.subject === 'en1') return ['en1','en2'];
+    if (tp.subject === 'ma1') return ['ma1', 'ma2', 'ma3'];
+    if (tp.subject === 'en1') return ['en1', 'en2'];
     return [tp.subject];
   }).flat();
-  currentQuestions = QUESTION_BANK.filter(q => {
+
+  let filtered = QUESTION_BANK.filter(q => {
     const s = currentFilter.subjects.length === 0 || currentFilter.subjects.includes(q.subject);
     const y = currentFilter.years.length === 0 || currentFilter.years.includes(q.year);
     const t = currentFilter.topics.length === 0 || topicSubjects.includes(q.subject);
     return s && y && t;
   });
+
+  // 搜索二次过滤
+  filtered = Search.execute(filtered);
+  Search.updateUI();
+
+  currentQuestions = filtered;
   currentIndex = -1; selectedOption = null; selectedMulti = {};
   renderSheet(); updateFilterStats();
   currentQuestions.length > 0 ? showQuestion(0) : showWelcome();
@@ -189,16 +220,27 @@ function startRandom() {
   currentQuestions = [...QUESTION_BANK];
   shuffle(currentQuestions);
   currentIndex = -1; selectedOption = null; selectedMulti = {};
+  Search.keyword = '';
+  if (Search.inputEl) Search.inputEl.value = '';
   renderSheet(); updateFilterStats(); showQuestion(0);
 }
 
 function reviewWrong() {
   mode = 'wrong';
-  currentQuestions = QUESTION_BANK.filter(q => wrongBook[q.id]);
+  currentQuestions = QUESTION_BANK.filter(q => Storage.isWrong(q.id));
   currentIndex = -1; selectedOption = null; selectedMulti = {};
   renderSheet(); updateFilterStats();
   if (currentQuestions.length > 0) showQuestion(0);
   else { alert('🎉 错题本为空！'); selectAllSubjects(); }
+}
+
+function showFavorites() {
+  mode = 'favorites';
+  currentQuestions = QUESTION_BANK.filter(q => Storage.isFavorite(q.id));
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  if (currentQuestions.length > 0) showQuestion(0);
+  else { alert('⭐ 收藏夹为空！'); selectAllSubjects(); }
 }
 
 function toggleWrongBook() { reviewWrong(); }
@@ -216,37 +258,59 @@ function showQuestion(index) {
   // Navigation
   document.getElementById('q-index').textContent = `第 ${index + 1}/${currentQuestions.length} 题`;
   const topicInfo = TOPICS[q.topic];
-  const typeInfo = QUESTION_TYPES[q.type] || QUESTION_TYPES.single;
+  const typeInfo = QUESTION_TYPES[q.type] || { name: q.type === 'code' ? '编程' : '未知', icon: q.type === 'code' ? '💻' : '?' };
   const diff = DIFFICULTY[q.difficulty] || DIFFICULTY.medium;
+
+  // 题目标签（含搜索高亮）
+  const subjTag = `<span class="tag" style="background:${SUBJECTS[q.subject].color}20;color:${SUBJECTS[q.subject].color};border:1px solid ${SUBJECTS[q.subject].color}40;">${SUBJECTS[q.subject].icon} ${SUBJECTS[q.subject].name}</span>`;
   document.getElementById('q-tag').innerHTML =
-    `<span class="tag" style="background:${SUBJECTS[q.subject].color}20;color:${SUBJECTS[q.subject].color};border:1px solid ${SUBJECTS[q.subject].color}40;">${SUBJECTS[q.subject].icon} ${SUBJECTS[q.subject].name}</span>
+    `${subjTag}
      <span class="tag" style="background:#f0f0f0;">${q.year}年</span>
-     ${topicInfo ? `<span class="tag topic-clickable" style="background:#fff3e0;color:#e65100;border:1px solid #ffe0b2;cursor:pointer;" onclick="jumpToTopic('${q.topic}')" title="点击查看「${topicInfo.name}」全部题目">📌 ${topicInfo.name}</span>` : ''}
+     ${topicInfo ? `<span class="tag topic-clickable" style="background:#fff3e0;color:#e65100;border:1px solid #ffe0b2;cursor:pointer;" onclick="jumpToTopic('${q.topic}')" title="点击查看「${topicInfo.name}」全部题目">📌 ${Search.highlight(topicInfo.name)}</span>` : ''}
      <span class="tag" style="background:${diff.bg};color:${diff.color};border:1px solid ${diff.color}40;">⬤ ${diff.label}</span>
      <span class="tag" style="background:#e8eaf6;color:#283593;border:1px solid #c5cae9;">${typeInfo.icon} ${typeInfo.name}</span>`;
 
-  // Passage (for English reading)
+  // Passage
   const passageEl = document.getElementById('q-passage');
   if (q.passage) { passageEl.style.display = 'block'; passageEl.innerHTML = `<div class="passage-box">${q.passage}</div>`; }
   else passageEl.style.display = 'none';
 
-  // Question text
-  document.getElementById('q-text').textContent = q.question;
+  // Question text with search highlight
+  document.getElementById('q-text').innerHTML = Search.highlight(q.question);
+
+  // 编程题：特殊处理
+  if (q.type === 'code') {
+    const optsEl = document.getElementById('q-options');
+    optsEl.style.display = 'block';
+    document.getElementById('q-fill').style.display = 'none';
+    document.getElementById('q-code').style.display = 'none';
+    document.getElementById('q-passage').style.display = 'none';
+    CodeEditor.render(optsEl, q);
+    document.getElementById('btn-submit').style.display = 'none';
+    document.getElementById('btn-mark').style.display = 'none';
+    document.getElementById('btn-fav').style.display = 'none';
+    document.getElementById('btn-next').style.display = 'none';
+    // 隐藏笔记区域
+    const noteArea = document.getElementById('note-area');
+    if (noteArea) noteArea.style.display = 'none';
+    renderSheet(); updateFilterStats();
+    return;
+  }
 
   // Code
   const codeEl = document.getElementById('q-code');
   codeEl.style.display = q.code ? 'block' : 'none';
   if (q.code) codeEl.textContent = q.code;
 
-  // Options (for single/multi)
+  // Options
   const optEl = document.getElementById('q-options');
   const fillEl = document.getElementById('q-fill');
-  const submitted = submittedQuestions[q.id];
+  const submitted = Storage.isSubmitted(q.id);
 
   if (q.type === 'fill') {
     optEl.style.display = 'none'; fillEl.style.display = 'block';
     const inp = document.getElementById('fill-answer');
-    inp.value = submitted ? (userAnswers[q.id] || '') : (userAnswers[q.id] || '');
+    inp.value = submitted ? (Storage.getAnswer(q.id) || '') : (Storage.getAnswer(q.id) || '');
     inp.disabled = submitted;
   } else {
     optEl.style.display = 'flex'; fillEl.style.display = 'none';
@@ -257,20 +321,20 @@ function showQuestion(index) {
       const isMulti = q.type === 'multi';
       const letter = String.fromCharCode(65 + i);
       const prefix = isMulti ? '☐' : '○';
-      div.innerHTML = `<span class="option-letter">${letter}</span><span>${opt.substring(2).trim()}</span>`;
+      div.innerHTML = `<span class="option-letter">${letter}</span><span>${Search.highlight(opt.substring(2).trim())}</span>`;
 
       if (submitted) {
         div.classList.add('disabled');
         const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
         if (correctAnswers.includes(letter)) div.classList.add('correct-answer');
-        const userAns = Array.isArray(userAnswers[q.id]) ? userAnswers[q.id] : [userAnswers[q.id]];
+        const userAns = Array.isArray(Storage.getAnswer(q.id)) ? Storage.getAnswer(q.id) : [Storage.getAnswer(q.id)];
         if (userAns.includes(letter) && !correctAnswers.includes(letter)) div.classList.add('wrong-answer');
       } else {
         if (isMulti) {
           if (selectedMulti[letter]) div.classList.add('selected');
-          else if (userAnswers[q.id] && Array.isArray(userAnswers[q.id]) && userAnswers[q.id].includes(letter)) div.classList.add('selected');
+          else if (Storage.getAnswer(q.id) && Array.isArray(Storage.getAnswer(q.id)) && Storage.getAnswer(q.id).includes(letter)) div.classList.add('selected');
         } else {
-          if (letter === selectedOption || (userAnswers[q.id] === letter && !Array.isArray(userAnswers[q.id]))) div.classList.add('selected');
+          if (letter === selectedOption || (Storage.getAnswer(q.id) === letter && !Array.isArray(Storage.getAnswer(q.id)))) div.classList.add('selected');
         }
       }
 
@@ -279,12 +343,12 @@ function showQuestion(index) {
         if (isMulti) {
           if (selectedMulti[letter]) delete selectedMulti[letter];
           else selectedMulti[letter] = true;
-          userAnswers[q.id] = Object.keys(selectedMulti).sort();
+          Storage.setAnswer(q.id, Object.keys(selectedMulti).sort());
           saveToStorage();
           showQuestion(currentIndex);
         } else {
           selectedOption = letter;
-          userAnswers[q.id] = letter;
+          Storage.setAnswer(q.id, letter);
           saveToStorage();
           showQuestion(currentIndex);
         }
@@ -295,15 +359,31 @@ function showQuestion(index) {
 
   // Buttons
   document.getElementById('btn-submit').style.display = submitted ? 'none' : 'inline-flex';
-  document.getElementById('btn-mark').style.display = submitted ? 'none' : 'inline-flex';
+  const markBtn = document.getElementById('btn-mark');
+  markBtn.style.display = submitted ? 'none' : 'inline-flex';
+  markBtn.textContent = Storage.isMarked(q.id) ? '🏷 取消标记' : '🏷 标记';
+
+  // Favorite button
+  let favBtn = document.getElementById('btn-fav');
+  if (!favBtn) {
+    favBtn = document.createElement('button');
+    favBtn.id = 'btn-fav';
+    favBtn.className = 'btn btn-mark-btn';
+    document.getElementById('question-actions').appendChild(favBtn);
+  }
+  favBtn.textContent = Storage.isFavorite(q.id) ? '⭐ 已收藏' : '☆ 收藏';
+  favBtn.onclick = () => {
+    const isFav = Storage.toggleFavorite(q.id);
+    favBtn.textContent = isFav ? '⭐ 已收藏' : '☆ 收藏';
+  };
+
   document.getElementById('btn-next').style.display = submitted ? 'inline-flex' : 'none';
-  document.getElementById('btn-mark').textContent = markedQuestions[q.id] ? '🏷 取消标记' : '🏷 标记';
 
   // Result
   const resultArea = document.getElementById('result-area');
   if (submitted) {
     resultArea.style.display = 'block';
-    const userAns = userAnswers[q.id];
+    const userAns = Storage.getAnswer(q.id);
     let isCorrect = false;
     if (q.type === 'multi') {
       const correct = (Array.isArray(q.answer) ? q.answer : [q.answer]).sort().join('');
@@ -323,16 +403,42 @@ function showQuestion(index) {
     `;
   } else {
     resultArea.style.display = 'none';
-    if (q.type === 'multi' && userAnswers[q.id] && Array.isArray(userAnswers[q.id])) {
-      userAnswers[q.id].forEach(l => selectedMulti[l] = true);
+    if (q.type === 'multi' && Storage.getAnswer(q.id) && Array.isArray(Storage.getAnswer(q.id))) {
+      Storage.getAnswer(q.id).forEach(l => selectedMulti[l] = true);
     }
-    if (q.type !== 'multi' && userAnswers[q.id] && !Array.isArray(userAnswers[q.id]) && !submitted) {
-      selectedOption = userAnswers[q.id];
+    if (q.type !== 'multi' && Storage.getAnswer(q.id) && !Array.isArray(Storage.getAnswer(q.id)) && !submitted) {
+      selectedOption = Storage.getAnswer(q.id);
     }
   }
 
+  // 笔记区域
+  let noteArea = document.getElementById('note-area');
+  if (!noteArea) {
+    noteArea = document.createElement('div');
+    noteArea.id = 'note-area';
+    noteArea.innerHTML = `
+      <div class="note-header">📝 个人笔记</div>
+      <textarea id="note-textarea" class="note-textarea" placeholder="记下你的思路、易错点..." oninput="saveNoteDebounced()"></textarea>`;
+    document.getElementById('question-body').appendChild(noteArea);
+  }
+  noteArea.style.display = 'block';
+  const nta = document.getElementById('note-textarea');
+  nta.value = Storage.getNote(q.id) || '';
+  nta.dataset.qId = q.id;
+
   renderSheet(); updateFilterStats();
   document.getElementById('content').scrollTop = 0;
+}
+
+// 笔记自动保存（500ms 防抖，锁定题目 ID 防竞态）
+let noteTimer = null;
+function saveNoteDebounced() {
+  clearTimeout(noteTimer);
+  const qId = document.getElementById('note-textarea')?.dataset?.qId;
+  noteTimer = setTimeout(() => {
+    const text = document.getElementById('note-textarea').value;
+    Storage.setNote(qId, text);
+  }, 500);
 }
 
 function showWelcome() {
@@ -347,39 +453,51 @@ function submitAnswer() {
   if (q.type === 'fill') {
     const val = document.getElementById('fill-answer').value;
     if (!val.trim()) return;
-    userAnswers[q.id] = val.trim();
+    Storage.setAnswer(q.id, val.trim());
   } else if (q.type === 'multi') {
     const keys = Object.keys(selectedMulti);
-    if (keys.length === 0 && (!userAnswers[q.id] || !Array.isArray(userAnswers[q.id]))) return;
-    if (keys.length > 0) userAnswers[q.id] = keys.sort();
+    if (keys.length === 0 && (!Storage.getAnswer(q.id) || !Array.isArray(Storage.getAnswer(q.id)))) return;
+    if (keys.length > 0) Storage.setAnswer(q.id, keys.sort());
   } else {
-    if (!selectedOption && !userAnswers[q.id]) return;
-    if (selectedOption) userAnswers[q.id] = selectedOption;
+    if (!selectedOption && !Storage.getAnswer(q.id)) return;
+    if (selectedOption) Storage.setAnswer(q.id, selectedOption);
   }
-  submittedQuestions[q.id] = true;
+  Storage.markSubmitted(q.id);
 
   // Check
+  const userAns = Storage.getAnswer(q.id);
   let isCorrect = false;
   if (q.type === 'multi') {
     const correct = (Array.isArray(q.answer) ? q.answer : [q.answer]).sort().join('');
-    const user = (Array.isArray(userAnswers[q.id]) ? userAnswers[q.id] : [userAnswers[q.id]]).sort().join('');
+    const user = (Array.isArray(userAns) ? userAns : [userAns]).sort().join('');
     isCorrect = correct === user;
   } else if (q.type === 'fill') {
-    isCorrect = String(userAnswers[q.id] || '').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+    isCorrect = String(userAns || '').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
   } else {
-    isCorrect = userAnswers[q.id] === q.answer;
+    isCorrect = userAns === q.answer;
   }
 
-  if (!isCorrect) wrongBook[q.id] = true;
+  if (!isCorrect) Storage.addWrong(q.id);
+
+  // 学习计划进度追踪
+  Plan.onQuestionSubmitted(q.id, isCorrect);
+
+  // 每日一题完成检测
+  if (Daily.getQuestion() && Daily.getQuestion().id === q.id && isCorrect) {
+    Daily.markAnswered();
+  }
+
+  // 打卡
+  Storage.checkinToday();
+
   saveToStorage(); renderSheet(); updateAllStats(); updateFilterStats();
   showQuestion(currentIndex);
 }
 
 function toggleMark() {
   const q = currentQuestions[currentIndex];
-  if (submittedQuestions[q.id]) return;
-  if (markedQuestions[q.id]) delete markedQuestions[q.id];
-  else markedQuestions[q.id] = true;
+  if (Storage.isSubmitted(q.id)) return;
+  Storage.toggleMarked(q.id);
   saveToStorage(); renderSheet();
   showQuestion(currentIndex);
 }
@@ -403,39 +521,41 @@ function renderSheet() {
     cell.title = `${SUBJECTS[q.subject].name} ${q.year}年 Q${i+1}`;
     cell.onclick = () => showQuestion(i);
     if (i === currentIndex) cell.classList.add('current');
-    if (submittedQuestions[q.id]) {
+    if (Storage.isSubmitted(q.id)) {
+      const userAns = Storage.getAnswer(q.id);
       let isCorrect = false;
       if (q.type === 'multi') {
         const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
-        const u = (Array.isArray(userAnswers[q.id])?userAnswers[q.id]:[userAnswers[q.id]]).sort().join('');
+        const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
         isCorrect = c === u;
       } else if (q.type === 'fill') {
-        isCorrect = String(userAnswers[q.id]||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+        isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
       } else {
-        isCorrect = userAnswers[q.id] === q.answer;
+        isCorrect = userAns === q.answer;
       }
       cell.classList.add(isCorrect ? 'correct-cell' : 'wrong-cell');
     }
-    if (markedQuestions[q.id]) cell.classList.add('marked-cell');
+    if (Storage.isMarked(q.id)) cell.classList.add('marked-cell');
     grid.appendChild(cell);
   });
 }
 
 // ---- Stats ----
 function updateAllStats() {
-  const done = Object.keys(submittedQuestions).length;
+  const done = Storage.getSubmittedIds().length;
   let corr = 0;
   QUESTION_BANK.forEach(q => {
-    if (!submittedQuestions[q.id]) return;
+    if (!Storage.isSubmitted(q.id)) return;
+    const userAns = Storage.getAnswer(q.id);
     let isCorrect = false;
     if (q.type === 'multi') {
       const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
-      const u = (Array.isArray(userAnswers[q.id])?userAnswers[q.id]:[userAnswers[q.id]]).sort().join('');
+      const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
       isCorrect = c === u;
     } else if (q.type === 'fill') {
-      isCorrect = String(userAnswers[q.id]||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
     } else {
-      isCorrect = userAnswers[q.id] === q.answer;
+      isCorrect = userAns === q.answer;
     }
     if (isCorrect) corr++;
   });
@@ -443,24 +563,26 @@ function updateAllStats() {
   document.getElementById('stat-correct').textContent = corr;
   document.getElementById('stat-wrong').textContent = done - corr;
   document.getElementById('stat-rate').textContent = done > 0 ? Math.round(corr/done*100)+'%' : '--';
-  document.getElementById('wrong-count').textContent = Object.keys(wrongBook).length;
+  document.getElementById('wrong-count').textContent = Storage.getWrongIds().length;
+  document.getElementById('fav-count').textContent = Storage.getFavoriteIds().length;
 }
 
 function updateFilterStats() {
   document.getElementById('filter-count').textContent = currentQuestions.length;
-  const done = currentQuestions.filter(q => submittedQuestions[q.id]).length;
+  const done = currentQuestions.filter(q => Storage.isSubmitted(q.id)).length;
   let corr = 0;
   currentQuestions.forEach(q => {
-    if (!submittedQuestions[q.id]) return;
+    if (!Storage.isSubmitted(q.id)) return;
+    const userAns = Storage.getAnswer(q.id);
     let isCorrect = false;
     if (q.type === 'multi') {
       const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
-      const u = (Array.isArray(userAnswers[q.id])?userAnswers[q.id]:[userAnswers[q.id]]).sort().join('');
+      const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
       isCorrect = c === u;
     } else if (q.type === 'fill') {
-      isCorrect = String(userAnswers[q.id]||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
     } else {
-      isCorrect = userAnswers[q.id] === q.answer;
+      isCorrect = userAns === q.answer;
     }
     if (isCorrect) corr++;
   });
@@ -471,9 +593,13 @@ function updateFilterStats() {
 // ---- Reset ----
 function resetProgress() {
   if (!confirm('确定要重置所有答题记录吗？此操作不可恢复。')) return;
-  userAnswers = {}; markedQuestions = {}; submittedQuestions = {}; wrongBook = {};
+  Storage.reset();
+  window.userAnswers = Storage.get('userAnswers');
+  window.markedQuestions = Storage.get('markedQuestions');
+  window.submittedQuestions = Storage.get('submittedQuestions');
+  window.wrongBook = Storage.get('wrongBook');
   selectedOption = null; selectedMulti = {};
-  saveToStorage(); updateAllStats(); applyFilter();
+  updateAllStats(); applyFilter();
 }
 
 // ---- Utils ----
@@ -481,9 +607,13 @@ function shuffle(a) { for (let i = a.length-1; i>0; i--) { const j = Math.floor(
 
 // ---- Keyboard ----
 document.addEventListener('keydown', (e) => {
+  // 如果焦点在搜索框或输入框，不处理快捷键
+  if (document.activeElement && (document.activeElement.id === 'search-input' || document.activeElement.id === 'fill-answer' || document.activeElement.id === 'ce-textarea')) return;
+  if (Exam.state === 'running') return; // 考试中不处理
+
   if (currentIndex < 0 || currentQuestions.length === 0) return;
   const q = currentQuestions[currentIndex];
-  if (submittedQuestions[q.id]) {
+  if (Storage.isSubmitted(q.id)) {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); if (currentIndex < currentQuestions.length-1) showQuestion(currentIndex+1); }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); if (currentIndex > 0) showQuestion(currentIndex-1); }
     return;
@@ -496,7 +626,7 @@ document.addEventListener('keydown', (e) => {
   if (['A','B','C','D','E'].includes(key)) {
     if (q.type === 'multi') {
       if (selectedMulti[key]) delete selectedMulti[key]; else selectedMulti[key] = true;
-      userAnswers[q.id] = Object.keys(selectedMulti).sort();
+      Storage.setAnswer(q.id, Object.keys(selectedMulti).sort());
       saveToStorage();
       showQuestion(currentIndex);
     } else {
@@ -506,17 +636,18 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') { e.preventDefault(); submitAnswer(); }
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); if (currentIndex < currentQuestions.length-1) showQuestion(currentIndex+1); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); if (currentIndex > 0) showQuestion(currentIndex-1); }
+  // Ctrl+S 收藏当前题
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); Storage.toggleFavorite(q.id); document.getElementById('btn-fav').textContent = Storage.isFavorite(q.id) ? '⭐ 已收藏' : '☆ 收藏'; }
 });
 
 function selectOptionUniversal(letter) {
   selectedOption = letter;
-  userAnswers[currentQuestions[currentIndex].id] = letter;
+  Storage.setAnswer(currentQuestions[currentIndex].id, letter);
   saveToStorage();
   showQuestion(currentIndex);
 }
 
 // ---- Start ----
-// 移动端切换
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('show');
@@ -534,13 +665,11 @@ function toggleSheet() {
     if (overlay) overlay.style.display = 'block';
   }
 }
-// 点击知识点标签跳转
+
 function jumpToTopic(topicKey) {
   const topic = TOPICS[topicKey];
   if (!topic) return;
-  // 找到topic对应的base subject，再映射回可能的subject key
   const baseSubj = topic.subject;
-  // 选中包含该知识点的学科
   let subjectsToSelect = [baseSubj];
   if (baseSubj === 'ma1') subjectsToSelect = ['ma1','ma2','ma3'];
   if (baseSubj === 'en1') subjectsToSelect = ['en1','en2'];
@@ -556,5 +685,19 @@ function jumpToTopic(topicKey) {
   applyFilter();
   document.getElementById('content').scrollTop = 0;
 }
+
+// ---- 模拟考试快捷入口 ----
+function startExam() {
+  Exam.start();
+}
+
+// 页面离开提醒（考试进行中）
+window.addEventListener('beforeunload', (e) => {
+  if (Exam.state === 'running') {
+    e.preventDefault();
+    e.returnValue = '考试正在进行中，确定离开吗？';
+    return e.returnValue;
+  }
+});
 
 init();

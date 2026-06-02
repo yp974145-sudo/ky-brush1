@@ -15,6 +15,15 @@
       <span class="logo-icon">📚</span>
       <span class="logo-text">考研刷题</span>
     </div>
+
+    <!-- 搜索栏 -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="搜题目、知识点、关键字..." autocomplete="off">
+      <span id="search-count" class="search-count" style="display:none;"></span>
+      <button id="search-clear" class="search-clear" style="display:none;" onclick="Search.clear()">✕</button>
+    </div>
+
     <div class="header-stats desktop-only">
       <span class="stat-item">📝 <strong id="stat-total">0</strong></span>
       <span class="stat-item correct">✅ <strong id="stat-correct">0</strong></span>
@@ -22,7 +31,13 @@
       <span class="stat-item">📊 <strong id="stat-rate">--</strong></span>
     </div>
     <div class="header-actions desktop-only">
+      <button class="btn btn-outline" onclick="startExam()">⏱ 模拟考试</button>
       <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题本 <span id="wrong-count" class="badge">0</span></button>
+      <button class="btn btn-outline" onclick="showFavorites()">⭐ 收藏 <span id="fav-count" class="badge">0</span></button>
+      <button class="btn btn-outline" onclick="Stats.show()">📊 统计</button>
+      <button class="btn btn-outline" onclick="PlanUI.show()">📋 计划</button>
+      <button class="btn btn-outline" onclick="ShareCard.show()">📤 分享</button>
+      <button class="btn btn-outline" id="btn-login-ui" onclick="Auth.showLoginModal()">登录</button>
       <button class="btn btn-outline" onclick="resetProgress()">🔄 重置</button>
     </div>
     <button class="btn btn-icon mobile-only" id="btn-sheet" onclick="toggleSheet()" aria-label="答题卡">📋</button>
@@ -57,6 +72,8 @@
         <h3>⚡ 模式</h3>
         <button class="btn btn-full" onclick="startRandom()">🎲 随机刷题</button>
         <button class="btn btn-full" style="margin-top:6px;" onclick="reviewWrong()">🔁 重做错题</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#e65100;" onclick="startExam()">⏱ 模拟考试</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#f5a623;color:#fff;" onclick="showFavorites()">⭐ 我的收藏</button>
       </div>
       <div class="filter-section stats-box">
         <h3>📊 当前筛选</h3>
@@ -71,10 +88,15 @@
         <div class="welcome-icon">🎯</div>
         <h2>考研公共课刷题</h2>
         <p>408计算机 · 数学一/二/三 · 政治 · 英语一/二</p>
-        <p class="welcome-sub">覆盖历年真题，支持单选/多选/填空</p>
+        <p class="welcome-sub">覆盖历年真题，支持单选/多选/填空 · 搜索搜题 · 模拟考试</p>
+
+        <!-- 每日一题卡片 -->
+        <div id="daily-card" class="daily-card-welcome"></div>
+
         <div class="quick-actions">
           <button class="btn btn-primary" onclick="startRandom()">🎲 随机刷题</button>
           <button class="btn btn-secondary" onclick="selectAllSubjects()">📝 全部浏览</button>
+          <button class="btn btn-secondary" onclick="startExam()">⏱ 模拟考试</button>
         </div>
       </div>
 
@@ -127,11 +149,23 @@
   </nav>
 </div>
 
+<!-- 模拟考试面板（动态渲染） -->
+<div id="exam-panel" style="display:none;"></div>
+
 <script src="js/subjects.js"></script>
 <script src="js/data-408.js"></script>
 <script src="js/data-math.js"></script>
 <script src="js/data-politics.js"></script>
 <script src="js/data-english.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/search.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/exam-mode.js"></script>
+<script src="js/stats-dashboard.js"></script>
+<script src="js/daily-challenge.js"></script>
+<script src="js/study-plan.js"></script>
+<script src="js/share-card.js"></script>
+<script src="js/code-editor.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
