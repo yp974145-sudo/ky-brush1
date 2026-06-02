@@ -1017,3 +1017,145 @@ body {
   overflow-x: auto; line-height: 1.5; white-space: pre-wrap;
 }
 .ce-ref-analysis { margin-top: 6px; font-size: 12px; color: #555; line-height: 1.6; }
+
+/* ============================================================
+   考研全流程指南
+   ============================================================ */
+#kaoyan-panel {
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 100; overflow-y: auto;
+  flex-direction: column; padding: 16px; display: none;
+}
+.kg-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; max-width: 900px; margin-left: auto; margin-right: auto; width: 100%;
+}
+.kg-header h2 { font-size: 20px; }
+
+/* 顶部状态栏 */
+.kg-topbar {
+  display: flex; gap: 16px; max-width: 900px; margin: 0 auto 20px; width: 100%;
+  flex-wrap: wrap;
+}
+.kg-progress-ring {
+  background: var(--card); border-radius: 16px; padding: 16px 24px;
+  text-align: center; box-shadow: var(--shadow); min-width: 100px;
+}
+.kg-progress-num { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+.kg-progress-label { font-size: 11px; color: var(--text-secondary); }
+.kg-next-box {
+  flex: 1; background: var(--card); border-radius: 16px; padding: 16px 20px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px; min-width: 200px;
+}
+.kg-next-label { font-size: 11px; color: var(--text-secondary); }
+.kg-next-title { font-size: 18px; font-weight: 700; }
+.kg-next-countdown { font-size: 13px; color: var(--text-secondary); }
+.kg-next-countdown strong { color: var(--primary); font-size: 20px; }
+
+/* 时间线 */
+.kg-section-title {
+  font-size: 16px; font-weight: 700; max-width: 900px;
+  margin: 0 auto 12px; width: 100%;
+}
+.kg-timeline {
+  max-width: 900px; margin: 0 auto 24px; width: 100%;
+  display: flex; flex-direction: column; gap: 0;
+}
+.kg-stage {
+  padding: 14px 16px; border-left: 3px solid #e0e0e0;
+  margin-left: 12px; position: relative; background: var(--card);
+  border-radius: 0 8px 8px 0; margin-bottom: 8px; box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.kg-stage.kg-passed { opacity: 0.55; }
+.kg-stage.kg-current { border-left-width: 4px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+.kg-stage.kg-future { opacity: 0.6; background: #fafafa; }
+body.dark .kg-stage.kg-future { background: #1e1e38; }
+
+.kg-stage-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.kg-stage-dot {
+  width: 12px; height: 12px; border-radius: 50%; position: absolute;
+  left: -8px; top: 18px;
+}
+.kg-stage-title { font-weight: 700; font-size: 15px; }
+.kg-stage-date { font-size: 11px; color: var(--text-secondary); font-family: monospace; }
+.kg-badge-now {
+  background: var(--primary); color: #fff; font-size: 10px;
+  padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.kg-badge-done {
+  background: var(--correct); color: #fff; font-size: 10px;
+  padding: 2px 6px; border-radius: 10px; font-weight: 600;
+}
+
+.kg-progress-bar {
+  height: 4px; background: #eee; border-radius: 2px; margin-bottom: 10px;
+}
+body.dark .kg-progress-bar { background: #3a3a5c; }
+.kg-progress-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+.kg-task-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.kg-task {
+  font-size: 13px; padding: 5px 8px; border-radius: 4px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; transition: background 0.1s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.kg-task:hover { background: #f5f5f5; }
+body.dark .kg-task:hover { background: #2a2a50; }
+.kg-task-done { text-decoration: line-through; color: #999; }
+.kg-task-check { font-size: 14px; flex-shrink: 0; }
+
+.kg-tip {
+  margin-top: 8px; font-size: 12px; color: var(--text-secondary);
+  background: #fff8e0; padding: 8px 10px; border-radius: 6px; line-height: 1.5;
+}
+body.dark .kg-tip { background: #2a2a30; }
+
+/* 链接区 */
+.kg-links-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px; max-width: 900px; margin: 0 auto 24px; width: 100%;
+}
+.kg-link {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+  background: var(--card); border-radius: 8px; text-decoration: none;
+  color: var(--text); box-shadow: var(--shadow); font-size: 13px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.kg-link:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.kg-link-icon { font-size: 18px; flex-shrink: 0; }
+.kg-link-name { flex: 1; font-weight: 500; }
+.kg-link-tag {
+  font-size: 10px; background: #f0f0f0; padding: 2px 6px;
+  border-radius: 4px; color: #888;
+}
+body.dark .kg-link-tag { background: #3a3a5c; }
+
+/* 资源区 */
+.kg-res-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px; max-width: 900px; margin: 0 auto 24px; width: 100%;
+}
+.kg-res-card {
+  background: var(--card); border-radius: 10px; padding: 14px; box-shadow: var(--shadow);
+}
+.kg-res-subj { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+.kg-res-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.kg-res-tag {
+  font-size: 11px; background: #f0f4ff; color: var(--primary);
+  padding: 3px 8px; border-radius: 12px; white-space: nowrap;
+}
+body.dark .kg-res-tag { background: #2a2a50; }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  #kaoyan-panel { top: 44px; padding: 10px; }
+  .kg-topbar { flex-direction: column; gap: 10px; }
+  .kg-progress-ring { min-width: auto; }
+  .kg-links-grid { grid-template-columns: repeat(2, 1fr); }
+  .kg-res-grid { grid-template-columns: 1fr; }
+  .kg-stage { margin-left: 8px; padding: 10px 12px; }
+  .kg-stage-title { font-size: 14px; }
+}
