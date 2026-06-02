@@ -27,6 +27,7 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
     ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
     ...(typeof QUESTIONS_POLITICS_2017 !== 'undefined' ? QUESTIONS_POLITICS_2017 : []),
+    ...(typeof QUESTIONS_POLITICS_2018 !== 'undefined' ? QUESTIONS_POLITICS_2018 : []),
     ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
     ...imported
   ];
@@ -915,24 +916,26 @@ function jumpToMobileSearchResult(qId, subject) {
 
 // ---- 题目左右滑动 ----
 function initQuestionSwipe() {
-  const area = document.getElementById('content');
   let startX = 0, startY = 0, swiping = false;
 
-  area.addEventListener('touchstart', function(e) {
+  document.addEventListener('touchstart', function(e) {
+    // 不在刷题模式或考试中，不处理
     if (currentIndex < 0 || currentQuestions.length === 0) return;
-    if (Exam.state === 'running') return;
+    if (typeof Exam !== 'undefined' && Exam.state === 'running') return;
+    // 如果点击的是按钮/链接/输入框，不拦截
+    if (e.target.closest('button, a, input, textarea, select, .sheet-cell, .option-item, .nav-btn, .btn')) return;
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     swiping = true;
   }, { passive: true });
 
-  area.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend', function(e) {
     if (!swiping) return;
     swiping = false;
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
-    // 水平滑动超过 40px，且水平不小于垂直
-    if (Math.abs(dx) > 40 && Math.abs(dx) >= Math.abs(dy)) {
+    // 水平滑动超过 30px，放宽方向判断
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 0.7) {
       if (dx < 0 && currentIndex < currentQuestions.length - 1) {
         showQuestion(currentIndex + 1);   // 左划 → 下一题
       } else if (dx > 0 && currentIndex > 0) {
