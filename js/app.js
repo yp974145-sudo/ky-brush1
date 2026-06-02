@@ -26,6 +26,7 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
     ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
     ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
+    ...(typeof QUESTIONS_POLITICS_2017 !== 'undefined' ? QUESTIONS_POLITICS_2017 : []),
     ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
     ...imported
   ];
