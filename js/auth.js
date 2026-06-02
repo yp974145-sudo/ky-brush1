@@ -153,6 +153,19 @@ const Auth = {
     if (el) { el.textContent = msg; el.style.display = 'block'; }
   },
 
+  async _manualSync() {
+    if (typeof Cloud === 'undefined' || !Cloud.isReady()) {
+      alert('云同步未配置。请先在 Supabase 创建项目并配置 js/supabase.js');
+      return;
+    }
+    if (!Cloud.isLoggedIn()) {
+      alert('请先用邮箱登录');
+      return;
+    }
+    const result = await Cloud.manualSync();
+    alert(result);
+  },
+
   _loginAs(name) {
     Storage.switchTo(name);
     this._user = { nickname: name };
@@ -230,6 +243,7 @@ const Auth = {
         <button class="btn btn-outline btn-me-action" onclick="Stats.show();Auth.closePanel()">📊 学习统计</button>
         <button class="btn btn-outline btn-me-action" onclick="PlanUI.show();Auth.closePanel()">📋 学习计划</button>
         <button class="btn btn-outline btn-me-action" onclick="startExam();Auth.closePanel()">⏱ 模拟考试</button>
+        <button class="btn btn-outline btn-me-action" onclick="Auth._manualSync()">☁️ 手动同步云端</button>
         <button class="btn btn-outline btn-me-action" onclick="Stats.exportMyData()">💾 导出数据备份</button>
         <button class="btn btn-outline btn-me-action" onclick="document.getElementById('import-file').click()">📥 导入数据</button>
         <input type="file" id="import-file" accept=".json" style="display:none;" onchange="Stats.importData(this)">

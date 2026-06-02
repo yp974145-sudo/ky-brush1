@@ -99,11 +99,24 @@ const Cloud = {
     if (this._syncing) return;
     this._syncing = true;
     try {
-      const dump = Storage.exportData();
+      // 直接用 Storage._data，避免 JSON 序列化/反序列化的数据丢失
+      const payload = {
+        user_id: this._userId,
+        data: Storage._data._accounts || {},
+        updated_at: new Date().toISOString()
+      };
       const { error } = await this._client
         .from('user_data')
-        .upsert({ user_id: this._userId, data: JSON.parse(dump), updated_at: new Date().toISOString() });
-      if (error) console.warn('云同步上传失败:', error.message);
+        .upsert(payload, { onConflict: 'user_id' });
+      if (error) {
+        if (error.code === '42P01') {
+          console.warn('⚠️ 云端表 user_data 不存在，请在 Supabase SQL Editor 执行建表语句');
+        } else {
+          console.warn('云同步上传失败:', error.message, error.code);
+        }
+      } else {
+        console.log('✅ 数据已同步到云端');
+      }
     } catch (e) {
       console.warn('云同步上传异常:', e.message);
     } finally {
@@ -119,13 +132,17 @@ const Cloud = {
         .from('user_data')
         .select('data')
         .eq('user_id', this._userId)
-        .single();
+        .maybeSingle();
       if (error) {
-        if (error.code === 'PGRST116') return null; // 没有记录，正常
-        console.warn('云同步下载失败:', error.message);
+        if (error.code === '42P01') {
+          console.warn('⚠️ 云端表 user_data 不存在');
+        } else {
+          console.warn('云同步下载失败:', error.message);
+        }
         return null;
       }
-      return data?.data || null;
+      if (!data?.data) return null;
+      return data.data;
     } catch (e) {
       console.warn('云同步下载异常:', e.message);
       return null;
@@ -134,32 +151,62 @@ const Cloud = {
 
   // ---- 登录后处理 ----
   async _onLogin() {
-    // 尝试从云端下载数据
-    const cloud = await this.download();
-    if (cloud) {
-      const merged = Storage.importData(JSON.stringify(cloud));
-      if (merged && typeof updateAllStats === 'function') updateAllStats();
+    console.log('🔐 已登录 Supabase，开始同步...');
+    // 先尝试从云端下载
+    const cloudData = await this.download();
+    if (cloudData) {
+      console.log('📥 从云端下载数据...');
+      // 合并到本地
+      if (Storage._data && Storage._data._accounts) {
+        for (const [name, acc] of Object.entries(cloudData)) {
+          if (!Storage._data._accounts[name]) {
+            Storage._data._accounts[name] = acc;
+          } else {
+            // 合并：云端数据覆盖本地（以云端为准）
+            Object.assign(Storage._data._accounts[name], acc);
+          }
+        }
+        Storage._flush();
+        console.log('✅ 云端数据已合并到本地');
+      }
+      // 刷新全局变量
+      if (typeof Auth !== 'undefined' && Auth._reloadGlobals) Auth._reloadGlobals();
+      if (typeof updateAllStats === 'function') updateAllStats();
       if (typeof applyFilter === 'function') applyFilter();
+    } else {
+      console.log('📤 云端无数据，上传本地数据...');
     }
     // 上传本地数据到云端
     await this.upload();
   },
 
+  // ---- 手动同步 ----
+  async manualSync() {
+    if (!this.isLoggedIn()) return '请先登录';
+    try {
+      await this.upload();
+      return '✅ 同步成功';
+    } catch(e) {
+      return '❌ 同步失败: ' + e.message;
+    }
+  },
+
   // ---- 自动同步 ----
-  // 答题后调用，带防抖
   _uploadTimer: null,
   scheduleUpload() {
     if (!this._userId) return;
     clearTimeout(this._uploadTimer);
-    this._uploadTimer = setTimeout(() => this.upload(), 2000);
+    this._uploadTimer = setTimeout(() => this.upload(), 3000);
   }
 };
 
-// 答题后自动触发云端同步（挂到 Storage 上）
+// 答题后自动触发云端同步
 const _origFlush = Storage._flush;
 Storage._flush = function() {
   _origFlush.call(this);
-  if (Cloud.isLoggedIn()) Cloud.scheduleUpload();
+  if (typeof Cloud !== 'undefined' && Cloud.isLoggedIn && Cloud.isLoggedIn()) {
+    Cloud.scheduleUpload();
+  }
 };
 
 // 启动
