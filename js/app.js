@@ -42,6 +42,10 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_POLITICS_2016 !== 'undefined' ? QUESTIONS_POLITICS_2016 : []),
     ...(typeof QUESTIONS_POLITICS_2017 !== 'undefined' ? QUESTIONS_POLITICS_2017 : []),
     ...(typeof QUESTIONS_POLITICS_2018 !== 'undefined' ? QUESTIONS_POLITICS_2018 : []),
+    ...(typeof QUESTIONS_POLITICS_2019 !== 'undefined' ? QUESTIONS_POLITICS_2019 : []),
+    ...(typeof QUESTIONS_POLITICS_2020 !== 'undefined' ? QUESTIONS_POLITICS_2020 : []),
+    ...(typeof QUESTIONS_POLITICS_2021 !== 'undefined' ? QUESTIONS_POLITICS_2021 : []),
+    ...(typeof QUESTIONS_POLITICS_2026 !== 'undefined' ? QUESTIONS_POLITICS_2026 : []),
     ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
     ...imported
   ];
