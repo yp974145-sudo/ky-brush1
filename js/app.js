@@ -896,12 +896,12 @@ function initQuestionSwipe() {
     swiping = false;
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
-    // 水平滑动超过 60px，且水平大于垂直
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    // 水平滑动超过 40px，且水平不小于垂直
+    if (Math.abs(dx) > 40 && Math.abs(dx) >= Math.abs(dy)) {
       if (dx < 0 && currentIndex < currentQuestions.length - 1) {
-        showQuestion(currentIndex + 1);
+        showQuestion(currentIndex + 1);   // 左划 → 下一题
       } else if (dx > 0 && currentIndex > 0) {
-        showQuestion(currentIndex - 1);
+        showQuestion(currentIndex - 1);   // 右划 → 上一题
       }
     }
   });
@@ -930,6 +930,18 @@ function jumpToTopic(topicKey) {
 // ---- 模拟考试快捷入口 ----
 function startExam() {
   Exam.start();
+}
+
+function showCodeQuestions() {
+  mode = 'filter';
+  currentFilter.subjects = ['ds', 'co', 'os', 'cn'];
+  currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
+  renderGroupFilters(); renderSubjectFilters(); renderTopicFilters(); renderYearFilters();
+  currentQuestions = getBank().filter(q => q.type === 'code');
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  if (currentQuestions.length > 0) showQuestion(0);
+  else alert('没有编程题');
 }
 
 // 页面离开提醒（考试进行中）
