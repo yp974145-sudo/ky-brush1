@@ -27,6 +27,15 @@ const Auth = {
     document.getElementById('me-overlay').style.display = 'none';
   },
 
+  logout() {
+    this._user = null;
+    Storage.clearUser();
+    this._updateUI();
+    this.closePanel();
+    // 切换到 guest 账户
+    if (typeof applyFilter === 'function') applyFilter();
+  },
+
   // ---- 选择/创建账户 ----
   _renderLogin() {
     const accounts = Storage.listAccounts();
@@ -143,6 +152,7 @@ const Auth = {
         <button class="btn btn-outline btn-me-action" onclick="Auth._renderLogin()">🔄 切换账户</button>
         <button class="btn btn-outline btn-me-action" onclick="Auth._renderEditNickname()">✏️ 改昵称</button>
         <button class="btn btn-danger-text btn-me-action" onclick="Auth._confirmDelete()">🗑 删除此账户</button>
+        <button class="btn btn-danger-text btn-me-action" onclick="Auth.logout()">🚪 退出登录</button>
       </div>`;
   },
 

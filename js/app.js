@@ -810,11 +810,11 @@ function initSheetSwipe() {
     }
   }, { passive: false });
 
-  sheet.addEventListener('touchend', function() {
+  sheet.addEventListener('touchend', function(e) {
     if (!dragging) return;
     dragging = false;
     sheet.style.transition = '';
-    const dy = event.changedTouches[0].clientY - startY;
+    const dy = e.changedTouches[0].clientY - startY;
     if (dy > 80) closeSheet();
     else sheet.style.transform = '';
   });

@@ -38,7 +38,7 @@
     <div class="header-actions desktop-only">
       <button class="btn btn-outline" onclick="startExam()">⏱ 考试</button>
       <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题 <span id="wrong-count" class="badge">0</span></button>
-      <button class="btn btn-outline" id="btn-login-ui" onclick="Auth.showLoginModal()">登录</button>
+      <button class="btn btn-outline" id="btn-login-ui" onclick="Auth.showMyPanel()">登录</button>
       <div class="header-more-wrap">
         <button class="btn btn-outline" onclick="toggleHeaderMore()">⋯ 更多</button>
         <div class="header-more-drop" id="header-more-drop">
@@ -92,6 +92,7 @@
         <button class="btn btn-full" style="margin-top:6px;background:#f5a623;color:#fff;" onclick="showFavorites()">⭐ 我的收藏</button>
         <button class="btn btn-full" style="margin-top:6px;background:#4CAF50;" onclick="KaoyanGuide.show()">📅 考研指南</button>
         <button class="btn btn-full" style="margin-top:6px;background:#9C27B0;" onclick="Planner.show()">📋 学习规划器</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#607D8B;" onclick="BankManager.show()">📦 题库管理</button>
       </div>
       <div class="filter-section stats-box">
         <h3>📊 当前筛选</h3>
@@ -135,7 +136,7 @@
         <div id="question-actions">
           <button class="btn btn-primary" id="btn-submit" onclick="submitAnswer()">✓ 提交</button>
           <button class="btn btn-mark-btn" id="btn-mark" onclick="toggleMark()">🏷 标记</button>
-          <button class="btn btn-secondary mobile-only" id="btn-prev" style="display:none;" onclick="prevQuestion()">◀ 上一题</button>
+          <button class="btn btn-secondary" id="btn-prev" style="display:none;" onclick="prevQuestion()">◀ 上一题</button>
           <button class="btn btn-secondary" id="btn-next" style="display:none;" onclick="nextQuestion()">→ 下一题</button>
         </div>
         <div id="result-area" style="display:none;"></div>
@@ -162,7 +163,7 @@
   <div id="sheet-overlay" onclick="toggleSheet()"></div>
 
   <!-- 移动端搜索面板 -->
-  <div id="mobile-search-panel" class="mobile-only">
+  <div id="mobile-search-panel">
     <div class="ms-panel-top">
       <span class="search-icon">🔍</span>
       <input type="text" id="mobile-search-input" class="search-input" placeholder="搜题目、知识点、关键字..." autocomplete="off">
