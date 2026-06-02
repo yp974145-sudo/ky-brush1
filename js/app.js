@@ -34,8 +34,8 @@ function init() {
   // 初始化搜索
   Search.init('search-input');
 
-  // 初始化登录（静默失败，不影响使用）
-  try { Auth.init('http://localhost:3456'); } catch(e) {}
+  // 初始化我的面板
+  Auth.init();
 
   // 检查今日打卡
   autoCheckin();
