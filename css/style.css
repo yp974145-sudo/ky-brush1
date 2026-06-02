@@ -329,6 +329,16 @@ body.dark .scratch-editor { background: #12122a; }
 }
 
 /* ---- Overlay & Mobile Nav ---- */
+/* 遮罩层默认完全隐藏，仅手机端显示 */
+#sheet-overlay { display: none; }
+#scratchpad-overlay { display: none; }
+#scratchpad { display: none; }
+@media (max-width: 768px) {
+  #sheet-overlay { display: block; }
+  #scratchpad-overlay { display: block; }
+  #scratchpad { display: flex; }
+}
+
 #sheet-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 265;
   opacity: 0; pointer-events: none; transition: opacity 0.3s;
