@@ -608,7 +608,6 @@ function submitAnswer() {
 
   // 原地更新：结果区 + 按钮状态 + 选项颜色（不重建DOM）
   const resultArea = document.getElementById('result-area');
-  const userAns = Storage.getAnswer(q.id);
   resultArea.style.display = 'block';
   resultArea.className = isCorrect ? 'result-correct' : 'result-wrong';
   const correctDisplay = Array.isArray(q.answer) ? q.answer.join('') : q.answer;
