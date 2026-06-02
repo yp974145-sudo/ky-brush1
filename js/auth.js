@@ -134,6 +134,13 @@ const Auth = {
       this._updateUI();
       this._renderProfile();
       this._reloadGlobals();
+      // 强制同步：先从云端下载合并，再上传本地
+      if (typeof Cloud !== 'undefined') {
+        Cloud.download().then(cloud => {
+          if (cloud) { Storage.importData(JSON.stringify(cloud)); this._reloadGlobals(); }
+          Cloud.upload();
+        }).catch(() => {});
+      }
       if (typeof updateAllStats === 'function') updateAllStats();
       if (typeof applyFilter === 'function') applyFilter();
     } catch(e) {

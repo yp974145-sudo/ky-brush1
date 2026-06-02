@@ -73,8 +73,7 @@ function init() {
   // 答题卡滑动
   initSheetSwipe();
 
-  // 题目左右滑动
-  initQuestionSwipe();
+  // 题目左右滑动（已移除，改用固定按钮）
 
   // 深色模式
   initDarkMode();
@@ -480,9 +479,13 @@ function showQuestion(index) {
     favBtn.textContent = isFav ? '⭐ 已收藏' : '☆ 收藏';
   };
 
-  document.getElementById('btn-next').style.display = submitted ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').style.display = 'inline-flex';
   const btnPrev = document.getElementById('btn-prev');
-  if (btnPrev) btnPrev.style.display = submitted ? 'inline-flex' : 'none';
+  if (btnPrev) btnPrev.style.display = currentIndex > 0 ? 'inline-flex' : 'none';
+  // 最后一题隐藏下一题
+  if (currentIndex >= currentQuestions.length - 1) {
+    document.getElementById('btn-next').style.display = 'none';
+  }
 
   // Result
   const resultArea = document.getElementById('result-area');
@@ -591,15 +594,53 @@ function submitAnswer() {
   Plan.onQuestionSubmitted(q.id, isCorrect);
 
   // 每日一题完成检测
-  if (Daily.getQuestion() && Daily.getQuestion().id === q.id && isCorrect) {
+  if (Daily.getQuestion && Daily.getQuestion() && Daily.getQuestion().id === q.id && isCorrect) {
     Daily.markAnswered();
   }
 
   // 打卡
   Storage.checkinToday();
+  saveToStorage();
 
-  saveToStorage(); renderSheet(); updateAllStats(); updateFilterStats();
-  showQuestion(currentIndex);
+  // 原地更新：结果区 + 按钮状态 + 选项颜色（不重建DOM）
+  const resultArea = document.getElementById('result-area');
+  const userAns = Storage.getAnswer(q.id);
+  resultArea.style.display = 'block';
+  resultArea.className = isCorrect ? 'result-correct' : 'result-wrong';
+  const correctDisplay = Array.isArray(q.answer) ? q.answer.join('') : q.answer;
+  resultArea.innerHTML = `
+    <div><span class="result-icon">${isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}</span></div>
+    <div style="margin-top:6px;"><strong>正确答案：${correctDisplay}</strong></div>
+    ${q.analysis ? `<div style="margin-top:10px;color:#555;"><strong>📖 解析：</strong>${q.analysis}</div>` : ''}`;
+
+  // 更新选项颜色
+  const optsEl = document.getElementById('q-options');
+  if (optsEl) {
+    const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const myAns = isCorrect ? correctAnswers : (Array.isArray(userAns) ? userAns : [userAns]);
+    optsEl.querySelectorAll('.option-item').forEach(el => {
+      el.classList.add('disabled');
+      const letter = el.querySelector('.option-letter').textContent;
+      if (correctAnswers.includes(letter)) el.classList.add('correct-answer');
+      else if (myAns.includes(letter) && !correctAnswers.includes(letter)) el.classList.add('wrong-answer');
+    });
+  }
+
+  // 隐藏提交/标记按钮，显示下一题
+  document.getElementById('btn-submit').style.display = 'none';
+  document.getElementById('btn-mark').style.display = 'none';
+  const favBtn = document.getElementById('btn-fav');
+  if (favBtn) favBtn.style.display = 'none';
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  const btnPrev = document.getElementById('btn-prev');
+  if (btnPrev) btnPrev.style.display = 'inline-flex';
+
+  // 禁用填空输入
+  const fillEl = document.getElementById('fill-answer');
+  if (fillEl) fillEl.disabled = true;
+
+  // 轻量更新答题卡和统计
+  renderSheet(); updateAllStats(); updateFilterStats();
 }
 
 function toggleMark() {
