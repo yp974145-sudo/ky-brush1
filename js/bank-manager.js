@@ -45,13 +45,185 @@ D. 选项D
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
-    this._renderImport();
+    this._renderQuickAdd();
   },
 
   close() {
     document.getElementById('bank-panel').style.display = 'none';
     document.getElementById('content').style.display = '';
     if (typeof applyFilter === 'function') applyFilter();
+  },
+
+  // ---- 快速连录（默认首页）----
+  _renderQuickAdd() {
+    const el = document.getElementById('bank-panel');
+    const imported = this._getImported();
+    const topics = typeof TOPICS !== 'undefined' ? TOPICS : {};
+    const subjects = typeof SUBJECTS !== 'undefined' ? SUBJECTS : {};
+
+    el.innerHTML = `
+      <div class="bm-header">
+        <h2>📦 题库管理</h2>
+        <div class="bm-tabs">
+          <button class="bm-tab active" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
+          <button class="bm-tab" onclick="BankManager._renderList()">📋 已导入 (${imported.length})</button>
+          <button class="bm-tab" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
+        </div>
+        <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
+      </div>
+
+      <div class="bm-body">
+        <div class="bm-quick-bar">
+          <span>已录 <strong id="bm-quick-count">${imported.length}</strong> 题</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Ctrl+Enter 快速提交，Esc 清空</span>
+        </div>
+        <div id="bm-quick-msg" class="bm-msg" style="display:none;"></div>
+        <div class="bm-form">
+          <div class="bm-row">
+            <div class="bm-field" style="flex:3"><label>科目</label><select id="bm-qsubj" class="bm-select">${this._subjOptions()}</select></div>
+            <div class="bm-field" style="flex:2"><label>知识点</label><select id="bm-qtopic" class="bm-select"><option value="">先选科目</option></select></div>
+            <div class="bm-field" style="flex:1"><label>题型</label><select id="bm-qtype" class="bm-select"><option value="single">单选</option><option value="multi">多选</option><option value="fill">填空</option></select></div>
+            <div class="bm-field" style="flex:1"><label>年份</label><input id="bm-qyear" class="bm-input" value="2025" placeholder="2025"></div>
+            <div class="bm-field" style="flex:1"><label>答案</label><input id="bm-qans" class="bm-input" placeholder="A"></div>
+          </div>
+          <div class="bm-field"><label>题干</label><textarea id="bm-qq" class="bm-input" rows="2" placeholder="题目内容..."></textarea></div>
+          <div class="bm-row" id="bm-opts-row">
+            <div class="bm-field"><input id="bm-qA" class="bm-input" placeholder="A. ..."></div>
+            <div class="bm-field"><input id="bm-qB" class="bm-input" placeholder="B. ..."></div>
+            <div class="bm-field"><input id="bm-qC" class="bm-input" placeholder="C. ..."></div>
+            <div class="bm-field"><input id="bm-qD" class="bm-input" placeholder="D. ..."></div>
+          </div>
+          <div class="bm-field"><label>解析（可选）</label><input id="bm-qanalysis" class="bm-input" placeholder="解析..."></div>
+          <div class="bm-actions">
+            <button class="btn btn-primary" onclick="BankManager._quickAdd()">✅ 提交 (Ctrl+Enter)</button>
+            <button class="btn btn-secondary" onclick="BankManager._quickClear()">🔄 清空</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 科目切换时更新知识点下拉
+    document.getElementById('bm-qsubj').addEventListener('change', () => {
+      this._updateTopicSelect('bm-qsubj', 'bm-qtopic');
+    });
+    // 键盘快捷键
+    document.addEventListener('keydown', this._quickKeyHandler);
+  },
+
+  _subjOptions() {
+    const subjects = typeof SUBJECTS !== 'undefined' ? SUBJECTS : {};
+    return '<option value="">选择科目</option>' + Object.entries(subjects).map(([k,v]) =>
+      `<option value="${k}">${v.icon} ${v.name}</option>`
+    ).join('');
+  },
+
+  _updateTopicSelect(subjId, topicId) {
+    const subj = document.getElementById(subjId).value;
+    const sel = document.getElementById(topicId);
+    const topics = typeof TOPICS !== 'undefined' ? TOPICS : {};
+    sel.innerHTML = '<option value="">无</option>' + Object.entries(topics)
+      .filter(([k,v]) => v.subject === subj)
+      .map(([k,v]) => `<option value="${k}">${v.name}</option>`).join('');
+  },
+
+  _quickKeyHandler(e) {
+    if (!document.getElementById('bank-panel') || document.getElementById('bank-panel').style.display === 'none') return;
+    if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); BankManager._quickAdd(); }
+    if (e.key === 'Escape') { BankManager._quickClear(); }
+  },
+
+  _quickAdd() {
+    const q = document.getElementById('bm-qq').value.trim();
+    const subj = document.getElementById('bm-qsubj').value;
+    if (!q) return;
+    if (!subj) return alert('请选择科目');
+
+    const opts = [];
+    ['A','B','C','D'].forEach(l => {
+      const v = document.getElementById('bm-q'+l).value.trim();
+      if (v) opts.push(l + '. ' + v);
+    });
+
+    const question = {
+      id: 'imported-' + Date.now(),
+      year: parseInt(document.getElementById('bm-qyear').value) || 2025,
+      subject: subj,
+      topic: document.getElementById('bm-qtopic').value || '',
+      type: document.getElementById('bm-qtype').value || 'single',
+      question: q,
+      options: opts.length > 0 ? opts : undefined,
+      answer: document.getElementById('bm-qans').value.trim().toUpperCase(),
+      analysis: document.getElementById('bm-qanalysis').value.trim() || undefined,
+    };
+
+    const imported = this._getImported();
+    imported.push(question);
+    this._saveImported(imported);
+    refreshQuestionBank();
+    if (typeof updateAllStats === 'function') updateAllStats();
+
+    // 显示提示 + 清空准备下一题
+    document.getElementById('bm-quick-count').textContent = imported.length;
+    const msg = document.getElementById('bm-quick-msg');
+    msg.textContent = '✅ 已添加！继续录下一题...';
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 1500);
+
+    this._quickClear();
+    document.getElementById('bm-qq').focus();
+  },
+
+  _quickClear() {
+    document.getElementById('bm-qq').value = '';
+    ['A','B','C','D'].forEach(l => document.getElementById('bm-q'+l).value = '');
+    document.getElementById('bm-qans').value = '';
+    document.getElementById('bm-qanalysis').value = '';
+    document.getElementById('bm-qq').focus();
+  },
+
+  // ---- OCR 帮助 ----
+  _renderOcrHelp() {
+    const el = document.getElementById('bank-panel');
+    const imported = this._getImported();
+    el.innerHTML = `
+      <div class="bm-header">
+        <h2>📦 题库管理</h2>
+        <div class="bm-tabs">
+          <button class="bm-tab" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
+          <button class="bm-tab" onclick="BankManager._renderList()">📋 已导入 (${imported.length})</button>
+          <button class="bm-tab" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab active" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
+        </div>
+        <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
+      </div>
+      <div class="bm-body" style="max-width:600px;">
+        <h4>📸 从 PDF 快速提取题目</h4>
+        <p class="bm-hint">你的真题大多是 PDF 格式，用以下任一方法提取文字后粘贴到「批量粘贴」或逐题录入：</p>
+
+        <div class="bm-ocr-card">
+          <h5>方法1: 微信截图OCR（最快）</h5>
+          <p>微信PC版截图（Alt+A）→ 框选题干区域 → 点「提取文字」→ 复制 → 粘贴到批量导入</p>
+        </div>
+        <div class="bm-ocr-card">
+          <h5>方法2: QQ截图OCR</h5>
+          <p>QQ截图（Ctrl+Alt+A）→ 框选 → 点「屏幕识图」→ 复制 → 粘贴</p>
+        </div>
+        <div class="bm-ocr-card">
+          <h5>方法3: 在线OCR</h5>
+          <p>上传PDF到 <a href="https://www.ocr2edit.com" target="_blank">ocr2edit.com</a> 或 <a href="https://tools.pdf24.org/zh/ocr" target="_blank">PDF24 OCR</a>，免费转文字</p>
+        </div>
+        <div class="bm-ocr-card">
+          <h5>方法4: WPS/Word打开</h5>
+          <p>.doc 文件直接用 WPS 打开 → 全选复制 → 粘贴到批量导入，系统自动解析</p>
+        </div>
+        <p class="bm-hint" style="margin-top:16px;">提取文字后 → 切到「📥 批量粘贴」→ 整理格式 → 一键导入</p>
+      </div>
+    `;
   },
 
   // ---- 导入页 ----
@@ -70,10 +242,12 @@ D. 选项D
       <div class="bm-header">
         <h2>📦 题库管理</h2>
         <div class="bm-tabs">
-          <button class="bm-tab active" onclick="BankManager._renderImport()">📥 批量导入</button>
-          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 手动添加</button>
+          <button class="bm-tab" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab active" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
           <button class="bm-tab" onclick="BankManager._renderList()">📋 已导入 (${imported.length}题)</button>
           <button class="bm-tab" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
         </div>
         <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
       </div>
@@ -122,10 +296,12 @@ D. 选项D
       <div class="bm-header">
         <h2>📦 题库管理</h2>
         <div class="bm-tabs">
-          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量导入</button>
-          <button class="bm-tab active" onclick="BankManager._renderManual()">✏️ 手动添加</button>
+          <button class="bm-tab" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab active" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
           <button class="bm-tab" onclick="BankManager._renderList()">📋 已导入</button>
           <button class="bm-tab" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
         </div>
         <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
       </div>
@@ -167,10 +343,12 @@ D. 选项D
       <div class="bm-header">
         <h2>📦 题库管理</h2>
         <div class="bm-tabs">
-          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量导入</button>
-          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 手动添加</button>
+          <button class="bm-tab" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
           <button class="bm-tab active" onclick="BankManager._renderList()">📋 已导入 (${imported.length}题)</button>
           <button class="bm-tab" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
         </div>
         <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
       </div>
@@ -204,10 +382,12 @@ D. 选项D
       <div class="bm-header">
         <h2>📦 题库管理</h2>
         <div class="bm-tabs">
-          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量导入</button>
-          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 手动添加</button>
+          <button class="bm-tab" onclick="BankManager._renderQuickAdd()">⚡ 快速连录</button>
+          <button class="bm-tab" onclick="BankManager._renderImport()">📥 批量粘贴</button>
+          <button class="bm-tab" onclick="BankManager._renderManual()">✏️ 逐题添加</button>
           <button class="bm-tab" onclick="BankManager._renderList()">📋 已导入</button>
           <button class="bm-tab active" onclick="BankManager._renderExport()">💾 导出</button>
+          <button class="bm-tab" onclick="BankManager._renderOcrHelp()">📸 OCR提示</button>
         </div>
         <button class="btn btn-icon" onclick="BankManager.close()" style="color:var(--text);font-size:22px;">✕</button>
       </div>
