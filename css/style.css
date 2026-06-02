@@ -473,6 +473,14 @@ body {
 .me-close { cursor: pointer; font-size: 18px; color: #999; padding: 4px; }
 .me-form { display: flex; flex-direction: column; gap: 14px; }
 .me-error { padding: 8px 12px; background: #fff0f0; color: #f54a45; border-radius: 6px; font-size: 12px; }
+.me-divider {
+  display: flex; align-items: center; gap: 10px; margin: 8px 0;
+  color: #bbb; font-size: 11px;
+}
+.me-divider::before, .me-divider::after {
+  content: ''; flex: 1; height: 1px; background: #e0e0e0;
+}
+body.dark .me-divider::before, body.dark .me-divider::after { background: #3a3a5c; }
 .me-hint { font-size: 11px; color: #bbb; text-align: center; margin: 0; }
 .me-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
 .me-desc { font-size: 12px; color: #888; margin-bottom: 4px; line-height: 1.6; }

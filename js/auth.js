@@ -32,7 +32,8 @@ const Auth = {
     Storage.clearUser();
     this._updateUI();
     this.closePanel();
-    // 切换到 guest 账户
+    // 断开云端
+    if (typeof Cloud !== 'undefined') Cloud.signOut().catch(() => {});
     if (typeof applyFilter === 'function') applyFilter();
   },
 
@@ -40,9 +41,12 @@ const Auth = {
   _renderLogin() {
     const accounts = Storage.listAccounts();
     const el = document.getElementById('me-panel');
-    let html = `
-      <div class="me-header"><h3>👤 选择账户</h3><span class="me-close" onclick="Auth.closePanel()">✕</span></div>`;
+    const cloudReady = typeof Cloud !== 'undefined' && Cloud.isReady();
 
+    let html = `
+      <div class="me-header"><h3>👤 账户</h3><span class="me-close" onclick="Auth.closePanel()">✕</span></div>`;
+
+    // 本地账户列表
     if (accounts.length > 0) {
       html += '<div class="me-account-list">';
       accounts.forEach(a => {
@@ -52,14 +56,32 @@ const Auth = {
         </div>`;
       });
       html += '</div>';
-    } else {
-      html += '<p class="me-desc" style="text-align:center;padding:12px;">还没有账户，创建一个吧</p>';
     }
 
+    // Supabase 云端登录（如果有配置）
+    if (cloudReady) {
+      html += `
+        <div class="me-divider"><span>云端同步登录</span></div>
+        <div id="me-cloud-error" class="me-error" style="display:none;"></div>
+        <div class="me-form">
+          <div class="input-group">
+            <label>邮箱</label>
+            <input type="email" id="me-email" placeholder="your@email.com">
+          </div>
+          <div class="input-group">
+            <label>密码</label>
+            <input type="password" id="me-password" placeholder="至少6位">
+          </div>
+          <button class="btn btn-primary btn-full-login" onclick="Auth._cloudLogin()">🔐 登录 / 注册</button>
+          <p class="me-hint">首次输入自动注册，数据云端同步</p>
+        </div>`;
+    }
+
+    // 本地离线账户
     html += `
-      <div class="me-form" style="margin-top:12px;">
+      <div class="me-divider"><span>或创建本地账户</span></div>
+      <div class="me-form">
         <div class="input-group">
-          <label>新账户昵称</label>
           <div class="code-row">
             <input type="text" id="me-nickname" placeholder="输入昵称" maxlength="12">
             <button class="btn btn-code" onclick="Auth._createAccount()">创建</button>
@@ -67,6 +89,61 @@ const Auth = {
         </div>
       </div>`;
     el.innerHTML = html;
+  },
+
+  // Supabase 登录/注册
+  async _cloudLogin() {
+    const email = document.getElementById('me-email').value.trim();
+    const password = document.getElementById('me-password').value.trim();
+    const errEl = document.getElementById('me-cloud-error');
+    if (!email || !password) { this._showCloudErr('请填写邮箱和密码'); return; }
+    if (password.length < 6) { this._showCloudErr('密码至少6位'); return; }
+
+    errEl.style.display = 'none';
+    try {
+      // 先尝试登录
+      let result;
+      try {
+        result = await Cloud.signIn(email, password);
+      } catch(e) {
+        // 登录失败，尝试注册
+        const msg = e.message || '';
+        if (msg.includes('Invalid login') || msg.includes('401') || msg.includes('400')) {
+          try {
+            result = await Cloud.signUp(email, password);
+            // 检查是否需要邮箱确认
+            if (!Cloud.isLoggedIn()) {
+              this._showCloudErr('注册成功！请检查邮箱确认链接，或去 Supabase 后台关闭邮箱确认。');
+              return;
+            }
+          } catch(e2) {
+            throw new Error('注册失败: ' + (e2.message || ''));
+          }
+        } else {
+          throw e;
+        }
+      }
+      // 成功 → 创建/切换到本地账户
+      const nickname = email.split('@')[0];
+      if (!Storage.listAccounts().find(a => a.name === nickname)) {
+        Storage.createAccount(nickname);
+      }
+      Storage.switchTo(nickname);
+      this._user = { nickname, email };
+      Storage.setUser(this._user);
+      this._updateUI();
+      this._renderProfile();
+      this._reloadGlobals();
+      if (typeof updateAllStats === 'function') updateAllStats();
+      if (typeof applyFilter === 'function') applyFilter();
+    } catch(e) {
+      this._showCloudErr('登录失败: ' + (e.message || '网络错误'));
+    }
+  },
+
+  _showCloudErr(msg) {
+    const el = document.getElementById('me-cloud-error');
+    if (el) { el.textContent = msg; el.style.display = 'block'; }
   },
 
   _loginAs(name) {
