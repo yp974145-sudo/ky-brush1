@@ -24,7 +24,6 @@ function getQuestionBank() {
   return [
     ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
     ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
-    ...(typeof QUESTIONS_MATH !== 'undefined' ? QUESTIONS_MATH : []),
     ...(typeof QUESTIONS_MATH_2007 !== 'undefined' ? QUESTIONS_MATH_2007 : []),
     ...(typeof QUESTIONS_MATH_2008 !== 'undefined' ? QUESTIONS_MATH_2008 : []),
     ...(typeof QUESTIONS_MATH_2009 !== 'undefined' ? QUESTIONS_MATH_2009 : []),
@@ -34,7 +33,6 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_MATH_2015 !== 'undefined' ? QUESTIONS_MATH_2015 : []),
     ...(typeof QUESTIONS_MATH_2016 !== 'undefined' ? QUESTIONS_MATH_2016 : []),
     ...(typeof QUESTIONS_MATH_2017 !== 'undefined' ? QUESTIONS_MATH_2017 : []),
-    ...(typeof QUESTIONS_POLITICS !== 'undefined' ? QUESTIONS_POLITICS : []),
     ...(typeof QUESTIONS_POLITICS_1995 !== 'undefined' ? QUESTIONS_POLITICS_1995 : []),
     ...(typeof QUESTIONS_POLITICS_1996 !== 'undefined' ? QUESTIONS_POLITICS_1996 : []),
     ...(typeof QUESTIONS_POLITICS_1997 !== 'undefined' ? QUESTIONS_POLITICS_1997 : []),
@@ -63,7 +61,6 @@ function getQuestionBank() {
     ...(typeof QUESTIONS_POLITICS_2022 !== 'undefined' ? QUESTIONS_POLITICS_2022 : []),
     ...(typeof QUESTIONS_POLITICS_2023 !== 'undefined' ? QUESTIONS_POLITICS_2023 : []),
     ...(typeof QUESTIONS_POLITICS_2026 !== 'undefined' ? QUESTIONS_POLITICS_2026 : []),
-    ...(typeof QUESTIONS_ENGLISH !== 'undefined' ? QUESTIONS_ENGLISH : []),
     ...(typeof QUESTIONS_ENGLISH1_1993 !== 'undefined' ? QUESTIONS_ENGLISH1_1993 : []),
     ...(typeof QUESTIONS_ENGLISH1_1994 !== 'undefined' ? QUESTIONS_ENGLISH1_1994 : []),
     ...(typeof QUESTIONS_ENGLISH1_1995 !== 'undefined' ? QUESTIONS_ENGLISH1_1995 : []),
