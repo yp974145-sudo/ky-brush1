@@ -1,14 +1,12 @@
-// 1989考研数学
+// 1989数学
 const QUESTIONS_MATH_1989 = [
-  { id:'math-1989-1', year:1989, subject:'ma1', topic:'ma-2', type:'single', question:'当x→0+时，与·x等价的无穷小量是()A.1_ex·', options:["B. ln x            C","D. 1_ cos x丶"], answer:"B" },
-  { id:'math-1989-2', year:1989, subject:'ma1', topic:'ma-2', type:'single', question:'函数f在[_π,π]上的第一类间断点是x=()', options:["A. 0","B. 1                    C        π","D. π2                          2"], answer:"B" },
-  { id:'math-1989-5', year:1989, subject:'ma1', topic:'ma-8', type:'single', question:'曲线yln渐近线的条数为()', options:["A. 0","B. 1","C. 2","D. 3"], answer:"D" },
-  { id:'math-1989-6', year:1989, subject:'ma1', topic:'ma-8', type:'single', question:'设函数f(x)在(0,+∞)上具有二阶导数，且f,,(x)&gt;0，令un=f(n)(n=1,2,)，则下列结论正确的是()', options:["A. 若u1  &gt; u2 ，则 {un } 必收敛","B. 若u1  &gt; u2 ，则 {un } 必发散","C. 若u1  &lt; u2 ，则 {un } 必收敛","D. 若u1  &lt; u2 ，则 {un } 必发散"], answer:"A" },
-  { id:'math-1989-9', year:1989, subject:'ma1', topic:'ma-9', type:'single', question:'设向量组α1,α2,α3线性无关，则下列向量组线性相关的是()', options:["A. α1 _ α2  , α2  _ α3 , α3  _ α1","B. α2  + α1  , α2  + α3 , α3  + α1","C. α1 _ 2α2 , α2  _ 2α3 , α3  _ 2α1","D. α1  + 2α2 , α2  + 2α3 , α3  + 2α1"], answer:"A" },
-  { id:'math-1989-10', year:1989, subject:'ma1', topic:'ma-9', type:'single', question:'设矩阵A则A与B', options:["A. 合同，且相似","B. 合同，但不相似","C. 不合同，但相似","D. 既不合同，也不相似"], answer:"B" },
-  { id:'math-1989-12', year:1989, subject:'ma1', topic:'ma-8', type:'fill', question:'曲线os2t上对应于t的点处的法线斜率为_____', options:[], answer:"A" },
-  { id:'math-1989-13', year:1989, subject:'ma1', topic:'ma-8', type:'fill', question:'设函数y，则y(n)', options:[], answer:"A" },
-  { id:'math-1989-14', year:1989, subject:'ma1', topic:'ma-8', type:'fill', question:'二阶常系数非齐次线性微分方程y,,_4y,+3y=2e2x的通解为y=', options:[], answer:"C" },
-  { id:'math-1989-15', year:1989, subject:'ma1', topic:'ma-8', type:'fill', question:'设f(u,v)是二元可微函数，z=f则x', options:[], answer:"" },
-  { id:'math-1989-16', year:1989, subject:'ma1', topic:'ma-8', type:'fill', question:'设矩阵A则A3的秩为＿＿＿＿＿.', options:[], answer:"" }
+  { id:'math-1989-15', year:1989, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分10分)求极限', options:[], answer:"" },
+  { id:'math-1989-16', year:1989, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分10分)设函数f(x)在(_∞,+∞)上有定义,在区间[0,2]上,f(x)=x(x2_4),若对任意的x都满足f(x)=kf(x+2),其中k为常数.(I)写出f(x)在[_2,0]上的表达式;(II)问k为何值时,f(x)在x=0处可导.', options:[], answer:"" },
+  { id:'math-1989-17', year:1989, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分11分)设fsintdt,(I)证明f(x)是以π为周期的周期函数;(II)求f(x)的值域.', options:[], answer:"" },
+  { id:'math-1989-18', year:1989, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分12分)曲线y与直线x=0,x=t(t&gt;0)及y=0围成一曲边梯形.该曲边梯形绕x轴旋转一周得一旋转体,其体积为V(t),侧面积为S(t),在x=t处的底面积为F(t).(I)求的值;(Ⅱ)计算极限t', options:[], answer:"" },
+  { id:'math-1989-19', year:1989, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分12分)设e&lt;a&lt;b&lt;e2,证明ln2b_ln2a', options:[], answer:"" },
+  { id:'math-1989-20', year:1989, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分11分)某种飞机在机场降落时,为了减少滑行距离,在触地的瞬间,飞机尾部张开减速伞,以增大阻力,使飞机迅速减速并停下.现有一质量为9000kg的飞机,着陆时的水平速度为700km/h.经测试,减速伞打开后,飞机所受的总阻力与飞机的速度成正比(比例系数为k=6.0×106).问从着陆点算起,飞', options:[], answer:"" },
+  { id:'math-1989-21', year:1989, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分10分)设z=f(x2_y2,exy),其中f具有连续二阶偏导数,求.', options:[], answer:"" },
+  { id:'math-1989-22', year:1989, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分9分)设有齐次线性方程组试问a取何值时,该方程组有非零解,并求出其通解', options:[], answer:"" },
+  { id:'math-1989-23', year:1989, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分9分)设矩阵的特征方程有一个二重根,求a的值,并讨论A是否可相似对角化.2004年全国硕士研究生入学统一考试数学二试题解析一、填空题', options:[], answer:"" }
 ];
