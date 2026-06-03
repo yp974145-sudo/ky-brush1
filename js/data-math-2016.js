@@ -1,6 +1,6 @@
 // 2016数学
 const QUESTIONS_MATH_2016 = [
-  { id:'math-2016-1', year:2016, subject:'ma2', topic:'ma-2', type:'single', question:'设a1=x(cosx_1)，a2=xln(1+3x)，a3=3x+1_1.当x→0+时，以上3个无穷小量按照从低阶到高阶拓排序是()', options:["A. a1 , a2 , a3 .","B. a2 , a3 , a1 .","C. a2 , a1 , a3  .","D. a3 , a2 , a1 ."], answer:"" },
+  { id:'math-2016-1', year:2016, subject:'ma2', topic:'ma-2', type:'single', question:'设a1=x(cosx_1)，a2=xln(1+3x)，a3=3x+1_1.当x→0+时，以上3个无穷小量按照从低阶到高阶拓排序是()', options:["A. a1 , a2 , a3 .","B. a2 , a3 , a1 .","C. a2 , a1 , a3  .","D. a3 , a2 , a1 ."], answer:"A" },
   { id:'math-2016-2', year:2016, subject:'ma2', topic:'ma-2', type:'single', question:'已知函数f(x则f(x)的一个原函数是()', options:["A. F(x   xx  11..","B. F(x   xx  11.."], answer:"" },
   { id:'math-2016-3', year:2016, subject:'ma2', topic:'ma-3', type:'single', question:'反常积分dx，②dx的敛散性为()', options:["A. ① 收敛， ② 收敛.","B. ① 收敛， ② 发散.","C. ① 收敛， ② 收敛.","D. ① 收敛， ② 发散."], answer:"" },
   { id:'math-2016-4', year:2016, subject:'ma2', topic:'ma-3', type:'single', question:'设函数f(x)在(_∞,+∞)内连续，求导函数的图形如图所示，则', options:["A. 函数 f(x)有 2 个极值点，曲线 y = f(x) 有 2 个拐点.","B. 函数 f(x)有 2 个极值点，曲线 y = f(x) 有 3 个拐点.","C. 函数 f(x) 有 3 个极值点，曲线y = f(x) 有 1 个拐点.","D. 函数f(x) 有 3 个极值点，曲线y = f(x) 有 2 个拐点."], answer:"" },
