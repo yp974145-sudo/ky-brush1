@@ -1,7 +1,7 @@
 // 2019考研数学
 const QUESTIONS_MATH_2019 = [
   { id:'math-2019-1', year:2019, subject:'ma1', topic:'ma-2', type:'single', question:'当x→0时，若x_tanx与xk是同阶无穷小，则k=()', options:["A. 1","B. 2","C. 3","D. 4"], answer:"" },
-  { id:'math-2019-2', year:2019, subject:'ma1', topic:'ma-2', type:'single', question:'设函数f(x则x=0是f(x)的()', options:["A. 可导点，极值点","B. 不可导点，极值点不可导点，非极值点","C. 可导点，非极值点"], answer:"" },
+  { id:'math-2019-2', year:2019, subject:'ma1', topic:'ma-2', type:'single', question:'设函数f(x则x=0是f(x)的()', options:["A. 可导点，极值点","B. 不可导点，极值点不可导点，非极值点","C. 可导点，非极值点"], answer:"A" },
   { id:'math-2019-4', year:2019, subject:'ma1', topic:'ma-3', type:'single', question:'设函数Q如果对上半平面(y&gt;0)内的任意有向光滑封闭曲线C都有P(x,y)dx+Q(x,y)dy=0,那么函数P(x,y)可取为()', options:["A. y _","B. (D)x _"], answer:"" },
   { id:'math-2019-5', year:2019, subject:'ma1', topic:'ma-8', type:'single', question:'设A是3阶实对称矩阵，E是3阶单位矩阵，若A2+A=2E,且A=4，则二次型xTAx的规范为()', options:["A. y21 + y22 + y23","B. y21 + y22 _ y23","C. y21 _ y22 _ y23","D. _ y21 _ y22 _ y23"], answer:"" },
   { id:'math-2019-6', year:2019, subject:'ma1', topic:'ma-8', type:'single', question:'如图所示，有3张平面两两相交，交线相互平行，它们的方程ai1x+ai2y+ai3z=di(i=1,2,3)组成的线性方程组的系数矩阵和增广矩阵分别记为A,A,则()', options:["A. r","A. = 2, r","A. = 3","B. r"], answer:"" },

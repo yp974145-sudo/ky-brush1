@@ -1,7 +1,7 @@
 // auto
 const QUESTIONS_ENGLISH1_2018 = [
-  { id:'en-2018-1', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第1题', options:["A. on","B. like","C. for","D. from"], answer:"" },
-  { id:'en-2018-2', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第2题', options:["A. faith","B. concern","C. attention","D. interest"], answer:"" },
+  { id:'en-2018-1', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第1题', options:["A. on","B. like","C. for","D. from"], answer:"C" },
+  { id:'en-2018-2', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第2题', options:["A. faith","B. concern","C. attention","D. interest"], answer:"B" },
   { id:'en-2018-3', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第3题', options:["A. benefit","B. debt","C. hope","D. price"], answer:"" },
   { id:'en-2018-4', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第4题', options:["A. Therefore","B. Then","C. Instead","D. Again"], answer:"" },
   { id:'en-2018-5', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第5题', options:["A. Until","B. Unless","C. Although","D. When"], answer:"" },

@@ -1,6 +1,6 @@
 // auto
 const QUESTIONS_ENGLISH2_2022 = [
-  { id:'en-2022-2', year:2022, subject:'en2', topic:'en-1', type:'single', question:'2022年真题 第2题', options:["A. c ombined ( 使)结合","B. compared 比较；对比","C. confused 误认；混淆","D. confronted 使面对；使面临[考点提炼]句内语义+上下文语义。[解题思路]空格句指出，哈兰 ·科本将写作(it="], answer:"" },
+  { id:'en-2022-2', year:2022, subject:'en2', topic:'en-1', type:'single', question:'2022年真题 第2题', options:["A. c ombined ( 使)结合","B. compared 比较；对比","C. confused 误认；混淆","D. confronted 使面对；使面临[考点提炼]句内语义+上下文语义。[解题思路]空格句指出，哈兰 ·科本将写作(it="], answer:"C" },
   { id:'en-2022-5', year:2022, subject:'en2', topic:'en-1', type:'single', question:'2022年真题 第5题', options:["A. Accept 接受；承认","B. Explain 解释；说明","C. Remember 记住；牢记","D. Suppose 假定；假设[考点提炼]上下文语义。「解题思路]空格句指出， 大多数畅销书作家当初开始写作的时候都在干着其"], answer:"" },
   { id:'en-2022-6', year:2022, subject:'en2', topic:'en-1', type:'single', question:'2022年真题 第6题', options:["A. well-k nown 出名的；知名的","B. well-advised 谨慎的；经过周密考虑的","C. well-informed 消息灵通的；见多识广的","D. well-chosen 精心挑选的；合适的"], answer:"" },
   { id:'en-2022-7', year:2022, subject:'en2', topic:'en-1', type:'single', question:'2022年真题 第7题', options:["A. donate 捐赠；赠送","B. generate 产生","C. supplement 增补；补充","D. calculate 计算；核算[考点提炼]句内语义+句间逻辑。[解题思路]空格句指出，而且如今，即便是相当 6 的作家也"], answer:"" },

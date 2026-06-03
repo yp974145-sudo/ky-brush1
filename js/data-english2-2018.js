@@ -1,7 +1,7 @@
 // auto
 const QUESTIONS_ENGLISH2_2018 = [
-  { id:'en-2018-1', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第1题', options:["A. protect","B. resolve","C. discuss","D. ignore"], answer:"" },
-  { id:'en-2018-2', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第2题', options:["A. refuse","B. wait","C. regret","D. seek"], answer:"" },
+  { id:'en-2018-1', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第1题', options:["A. protect","B. resolve","C. discuss","D. ignore"], answer:"C" },
+  { id:'en-2018-2', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第2题', options:["A. refuse","B. wait","C. regret","D. seek"], answer:"B" },
   { id:'en-2018-3', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第3题', options:["A. hurt","B. last","C. mislead","D. rise"], answer:"" },
   { id:'en-2018-4', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第4题', options:["A. alert","B. tie","C. treat","D. expose"], answer:"" },
   { id:'en-2018-5', year:2018, subject:'en2', topic:'en-1', type:'single', question:'2018年真题 第5题', options:["A. message","B. review","C. trial","D. concept"], answer:"" },

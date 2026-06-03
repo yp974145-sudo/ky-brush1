@@ -1,7 +1,7 @@
 // auto
 const QUESTIONS_ENGLISH2_2010 = [
-  { id:'en-2010-1', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第1题', options:["A. why","B. where","C. how","D. when"], answer:"" },
-  { id:'en-2010-2', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第2题', options:["A. In return","B. In particular","C. In contrast","D. In conclusion"], answer:"" },
+  { id:'en-2010-1', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第1题', options:["A. why","B. where","C. how","D. when"], answer:"B" },
+  { id:'en-2010-2', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第2题', options:["A. In return","B. In particular","C. In contrast","D. In conclusion"], answer:"D" },
   { id:'en-2010-3', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第3题', options:["A. sufficient","B. famous","C. perfect","D. necessary"], answer:"" },
   { id:'en-2010-4', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第4题', options:["A. individualism","B. modernism","C. optimism","D. realism"], answer:"" },
   { id:'en-2010-5', year:2010, subject:'en2', topic:'en-1', type:'single', question:'2010年真题 第5题', options:["A. echo","B. miss","C. spoil","D. change"], answer:"" },

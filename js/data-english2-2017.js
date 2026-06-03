@@ -6,7 +6,7 @@ const QUESTIONS_ENGLISH2_2017 = [
   { id:'en-2017-4', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第4题', options:["A. characterized","B. divided","C. balanced","D. measured"], answer:"" },
   { id:'en-2017-5', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第5题', options:["A. wisdom","B. meaning","C. glory","D. freedom"], answer:"" },
   { id:'en-2017-6', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第6题', options:["A. Instead","B. Indeed","C. Thus","D. Nevertheless"], answer:"" },
-  { id:'en-2017-7', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第7题', options:["A. rich","B. urban","C. working","D. educated"], answer:"" },
+  { id:'en-2017-7', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第7题', options:["A. rich","B. urban","C. working","D. educated"], answer:"A" },
   { id:'en-2017-8', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第8题', options:["A. explanation","B. requirement","C. compensation","D. substitute"], answer:"" },
   { id:'en-2017-9', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第9题', options:["A. under","B. beyond","C. alongside","D. among"], answer:"" },
   { id:'en-2017-10', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第10题', options:["A. leave behind","B. make up","C. worry about","D. set aside"], answer:"" },

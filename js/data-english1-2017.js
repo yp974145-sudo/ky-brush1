@@ -6,7 +6,7 @@ const QUESTIONS_ENGLISH1_2017 = [
   { id:'en-2017-4', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第4题', options:["A. recall","B. forget","C. avoid","D. keep"], answer:"" },
   { id:'en-2017-5', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第5题', options:["A. collecting","B. affecting","C. guiding","D. involving"], answer:"" },
   { id:'en-2017-6', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第6题', options:["A. on","B. in","C. at","D. of"], answer:"" },
-  { id:'en-2017-7', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第7题', options:["A. devoted","B. exposed","C. lost","D. attracted"], answer:"" },
+  { id:'en-2017-7', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第7题', options:["A. devoted","B. exposed","C. lost","D. attracted"], answer:"A" },
   { id:'en-2017-8', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第8题', options:["A. across","B. along","C. down","D. out"], answer:"" },
   { id:'en-2017-9', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第9题', options:["A. imagined","B. denied","C. doubted","D. calculated"], answer:"" },
   { id:'en-2017-10', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第10题', options:["A. served","B. explained","C. restored","D. required"], answer:"" },
