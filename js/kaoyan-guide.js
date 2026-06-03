@@ -138,24 +138,28 @@ const KaoyanGuide = {
       if (isCurrent) cls += ' kg-current';
       if (isFuture) cls += ' kg-future';
 
+      const collapsed = isCurrent ? '' : ' kg-collapsed';
       return `
-        <div class="${cls}" style="border-left-color:${s.color}">
+        <div class="${cls}${collapsed}" style="border-left-color:${s.color}" onclick="KaoyanGuide._toggleStage(event, this)">
           <div class="kg-stage-head">
             <span class="kg-stage-dot" style="background:${s.color}"></span>
             <span class="kg-stage-title">${s.title}</span>
             <span class="kg-stage-date">${s.date.slice(5)} – ${s.end.slice(5)}</span>
             ${isCurrent ? '<span class="kg-badge-now">当前</span>' : ''}
             ${isPassed && !isCurrent ? '<span class="kg-badge-done">✓</span>' : ''}
+            <span class="kg-toggle">${isCurrent ? '▾' : '▸'}</span>
           </div>
-          <div class="kg-progress-bar"><div class="kg-progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
-          <ul class="kg-task-list">
-            ${s.tasks.map(t => `
-              <li class="kg-task ${checked[t] ? 'kg-task-done' : ''}" onclick="KaoyanGuide._toggleTask('${s.id}', '${t.replace(/'/g, "\\'")}')">
-                <span class="kg-task-check">${checked[t] ? '✅' : '⬜'}</span> ${t}
-              </li>
-            `).join('')}
-          </ul>
-          ${s.tips ? `<div class="kg-tip">💡 ${s.tips}</div>` : ''}
+          <div class="kg-stage-body">
+            <div class="kg-progress-bar"><div class="kg-progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
+            <ul class="kg-task-list">
+              ${s.tasks.map(t => `
+                <li class="kg-task ${checked[t] ? 'kg-task-done' : ''}" onclick="event.stopPropagation();KaoyanGuide._toggleTask('${s.id}', '${t.replace(/'/g, "\\'")}')">
+                  <span class="kg-task-check">${checked[t] ? '✅' : '⬜'}</span> ${t}
+                </li>
+              `).join('')}
+            </ul>
+            ${s.tips ? `<div class="kg-tip">💡 ${s.tips}</div>` : ''}
+          </div>
         </div>
       `;
     }).join('');
@@ -198,10 +202,10 @@ const KaoyanGuide = {
       <div class="kg-section-title">⏱ 全流程时间线</div>
       <div class="kg-timeline">${timelineHTML}</div>
 
-      <div class="kg-section-title">🔗 必备网站 & 资源</div>
+      <div class="kg-section-title kg-collapsible" onclick="this.classList.toggle('kg-closed');const g=this.nextElementSibling;g.style.display=g.style.display==='none'?'grid':'none'">🔗 必备网站 & 资源 ▾</div>
       <div class="kg-links-grid">${linksHTML}</div>
 
-      <div class="kg-section-title">👨‍🏫 各科推荐老师 & 资料</div>
+      <div class="kg-section-title kg-collapsible" onclick="this.classList.toggle('kg-closed');const g=this.nextElementSibling;g.style.display=g.style.display==='none'?'grid':'none'">👨‍🏫 各科推荐老师 & 资料 ▾</div>
       <div class="kg-res-grid">${resHTML}</div>
     `;
   },
@@ -222,6 +226,14 @@ const KaoyanGuide = {
 
   _saveChecklist() {
     localStorage.setItem('ky-checklist', JSON.stringify(this._checklist));
+  },
+
+  // 折叠/展开阶段
+  _toggleStage(event, el) {
+    if (event.target.closest('.kg-task')) return; // 不拦截任务点击
+    el.classList.toggle('kg-collapsed');
+    const toggle = el.querySelector('.kg-toggle');
+    if (toggle) toggle.textContent = el.classList.contains('kg-collapsed') ? '▸' : '▾';
   },
 
   // ---- DOM ----

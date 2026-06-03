@@ -395,6 +395,12 @@ body.dark .scratch-editor { background: #12122a; }
   /* 搜索栏手机端隐藏（用独立搜索面板） */
   .search-bar { display: none; }
 
+  /* 侧边栏折叠 */
+  .filter-section h3 { cursor: pointer; user-select: none; }
+  .filter-section h3::after { content: ' ▾'; font-size: 10px; }
+  .filter-section.collapsed h3::after { content: ' ▸'; }
+  .filter-section.collapsed > :not(h3) { display: none; }
+
   /* 答题卡底部面板 */
   #answer-sheet {
     position: fixed; left: 0; right: 0; bottom: 48px; z-index: 270;
@@ -1188,6 +1194,14 @@ body.dark .kg-task:hover { background: #2a2a50; }
   margin-top: 8px; font-size: 12px; color: var(--text-secondary);
   background: #fff8e0; padding: 8px 10px; border-radius: 6px; line-height: 1.5;
 }
+.kg-toggle { margin-left: auto; font-size: 14px; color: #999; flex-shrink: 0; }
+.kg-stage-body { overflow: hidden; transition: max-height 0.3s ease; }
+.kg-collapsed .kg-stage-body { display: none; }
+.kg-stage-head { cursor: pointer; }
+.kg-collapsible { cursor: pointer; user-select: none; }
+.kg-collapsible:hover { color: var(--primary); }
+.kg-closed + .kg-links-grid,
+.kg-closed + .kg-res-grid { display: none; }
 body.dark .kg-tip { background: #2a2a30; }
 
 /* 链接区 */
