@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2013 = [
   { id:'en-2013-1', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第1题', options:["A. However 然而，可是 [C] Therefore 因此，所以","B. Moreover 而且，此外 [D] Otherwise 否则，另外【答案】A【考点】逻辑关系【直击答案】本题空格所在句","C. over 结束","D. around 到处【答案】D【考点】语义衔接【直击答案】本题空格所在句为 Indeed, predictions hav"], answer:"" },
   { id:'en-2013-3', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第3题', options:["A. power 能量，能力","B. concept 观念，概念","C. history 历史","D. role 角色，任务【答案】B【考点】逻辑关系【直击答案】本题空格所在句是 Business Week predicte"], answer:"" },
@@ -11,10 +11,6 @@ const QUESTIONS_ENGLISH2_2013 = [
   { id:'en-2013-11', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第11题', options:["A. before 在……之前","B. after 在……之后","C. since 自从……","D. when 当……的时候【答案】A【考点】词义辨析【直击答案】本题空格所在句为 Third, the use of pap"], answer:"" },
   { id:'en-2013-12', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第12题', options:["A. kept 保持","B. borrowed 借，借用","C. released 释放，发射，让与","D. withdrawn 撤退 取款【答案】D【考点】词义辨析【直击答案】本题空格所在句 …and funds are__ 1"], answer:"" },
   { id:'en-2013-13', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第13题', options:["A. Unless 除非，如果不","B. Until 直到……的时候","C. Because 因为","D. Though 尽管，即使【答案】C【考点】上下文逻辑关系【直击答案】本题空格所在句为__ 13__electronic "], answer:"" },
-  { id:'en-2013-4', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第4题', options:["A. hide 隐藏，隐瞒","B. express 表达，快递","C. raise 提高，筹集，养育，引发","D. ease 减轻，缓和【答案】C【考点】词义辨析【直击答案】本题空格所在句为 Fourth, electronic mea"], answer:"" },
-  { id:'en-2013-5', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第5题', options:["A. analyzed 分析，分解","B. shared 分享，分担","C. stored 储备，贮藏","D. displayed 显示，表现，陈列【答案】C【考点】词义辨析【直击答案】本题空格所在句为 We often hear "], answer:"" },
-  { id:'en-2013-6', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第6题', options:["A. unsafe 不安全的，危险的","B. unnatural 不自然的，反常的","C. uncommon 不寻常的，罕有的","D. unclear 不清楚的，不宜了解的【答案】C【考点】词义辨析【直击答案】本题空格所在句为 The fact that "], answer:"" },
-  { id:'en-2013-7', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第7题', options:["A. steal 剽窃，偷窃","B. choose 选择，挑选","C. benefit 收益，得益","D. return 返回，报答【答案】A【考点】词义辨析【直击答案】本题空格所在句为…and__ 17__from someo"], answer:"" },
   { id:'en-2013-18', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第18题', options:["A. consideration 考虑，原因，关心","B. prevention 预防，阻止，妨碍","C. manipulation 操纵，操作，处理","D. justification 理由，辩护【答案】B【考点】词义辨析【直击答案】本题空格所在句是 The__ 18__of "], answer:"" },
   { id:'en-2013-19', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第19题', options:["A. cope with 处理，应付","B. fight against 对抗，反对","C. adapt to 使适应于……","D. call for 要求，需要，提倡【答案】A【考点】词义辨析【直击答案】本题空格所在句为…and a new field"], answer:"" },
   { id:'en-2013-20', year:2013, subject:'en2', topic:'en-1', type:'single', question:'2013年真题 第20题', options:["A. chunk 大块，矮胖的人或物","B. chip 碎片","C. path 道路，小路","D. trail 痕迹，尾部【答案】D【考点】词义辨析【直击答案】本题空格所在句为 A further concern is "], answer:"" }

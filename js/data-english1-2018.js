@@ -1,4 +1,4 @@
-// 2018考研英语真题
+// auto
 const QUESTIONS_ENGLISH1_2018 = [
   { id:'en-2018-1', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第1题', options:["A. on","B. like","C. for","D. from"], answer:"" },
   { id:'en-2018-2', year:2018, subject:'en1', topic:'en-1', type:'single', question:'2018年真题 第2题', options:["A. faith","B. concern","C. attention","D. interest"], answer:"" },

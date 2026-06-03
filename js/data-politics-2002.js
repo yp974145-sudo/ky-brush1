@@ -1,4 +1,4 @@
-// 2002考研政治真题
+// auto
 const QUESTIONS_POLITICS_2002 = [
   { id:'pol-2002-1', year:2002, subject:'po', topic:'po-1', type:'single', question:'随着科学技术的发展，人类已经制造出诸如醋酸纤维、聚苯乙烯、合成橡胶等自然界原本不存在的化合物，其数量已达数百万种。这一情况说明', options:["A. 物质世界是人类创造的","B. 人类通过实践将“自在之物”转化为“为我之物”","C. 物质世界依赖于人的意识而存在","D. 人造物质可以脱离天然物质而存在"], answer:"" },
   { id:'pol-2002-2', year:2002, subject:'po', topic:'po-1', type:'single', question:'先进生产力的集申体现和主要标志是', options:["A. 劳动者","B. 劳动对象","C. 科学技术","D. 管理方式"], answer:"" },
@@ -14,7 +14,7 @@ const QUESTIONS_POLITICS_2002 = [
   { id:'pol-2002-12', year:2002, subject:'po', topic:'po-3', type:'single', question:'个体经济在性质上不同于私营经济，是因为', options:["A. 投资规模较小","B. 经营方式单一","C. 主要依靠自己劳动和经营","D. 不是法人企业"], answer:"" },
   { id:'pol-2002-13', year:2002, subject:'po', topic:'po-3', type:'single', question:'谋求世界各国经济共同发展的根本途径是', options:["A. 加速各国经济结构的调整","B. 推动南北对话","C. 加强南南合作","D. 建立公正、合理、平等、互利的国际经济新秩序"], answer:"" },
   { id:'pol-2002-14', year:2002, subject:'po', topic:'po-3', type:'single', question:'20世纪70年代初，美国为推行尼克松主义，缓和美苏关系，与苏联签署了', options:["A. 《限制反弹道导弹系统条约》","B. 《进一步削减和限制进攻性战略武器条约》","C. 《关于销毁中程和中短程导弹条约》","D. 《不扩散核武器条约》"], answer:"" },
-  { id:'pol-2002-15', year:2002, subject:'po', topic:'po-4', type:'single', question:'中国共产党十五届六中全会通过的《关于加强和改进党的作风建设的决定》指出，加强和改进党的作风建设，核心问题是', options:["A. 坚持理论联系实际","B. 加强党内的批评与自我批评","C. 保持党同人民群众的血肉联系"], answer:"" },
+  { id:'pol-2002-15', year:2002, subject:'po', topic:'po-4', type:'single', question:'中国共产党十五届六中全会通过的《关于加强和改进党的作风建设的决定》指出，加强和改进党的作风建设，核心问题是', options:["A. 坚持理论联系实际","B. 加强党内的批评与自我批评","C. 保持党同人民群众的血肉联系","D. 健全制度，从源头上预防和治理各种不良作风二、下列每题的选项中，至少有一项是符合题意的。请在答题卡上将所选项的字母涂黑。少选、多选、错选，该题不得分。（每小题2分，共30分）"], answer:"" },
   { id:'pol-2002-16', year:2002, subject:'po', topic:'po-4', type:'single', question:'意识和物质的对立只是在非常有限的范围内才有绝对的意义，超出这个范围，其对立便是相对的。这是因为', options:["A. 意识根源于物质","B. 意识是物质的反映","C. 意识是物质的固有属性","D. 意识是物质的存在形式"], answer:"" },
   { id:'pol-2002-17', year:2002, subject:'po', topic:'po-5', type:'multi', question:'从社会发展的主体选择性的角度看，中国人民走上社会主义道路，其原因在于', options:["A. 社会主义符合中国人民根本利益的要求","B. 在历史进程中没有多种道路可供人们选择","C. 中国人民在国际交往中受到俄国十月社会主义革命的历史启示","D. 中国共产党对历史必然性及本国国情的正确把握"], answer:[] },
   { id:'pol-2002-18', year:2002, subject:'po', topic:'po-5', type:'multi', question:'经济运行中通货紧缩一般表现为', options:["A. 货币供应增速减缓","B. 物价持续普遍下降","C. 货币供应量少于货币需求量","D. 货币升值"], answer:[] },
@@ -32,9 +32,5 @@ const QUESTIONS_POLITICS_2002 = [
   { id:'pol-2002-30', year:2002, subject:'po', topic:'po-5', type:'multi', question:'2001年10月在中国上海召开的亚太经合组织（APEC）第九次领导人非正式会议通过的《领导人宣言》指出，亚太经合组织取得成功的关键在于坚持', options:["A. 自主自愿、协商一致的原则","B. 单边行动与集体行动相结合的原则","C. “开放的地区主义”的原贴","D. 灵活性与全面性相结合的原则"], answer:[] },
   { id:'pol-2002-31', year:2002, subject:'po', topic:'po-5', type:'multi', question:'古希腊哲学家说:没有理性，眼睛是最坏的见证人。', options:[], answer:[] },
   { id:'pol-2002-32', year:2002, subject:'po', topic:'po-5', type:'multi', question:'价格是价值的货币表现，价格的变化就是价值变化的表现。', options:[], answer:[] },
-  { id:'pol-2002-33', year:2002, subject:'po', topic:'po-5', type:'multi', question:'大国的控制能力是建立国际秩序的基础。四、论述题(共2题，每题10分，共20分)要求论述紧扣题意，合乎逻辑。将答案写在答题纸相应位置上。论述过程联系题意不紧密、逻辑不清晰者可酌情扣分。', options:[], answer:[] },
-  { id:'pol-2002-34', year:2002, subject:'po', topic:'po-5', type:'multi', question:'邓小平在领导中国共产党进行指导思想的拨乱反正中如何正确评价毛泽东和毛泽东思想?这一正确评价有何重大意义?', options:[], answer:[] },
-  { id:'pol-2002-35', year:2002, subject:'po', topic:'po-5', type:'multi', question:'改革开放以来，人们收入分配差距有所扩大。请结合我国社会主义初级阶段的收入分配理论和社会主义最终要实现的目标，对这一现象进行分析。五、材料题(共2题，每题10分，共20分)结合所学知识或原理分析材料并回', options:[], answer:[] },
-  { id:'pol-2002-36', year:2002, subject:'po', topic:'po-5', type:'multi', question:'以下是关于我国水资源及其开发利用的材料：材料1中国可利用的水资源仅占世界的7%，全国年人均淡水量2400立方米，仅为世界人均占有量的1/4，而且长江以南的水资源占全国的80%，长江以北占20%，其人均', options:[], answer:[] },
-  { id:'pol-2002-37', year:2002, subject:'po', topic:'po-5', type:'multi', question:'根据下列材料回答问题：材料1《中华人民共和国与苏维埃社会主义共和国联盟友好同盟互助条约》第一条：“缔约国双方保证共同尽力采取一切必要的措施，以期制止日本或其它直接间接在侵略行为上与日本相勾结的任何国家', options:[], answer:[] }
+  { id:'pol-2002-33', year:2002, subject:'po', topic:'po-5', type:'multi', question:'大国的控制能力是建立国际秩序的基础。四、论述题(共2题，每题10分，共20分)要求论述紧扣题意，合乎逻辑。将答案写在答题纸相应位置上。论述过程联系题意不紧密、逻辑不清晰者可酌情扣分。34.邓小平在', options:[], answer:[] }
 ];

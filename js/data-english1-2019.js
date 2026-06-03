@@ -1,4 +1,4 @@
-// 2019考研英语真题
+// auto
 const QUESTIONS_ENGLISH1_2019 = [
   { id:'en-2019-1', year:2019, subject:'en1', topic:'en-1', type:'single', question:'2019年真题 第1题', options:["A. Some","B. Most","C. Few","D. All"], answer:"" },
   { id:'en-2019-2', year:2019, subject:'en1', topic:'en-1', type:'single', question:'2019年真题 第2题', options:["A. put","B. take","C. run","D. come"], answer:"" },

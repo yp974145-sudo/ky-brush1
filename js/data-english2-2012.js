@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2012 = [
   { id:'en-2012-1', year:2012, subject:'en2', topic:'en-1', type:'single', question:'2012年真题 第1题', options:["A. performed 执行，完成","B. served 为……服务，招待","C. rebelled 反叛，反抗","D. betrayed 背叛，出卖【答案】B【考点】词义辨析【直击答案】本空格所在句是 To the men and wome"], answer:"" },
   { id:'en-2012-2', year:2012, subject:'en2', topic:'en-1', type:'single', question:'2012年真题 第2题', options:["A. actual 真实的，实际的","B. common 普通的，一般的","C. special 特别的，专门的","D. normal 正常的，正规的【答案】B【考点】词义辨析【直击答案】本空格所在句是 the G.I. was the__2"], answer:"" },

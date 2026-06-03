@@ -1,4 +1,4 @@
-// 2017考研英语真题
+// auto
 const QUESTIONS_ENGLISH2_2017 = [
   { id:'en-2017-1', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第1题', options:["A. boasting","B. denying","C. warning","D. ensuring"], answer:"" },
   { id:'en-2017-2', year:2017, subject:'en2', topic:'en-1', type:'single', question:'2017年真题 第2题', options:["A. inequality","B. instability","C. unreliability","D. uncertainty"], answer:"" },

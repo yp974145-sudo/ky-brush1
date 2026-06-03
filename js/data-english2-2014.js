@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2014 = [
   { id:'en-2014-1', year:2014, subject:'en2', topic:'en-1', type:'single', question:'2014年真题 第1题', options:["A. denied 否认","B. concluded 得出结论","C. doubled 两倍，加倍努力","D. ensured 确保【答案】B【考点】词义辨析【直击答案】空格所在句意为“一系列的研究已经 ，事实上，正常体重的人患病风"], answer:"" },
   { id:'en-2014-2', year:2014, subject:'en2', topic:'en-1', type:'single', question:'2014年真题 第2题', options:["A. protective 防护的，保护的","B. dangerous 危险的","C. sufficient 足够的，充分的","D. troublesome 麻烦的【答案】A【考点】词义辨析【直击答案】空格所在句意为“对于某些健康情况，超重事实上是有 ”"], answer:"" },

@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_POLITICS_2001 = [
   { id:'pol-2001-1', year:2001, subject:'po', topic:'po-1', type:'single', question:'“只要知道自然界一切组成部分的相对位置和全部作用，一亿年以前的情况和一亿年以后的状况都可精确无误地演算出来，因为未来的一切早就在宇宙诞生时便已完全被确定了。”这是', options:["A. 唯心主义决定论的观点","B. 辩证唯物主义决定论的观点","C. 非决定论的观点","D. 机械决定论的观点"], answer:"" },
   { id:'pol-2001-2', year:2001, subject:'po', topic:'po-1', type:'single', question:'人类创造的自然语言和人工语言', options:["A. 是人类的主观意识","B. 既非物质，也非意识","C. 是人类意识的物质外壳","D. 是意识的客观内容"], answer:"" },

@@ -1,4 +1,4 @@
-// 2024考研英语真题
+// auto
 const QUESTIONS_ENGLISH1_2024 = [
   { id:'en-2024-1', year:2024, subject:'en1', topic:'en-1', type:'single', question:'2024年真题 第1题', options:["A. Though","B. Despite2. [A] revealing [B] demanding3. [A] experience [B] c","C. Besides[C] improving[C] guidance[C] successively","D. Without[D] tracing[D] reference[D] eventually"], answer:"" },
   { id:'en-2024-5', year:2024, subject:'en1', topic:'en-1', type:'single', question:'2024年真题 第5题', options:["A. held on","B. started out","C. settled down","D. went by"], answer:"" },

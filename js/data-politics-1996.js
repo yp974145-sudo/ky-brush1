@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_POLITICS_1996 = [
   { id:'pol-1996-3', year:1996, subject:'po', topic:'po-1', type:'single', question:'4卷材料2波普尔认为：“衡量一种理论的科学地位是它的可证伪性或可反驳或可检验性。”“我所想到的科学知识增长并不是指观察的积累，而是指不断推翻一种科学理论、由另一种更好的或者更合乎要求的理论取而代之。”', options:[], answer:"" },
   { id:'pol-1996-10', year:1996, subject:'po', topic:'po-3', type:'single', question:'B二、多项选择题（每小题2分，共20分）', options:[], answer:"" },

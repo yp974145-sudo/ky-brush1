@@ -1,4 +1,4 @@
-// 2024考研英语真题
+// auto
 const QUESTIONS_ENGLISH2_2024 = [
   { id:'en-2024-1', year:2024, subject:'en2', topic:'en-1', type:'single', question:'2024年真题 第1题', options:["A. because","B. unless","C. whereas","D. until"], answer:"" },
   { id:'en-2024-2', year:2024, subject:'en2', topic:'en-1', type:'single', question:'2024年真题 第2题', options:["A. contrast","B. balance","C. link","D. gap"], answer:"" },

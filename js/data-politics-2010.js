@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_POLITICS_2010 = [
   { id:'pol-2010-1', year:2010, subject:'po', topic:'po-1', type:'single', question:'1884年1月3日，意大利人卡内帕给恩格斯写信，请求他为即将在日内瓦出版的《新纪元》周刊的创刊号题词，而且要求尽量用简短的字句来表述未来的社会主义纪元的基本思想，以区别于伟大诗人但丁的对旧纪元所作的“', options:[], answer:"A" },
   { id:'pol-2010-2', year:2010, subject:'po', topic:'po-1', type:'single', question:'有一则箴言：“在溪水和岩石的斗争中，胜利的总是溪水，不是因为力量，而是因为坚持。”“坚持就是胜利”的哲理在于：A．必然性通过偶然性开辟道路B．肯定中包含着否定的因素C．量变必然引起质变D．有其因必有其', options:[], answer:"C" },

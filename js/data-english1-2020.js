@@ -1,4 +1,4 @@
-// 2020考研英语真题
+// auto
 const QUESTIONS_ENGLISH1_2020 = [
   { id:'en-2020-1', year:2020, subject:'en1', topic:'en-1', type:'single', question:'2020年真题 第1题', options:["A. In","B. Towards","C. On","D. Till"], answer:"" },
   { id:'en-2020-2', year:2020, subject:'en1', topic:'en-1', type:'single', question:'2020年真题 第2题', options:["A. match","B. express","C. satisfy","D. influence"], answer:"" },

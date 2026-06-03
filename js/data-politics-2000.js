@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_POLITICS_2000 = [
   { id:'pol-2000-4', year:2000, subject:'po', topic:'po-1', type:'single', question:'1%。摘自《缭望》1999年第39期②三种价格形式在各类商品定价中的比重年份19781985198819911993农产品收购国家定价%94.437.0', options:[], answer:"" },
   { id:'pol-2000-5', year:2000, subject:'po', topic:'po-2', type:'single', question:'640.057.057.882.7零售商品国家定价%97.047.0', options:[], answer:"" },

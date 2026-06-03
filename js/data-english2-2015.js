@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2015 = [
   { id:'en-2015-1', year:2015, subject:'en2', topic:'en-1', type:'single', question:'2015年真题 第1题', options:["A. ticket 车票","B. permit 许可证","C. signal 信号","D. record 记录【答案】C【考点】词义辨析【直击答案】空格所在句意为：陌生人之间没有交流，大家都只关注自己的手机，即使"], answer:"" },
   { id:'en-2015-2', year:2015, subject:'en2', topic:'en-1', type:'single', question:'2015年真题 第2题', options:["A. nothing 没有什么","B. link 联系","C. another 另一个，又一个","D. much 大量【答案】D【考点】词义辨析【直击答案】It's a sad reality 是对第一段内容的总结，该句中双"], answer:"" },

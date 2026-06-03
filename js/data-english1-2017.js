@@ -1,4 +1,4 @@
-// 2017考研英语真题
+// auto
 const QUESTIONS_ENGLISH1_2017 = [
   { id:'en-2017-1', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第1题', options:["A. Unlike","B. Besides","C. Throughout","D. Despite"], answer:"" },
   { id:'en-2017-2', year:2017, subject:'en1', topic:'en-1', type:'single', question:'2017年真题 第2题', options:["A. equal","B. restricted","C. connected","D. inferior"], answer:"" },

@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2016 = [
   { id:'en-2016-1', year:2016, subject:'en2', topic:'en-1', type:'single', question:'2016年真题 第1题', options:["A. why 为什么","B. where 哪里","C. how 如何","D. when 什么时候【答案】C【考点】结构衔接题。【解析】空格前为谓语 influence，空格后为完整的主谓结构 fir"], answer:"" },
   { id:'en-2016-2', year:2016, subject:'en2', topic:'en-1', type:'single', question:'2016年真题 第2题', options:["A. In return 作为回报，作为交换","B. In particular 尤其，特别","C. In contrast 与此相反，对比起来","D. In conclusion 总之，综上所述【答案】B【考点】逻辑衔接题。【解析】空格前一句和空格所在句都在说明快乐会使公"], answer:"" },

@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_POLITICS_2007 = [
   { id:'pol-2007-1', year:2007, subject:'po', topic:'po-1', type:'single', question:'“风定花犹落，鸟鸣山更幽”形象地表达了动和静的辩证关系是：', options:["A. 静不是动，动不是静","B. 静中有动，动中有静","C. 动是必然的，静是偶然的","D. 动是静的原因，静是动的结果"], answer:"B" },
   { id:'pol-2007-2', year:2007, subject:'po', topic:'po-1', type:'single', question:'“挟泰山以超北海，语人曰吾不能，是诚不能也。为长者折技，语人曰吾不能，是不为也，非不能也”。《孟子》中的这段话启示我们，做事情时要区分可能性和不可能性，二者的区别在于：', options:["A. 人的主观努力程度","B. 对人是否有利","C. 现实中有无根据和条件","D. 现实中的根据和条件是否充分"], answer:"C" },

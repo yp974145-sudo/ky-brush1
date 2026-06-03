@@ -1,0 +1,23 @@
+// auto
+const QUESTIONS_ENGLISH2_2007 = [
+  { id:'en-2007-1', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第1题', options:["A. natives 本地人","B. inhabitants 居民","C. peoples 民族","D. individuals 个人【答案】 B【考点】 词汇辨析【难度系数】"], answer:"" },
+  { id:'en-2007-2', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第2题', options:["A. confusedly 困惑地","B. cheerfully 快乐地","C. worriedly 焦虑地","D. hopefully 有希望地【答案】 D【考点】 逻辑搭配【难度系数】"], answer:"" },
+  { id:'en-2007-3', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第3题', options:["A. shared 分享","B. forgot 忘记","C. attained 获得","D. rejected 拒绝【答案】 A【考点】 词汇搭配【难度系数】"], answer:"" },
+  { id:'en-2007-4', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第4题', options:["A. related 与 有联系","B. close 接近","C. open 开放的","D. devoted 专心致志于做 【答案】 C【考点】 词汇辨析【难度系数】"], answer:"" },
+  { id:'en-2007-5', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第5题', options:["A. access 通道","B. succession 接替，继任","C. right 权利","D. return 偿还，归还【答案】 C【考点】 词汇辨析【难度系数】"], answer:"" },
+  { id:'en-2007-6', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第6题', options:["A. Presumably 很可能，大概，表推测","B. Incidentally 顺便说及","C. Obviously 显而易见地","D. Generally 普遍地【答案】 D【考点】 逻辑搭配【难度系数】"], answer:"" },
+  { id:'en-2007-7', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第7题', options:["A. unique 唯一的","B. common 共同的","C. particular 特定的，特殊的","D. typical 典型的【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-8', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第8题', options:["A. freedom 自由","B. origin 起源，来源","C. impact 影响","D. reform 改革【答案】 A【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-9', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第9题', options:["A. therefore 因此","B. however 然而","C. indeed 真正地，实际上","D. moreover 而且【答案】 B【考点】 逻辑搭配【难度系数】"], answer:"" },
+  { id:'en-2007-10', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第10题', options:["A. with 和 在一起","B. about 关于","C. among 在 之中","D. by 被【答案】 C【考点】 词义搭配【难度系数】"], answer:"" },
+  { id:'en-2007-11', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第11题', options:["A. allowed 允许","B. preached 宣讲","C. granted 授予， 同意","D. funded 为 提供资金【答案】 A【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-12', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第12题', options:["A. Since 自 以来","B. If 如果","C. Unless 除非","D. While 虽然【答案】 D【考点】 逻辑搭配【难度系数】"], answer:"" },
+  { id:'en-2007-13', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第13题', options:["A. as 当作","B. for 为了","C. under 在 下面","D. against 违反【答案】 A【考点】 词汇搭配【难度系数】"], answer:"" },
+  { id:'en-2007-14', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第14题', options:["A. spread 传播","B. interference 干涉","C. exclusion 拒绝，排斥","D. influence 影响【答案】 C【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-15', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第15题', options:["A. support 支持","B. cry 叫喊， 口号","C. plea 恳求","D. wish 愿望【答案】 B【考点】 习惯搭配【解析】 本题考查的是一个固定搭配，rallying cry 意思是“（起号"], answer:"" },
+  { id:'en-2007-16', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第16题', options:["A. urged 鼓励 ；力劝","B. intended 打算","C. expected 预料；要求","D. promised 承诺，答应【答案】 D【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-17', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第17题', options:["A. controlling 控制的","B. former 从前的，以前的","C. remaining 剩下的，残存的","D. original 起初的，独创的【答案】 C【考点】 词汇搭配【难度系数】"], answer:"" },
+  { id:'en-2007-18', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第18题', options:["A. slower 较慢的","B. faster 较快的","C. easier 较容易的","D. tougher 较坚硬的【答案】 A【考点】 逻辑关系【难度系数】"], answer:"" },
+  { id:'en-2007-19', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第19题', options:["A. created 创造， 引起","B. produced 生产","C. contributed 增进，捐款","D. preferred 更喜欢【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
+  { id:'en-2007-20', year:2007, subject:'en2', topic:'en-1', type:'single', question:'2007年真题 第20题', options:["A. puzzled by 迷惑的","B. hostile to 敌视的","C. pessimistic about 悲观的","D. unprepared for 未做好准备的【答案】 D【考点】 词义辨析【难度系数】"], answer:"" }
+];

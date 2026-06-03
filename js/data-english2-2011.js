@@ -1,4 +1,4 @@
-// auto-generated
+// auto
 const QUESTIONS_ENGLISH2_2011 = [
   { id:'en-2011-1', year:2011, subject:'en2', topic:'en-1', type:'single', question:'2011年真题 第1题', options:["A. swept 打扫，席卷","B. skipped 跳过，掠过","C. walked 行走","D. ridden 骑【答案】A【考点】词义辨析【直击答案】本空格所在句是But that very anonymity is"], answer:"" },
   { id:'en-2011-2', year:2011, subject:'en2', topic:'en-1', type:'single', question:'2011年真题 第2题', options:["A. for 因为","B. within 在……之内","C. while 当……时候，和……同时","D. though 尽管，虽然【答案】C【考点】词义辨析【直击答案】本空格所在句是 Can privacy be preser"], answer:"" },
