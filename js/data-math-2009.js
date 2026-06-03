@@ -1,8 +1,10 @@
-// 2009考研数学真题
+// 2009数学
 const QUESTIONS_MATH_2009 = [
-  { id:'math-2009-2', year:2009, subject:'ma1', topic:'ma-2', type:'single', question:'如图,正方形{(x,y)x≤1,y≤1}被其对角线划分为四个区域Dk(k=1,2,3,4),Ikycosxdxdy,则x4{Ik}=()', options:["A. I1","B. I2","C. I3","D. I4"], answer:"" },
-  { id:'math-2009-3', year:2009, subject:'ma1', topic:'ma-2', type:'single', question:'设函数y=f(x)在区间[-1,3]上的图形为O0-21-123xf(x)则函数Fdt的图形为()', options:["A. 1f(x-0   1     2     3     x-","B. 0--f(x2     3      x11","C. 1-f(xx2031","D. 10-1     2     3     xf(x-"], answer:"" },
-  { id:'math-2009-4', year:2009, subject:'ma1', topic:'ma-2', type:'single', question:'设有两个数列{an},{bn},若an=0,则()bn收敛时,anbn收敛.', options:["B. 当 bn  发散时,  anbn  发散.","C. 当 bn   收敛时,  收敛.","D. 当 bn  发散时,  发散."], answer:"" },
-  { id:'math-2009-7', year:2009, subject:'ma1', topic:'ma-9', type:'single', question:'设随机变量X的分布函数为F=0.3Φ(x其中Φ(x)为标准正态分布函数,则EX=()', options:["A. 0","B. 0.3","C. 0.7","D. 1"], answer:"" },
-  { id:'math-2009-8', year:2009, subject:'ma1', topic:'ma-9', type:'single', question:'设随机变量X与Y相互独立,且X服从标准正态分布N(0,1),Y的概率分布为P=P记FZ(z)为随机变量Z=XY的分布函数,则函数FZ(z)的间断点个数为()', options:["A. 0","B. 1","C. 2","D. 3"], answer:"" }
+  { id:'math-2009-1', year:2009, subject:'ma2', topic:'ma-2', type:'single', question:'函数f的可去间断点的个数为()', options:["A. 1.","B. 2.","C. 3.","D. 无穷多个."], answer:"" },
+  { id:'math-2009-2', year:2009, subject:'ma2', topic:'ma-2', type:'single', question:'当x→0时,f(x)=x_sinax与g(x)=x2ln(1_bx)是等价无穷小,则()', options:["A. a = 1, b","B. a = 1, b","C. a = _1, b","D. a = _1, b  ."], answer:"" },
+  { id:'math-2009-3', year:2009, subject:'ma2', topic:'ma-3', type:'single', question:'设函数z=f(x,y)的全微分为dz=xdx+ydy,则点(0,0)()', options:["A. 不是f (x, y ) 的连续点.","B. 不是f (x, y ) 的极值点.","C. 是f (x, y ) 的极大值点.","D. 是f (x, y ) 的极小值点."], answer:"" },
+  { id:'math-2009-4', year:2009, subject:'ma2', topic:'ma-3', type:'single', question:'设函数f(x,y)连续,则dxf(x,y)dy+dy∫4y_yf(x,y)dx=()', options:["A. dx f (x, y )dy .","B. dx_x f (x, y )dy . dy  f (x, y )dx .               dy  f (x,"], answer:"" },
+  { id:'math-2009-5', year:2009, subject:'ma2', topic:'ma-8', type:'single', question:'若f,,(x)不变号,且曲线y=f(x)在点(1,1)处的曲率圆为x2+y2=2,则函数f(x)在区间(1,2)内()', options:["A. 有极值点,无零点.","B. 无极值点,有零点.","C. 有极值点,有零点.","D. 无极值点,无零点."], answer:"" },
+  { id:'math-2009-6', year:2009, subject:'ma2', topic:'ma-8', type:'single', question:'设函数y=f(x)在区间[_1,3]上的图形为则函数Fdt的图形为()', options:["A. (B)","C. (D)"], answer:"" },
+  { id:'math-2009-7', year:2009, subject:'ma2', topic:'ma-9', type:'single', question:'设A,B均为2阶矩阵,A*,B*分别为A,B的伴随矩阵,若A=2,B=3,则分块矩阵的伴随矩阵为()', options:["A. (B)","C. (D)"], answer:"" }
 ];

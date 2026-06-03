@@ -1,9 +1,25 @@
-// 2010考研数学真题
+// 2010数学
 const QUESTIONS_MATH_2010 = [
-  { id:'math-2010-2', year:2010, subject:'ma1', topic:'ma-2', type:'single', question:'设函数z=z(x,y)由方程F确定,其中F为可微函数,且F2,≠0,则x）', options:["A. x","B. z","C. -x","D. -z"], answer:"" },
-  { id:'math-2010-3', year:2010, subject:'ma1', topic:'ma-2', type:'single', question:'设m,n为正整数,则反常积分dx的收敛性()', options:["A. 仅与 m 取值有","B. 仅与 n 取值有关","C. 与 m, n 取值都有关","D. 与 m, n 取值都无关"], answer:"" },
-  { id:'math-2010-5', year:2010, subject:'ma1', topic:'ma-8', type:'single', question:'设A为m×n型矩阵,B为n×m型矩阵，为阶单位矩阵，若AB=E,则()', options:["A. 秩","A. = m, 秩","B. = m","B. 秩"], answer:"" },
-  { id:'math-2010-6', year:2010, subject:'ma1', topic:'ma-8', type:'single', question:'设A为4阶对称矩阵,且A2+A=0,若A的秩为3,则A相似于()', options:["A. (C)))0丿(1((1((1| || |11| || || |","B. 1-1| |0丿()0丿)(-1| || || || |-1-1","D. | || || |-1-10| |丿("], answer:"" },
-  { id:'math-2010-7', year:2010, subject:'ma1', topic:'ma-9', type:'single', question:'设随机变量X的分布函数，则pfx=}=()', options:["A. 0","B. 1","C. 1 _ e_1","D. 1 _ e_1 2"], answer:"" },
-  { id:'math-2010-8', year:2010, subject:'ma1', topic:'ma-9', type:'single', question:'设f1(x)为标准正态分布的概率密度,f2(x)为[_1,3]上均匀分布的概率密度,若为概率密度,则a,b应满足()', options:["A. 2a + 3b = 4","B. 3a + 2b = 4","C. a + b = 1","D. a + b = 2"], answer:"" }
+  { id:'math-2010-1', year:2010, subject:'ma2', topic:'ma-2', type:'single', question:'函数f的无穷间断点的个数为()', options:["A. 0.","B. 1.","C. 2.","D. 3."], answer:"" },
+  { id:'math-2010-2', year:2010, subject:'ma2', topic:'ma-2', type:'single', question:'设y1,y2是一阶线性非齐次微分方程y,+p(x)y=q(x)的两个特解,若常数λ,μ使λy1+μy2是该方程的解,λy1一μy2是该方程对应的齐次方程的解,则()', options:["A. (B)","C. (D)  ."], answer:"" },
+  { id:'math-2010-3', year:2010, subject:'ma2', topic:'ma-3', type:'single', question:'曲线y=x2与曲线y=alnx(a≠0)相切,则a=()', options:["A. 4e.","B. 3e.","C. 2e.","D. e."], answer:"" },
+  { id:'math-2010-4', year:2010, subject:'ma2', topic:'ma-3', type:'single', question:'设m,n是正整数,则反常积分dx的收敛性()', options:["A. 仅与m 的取值有关.","B. 仅与n 的取值有关.","C. 与m, n 取值都有关.","D. 与m, n 取值都无关."], answer:"" },
+  { id:'math-2010-5', year:2010, subject:'ma2', topic:'ma-8', type:'single', question:'设函数z=z(x,y),由方程F确定,其中F为可微函数,且F2,≠0,则x)', options:["A. x .","B. z .","C. 一x .","D. 一z ."], answer:"" },
+  { id:'math-2010-7', year:2010, subject:'ma2', topic:'ma-9', type:'single', question:'设向量组I:α1,α2,,αr可由向量组II:β1,β2,,βs线性表示,下列命题正确的是()', options:["A. 若向量组I 线性无关,则r ≤ s .","B. 若向量组I 线性相关,则r &gt; s .","C. 若向量组II 线性无关,则r ≤ s .","D. 若向量组II 线性相关,则r &gt; s ."], answer:"" },
+  { id:'math-2010-8', year:2010, subject:'ma2', topic:'ma-9', type:'single', question:'设A为4阶实对称矩阵,且A2+A=O,若A的秩为3,则A相似于()(1)(1)', options:["A. |                 | .","B. |                   ||     1            |                   ","C. |                    | .","D. |                      ||           _1       |              "], answer:"" },
+  { id:'math-2010-9', year:2010, subject:'ma2', topic:'ma-3', type:'fill', question:'3阶常系数线性齐次微分方程y,,,_2y,,+y,_2y=0的通解为y=.', options:[], answer:"" },
+  { id:'math-2010-10', year:2010, subject:'ma2', topic:'ma-3', type:'fill', question:'曲线y的渐近线方程为.', options:[], answer:"" },
+  { id:'math-2010-11', year:2010, subject:'ma2', topic:'ma-3', type:'fill', question:'函数y=ln(1_2x)在x=0处的n阶导数y(n)', options:[], answer:"" },
+  { id:'math-2010-12', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'当0≤θ≤π时,对数螺线r=eθ的弧长为.', options:[], answer:"" },
+  { id:'math-2010-13', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'已知一个长方形的长l以2cm/s的速率增加,宽w以3cm/s的速率增加.则当l=12cm,w=5cm时,它的对角线增加的速率为.', options:[], answer:"" },
+  { id:'math-2010-14', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'设A,B为3阶矩阵,且A=3，B=2,A_1+B=2,则A+B__1=.', options:[], answer:"" },
+  { id:'math-2010-15', year:2010, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分11分)求函数fe_t2d的单调区间与极值.', options:[], answer:"" },
+  { id:'math-2010-16', year:2010, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分10分)(I)比较∫10lntln(1+t)ndt与∫10tnlntdt(n=1,2,)的大小,说明理由；(II)记un=∫10lntln(1+t)ndt(n=1,2,),求极限un.', options:[], answer:"" },
+  { id:'math-2010-17', year:2010, subject:'ma2', topic:'ma-4', type:'fill', question:'(本题满分10分)设函数y=f(x)由参数方程所确定,其中ψ(t)具有2阶导数,且已知求函数ψ(t).', options:[], answer:"" },
+  { id:'math-2010-18', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分10分)一个高为l的柱体形贮油罐,底面是长轴为2a,短轴为2b的椭圆.现将贮油罐平放,当3油罐中油面高度为b时(如图),计算油的质量.(长度单位为m,质量单位为kg,油的密度为2常数ρkg/m3)', options:[], answer:"" },
+  { id:'math-2010-19', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分11分)设函数u=f(x,y)具有二阶连续偏导数,且满足等式确定a,b的值,使等式在变换ξ=x+ay,η=x+by下化简为.', options:[], answer:"" },
+  { id:'math-2010-20', year:2010, subject:'ma2', topic:'ma-8', type:'fill', question:'(本题满分10分)计算二重积分Ir2sinr2cos2θdrdθ,其中', options:[], answer:"" },
+  { id:'math-2010-21', year:2010, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分10分)设函数f(x)在闭区间[0,1]上连续,在开区间(0,1)内可导,且f=0,f证明：存在使得f,(ξ)+f,(η)=ξ2+η2.', options:[], answer:"" },
+  { id:'math-2010-22', year:2010, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分11分)设A已知线性方程组Ax=b存在两个不同的解．(I)求λ,a;(II)求方程组Ax=b的通解.', options:[], answer:"" },
+  { id:'math-2010-23', year:2010, subject:'ma2', topic:'ma-9', type:'fill', question:'(本题满分11分)设A,正交矩阵Q使得QTAQ为对角矩阵,若Q的第1列为T,求a,Q.2010年全国硕士研究生入学统一考试数学二试题', options:[], answer:"" }
 ];
