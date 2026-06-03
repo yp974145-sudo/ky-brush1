@@ -213,26 +213,25 @@ const Auth = {
 
     el.innerHTML = `
       <div class="me-header"><h3>👤 ${u.nickname}</h3><span class="me-close" onclick="Auth.closePanel()">✕</span></div>
-      <div class="me-profile">
-        <div class="user-avatar">📚</div>
-        <div class="user-stats">
-          <div class="ustat"><strong>${streak}</strong><span>连续天数</span></div>
-          <div class="ustat"><strong>${submitted}</strong><span>累计刷题</span></div>
-          <div class="ustat"><strong>${wrong}</strong><span>错题</span></div>
-          <div class="ustat"><strong>${exams}</strong><span>模考</span></div>
-        </div>
+      <div class="me-stats-row">
+        <div class="me-stat"><strong>🔥${streak}天</strong><span>连续</span></div>
+        <div class="me-stat"><strong>📝${submitted}</strong><span>刷题</span></div>
+        <div class="me-stat"><strong>❌${wrong}</strong><span>错题</span></div>
+        <div class="me-stat"><strong>⏱${exams}</strong><span>模考</span></div>
       </div>
       ${accountList}
+      <div class="me-actions-grid">
+        <button class="btn btn-outline btn-me-action" onclick="Stats.show();Auth.closePanel()">📊 统计</button>
+        <button class="btn btn-outline btn-me-action" onclick="PlanUI.show();Auth.closePanel()">📋 计划</button>
+        <button class="btn btn-outline btn-me-action" onclick="startExam();Auth.closePanel()">⏱ 模考</button>
+        <button class="btn btn-outline btn-me-action" onclick="Auth._manualSync()">☁️ 同步</button>
+        <button class="btn btn-outline btn-me-action" onclick="Auth._renderEditNickname()">✏️ 改名</button>
+        <button class="btn btn-outline btn-me-action" onclick="Auth._renderLogin()">🔄 切换</button>
+      </div>
       <div class="me-actions">
-        <button class="btn btn-outline btn-me-action" onclick="Stats.show();Auth.closePanel()">📊 学习统计</button>
-        <button class="btn btn-outline btn-me-action" onclick="PlanUI.show();Auth.closePanel()">📋 学习计划</button>
-        <button class="btn btn-outline btn-me-action" onclick="startExam();Auth.closePanel()">⏱ 模拟考试</button>
-        <button class="btn btn-outline btn-me-action" onclick="Auth._manualSync()">☁️ 手动同步云端</button>
-        <button class="btn btn-outline btn-me-action" onclick="Stats.exportMyData()">💾 导出数据备份</button>
+        <button class="btn btn-outline btn-me-action" onclick="Stats.exportMyData()">💾 导出备份</button>
         <button class="btn btn-outline btn-me-action" onclick="document.getElementById('import-file').click()">📥 导入数据</button>
         <input type="file" id="import-file" accept=".json" style="display:none;" onchange="Stats.importData(this)">
-        <button class="btn btn-outline btn-me-action" onclick="Auth._renderLogin()">🔄 切换账户</button>
-        <button class="btn btn-outline btn-me-action" onclick="Auth._renderEditNickname()">✏️ 改昵称</button>
         <button class="btn btn-danger-text btn-me-action" onclick="Auth._confirmDelete()">🗑 删除此账户</button>
         <button class="btn btn-danger-text btn-me-action" onclick="Auth.logout()">🚪 退出登录</button>
       </div>`;

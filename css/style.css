@@ -556,6 +556,13 @@ body.dark .me-divider::before, body.dark .me-divider::after { background: #3a3a5
 .me-hint { font-size: 11px; color: #bbb; text-align: center; margin: 0; }
 .me-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
 .me-desc { font-size: 12px; color: #888; margin-bottom: 4px; line-height: 1.6; }
+.me-stats-row { display: flex; gap: 0; justify-content: space-around; padding: 8px 0 12px; }
+.me-stat { text-align: center; flex: 1; }
+.me-stat strong { display: block; font-size: 15px; color: var(--text); }
+.me-stat span { font-size: 10px; color: var(--text-secondary); }
+.me-actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+.me-actions-grid .btn-me-action { font-size: 12px; padding: 8px 4px; justify-content: center; }
+.me-actions .btn-me-action { font-size: 13px; }
 .me-account-list { display: flex; flex-direction: column; gap: 4px; }
 .me-account-item {
   display: flex; align-items: center; gap: 10px; padding: 10px;
