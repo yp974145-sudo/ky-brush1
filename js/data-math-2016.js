@@ -1,18 +1,5 @@
-// 2016数学
+// auto-generated v2
 const QUESTIONS_MATH_2016 = [
-  { id:'math-2016-1', year:2016, subject:'ma2', topic:'ma-2', type:'single', question:'设a1=x(cosx_1)，a2=xln(1+3x)，a3=3x+1_1.当x→0+时，以上3个无穷小量按照从低阶到高阶拓排序是()', options:["A. a1 , a2 , a3 .","B. a2 , a3 , a1 .","C. a2 , a1 , a3  .","D. a3 , a2 , a1 ."], answer:"A" },
-  { id:'math-2016-2', year:2016, subject:'ma2', topic:'ma-2', type:'single', question:'已知函数f(x则f(x)的一个原函数是()', options:["A. F(x   xx  11..","B. F(x   xx  11.."], answer:"" },
-  { id:'math-2016-3', year:2016, subject:'ma2', topic:'ma-3', type:'single', question:'反常积分dx，②dx的敛散性为()', options:["A. ① 收敛， ② 收敛.","B. ① 收敛， ② 发散.","C. ① 收敛， ② 收敛.","D. ① 收敛， ② 发散."], answer:"" },
-  { id:'math-2016-4', year:2016, subject:'ma2', topic:'ma-3', type:'single', question:'设函数f(x)在(_∞,+∞)内连续，求导函数的图形如图所示，则', options:["A. 函数 f(x)有 2 个极值点，曲线 y = f(x) 有 2 个拐点.","B. 函数 f(x)有 2 个极值点，曲线 y = f(x) 有 3 个拐点.","C. 函数 f(x) 有 3 个极值点，曲线y = f(x) 有 1 个拐点.","D. 函数f(x) 有 3 个极值点，曲线y = f(x) 有 2 个拐点."], answer:"" },
-  { id:'math-2016-5', year:2016, subject:'ma2', topic:'ma-8', type:'single', question:'设函数fi(x)(i=1,2)具有二阶连续导数，且fi,(,x0)&lt;0(i=1,2)，若两条曲线y=fi(x)(i=1,2)在点(x0,y0)处具有公切线y=g(x)，且在该点处曲线y=f1(x)的曲率大于曲线y=f2(x)的曲率，则在x0的某个领域内，有()', options:["A. f1 (x) ≤ f2 (x) ≤ g(x)","B. f2 (x) ≤ f1 (x) ≤ g(x)","C. f1 (x) ≤ g(x) ≤ f2 (x)","D. f2 (x) ≤ g(x) ≤ f1 (x)"], answer:"" },
-  { id:'math-2016-6', year:2016, subject:'ma2', topic:'ma-8', type:'single', question:'已知函数f则()', options:["A. fx' _fy'  = 0","B. fx'  + fy'  = 0","C. fx' _fy'  = f","D. fx' + fy'  = f"], answer:"" },
-  { id:'math-2016-7', year:2016, subject:'ma2', topic:'ma-9', type:'single', question:'设A，B是可逆矩阵，且A与B相似，则下列结论错误的是()', options:["A. AT  与BT  相似","B. A_1与B_1相似","C. A + AT 与B + BT 相似","D. A + A_1与 B + B__1相似"], answer:"" },
-  { id:'math-2016-8', year:2016, subject:'ma2', topic:'ma-9', type:'single', question:'设二次型f(x1,x2,x3)=a(x21+x22+x23)+2x1x2+2x2x3+2x1x3的正、负惯性指数分别为1,2，则()', options:["A. a &gt; 1","B. a &lt; _2","C. _2 &lt; a &lt; 1","D. a = 1 与 a = _2"], answer:"" },
-  { id:'math-2016-9', year:2016, subject:'ma2', topic:'ma-3', type:'fill', question:'曲线yarctan的斜渐近线方程为.', options:[], answer:"" },
-  { id:'math-2016-11', year:2016, subject:'ma2', topic:'ma-3', type:'fill', question:'以y=x2_ex和y=x2为特解的一阶非齐次线性微分方程为', options:[], answer:"" },
-  { id:'math-2016-12', year:2016, subject:'ma2', topic:'ma-8', type:'fill', question:'已知函数f(x)在(_∞,+∞)上连续，且fdt，则当n≥2时，f(n)', options:[], answer:"" },
-  { id:'math-2016-13', year:2016, subject:'ma2', topic:'ma-8', type:'fill', question:'已知动点P在曲线y=x3上运动，记坐标原点与点P间的距离为l.若点P的横坐标时间的变化率为常数v0，则当点P运动到点(1,1)时，l对时间的变化率是.Γa_1_11Γ1101', options:[], answer:"" },
-  { id:'math-2016-14', year:2016, subject:'ma2', topic:'ma-8', type:'fill', question:'设矩阵l_1a_1|与l0_11|等价，则a=lL_1_1a」|lL101」|解答题：15~23小题，共94分.解答应写出文字说明、证明过程或演算步骤.', options:[], answer:"" },
-  { id:'math-2016-15', year:2016, subject:'ma2', topic:'ma-8', type:'fill', question:'（本题满分10分）求极限', options:[], answer:"" },
-  { id:'math-2016-16', year:2016, subject:'ma2', topic:'ma-8', type:'fill', question:'（本题满分10分）设函数ft2_x2dt求f\'(x)并求f(x)的最小值.', options:[], answer:"" }
+  { id:'math3-2016-4', year:2016, subject:'ma3', topic:'ma-2', type:'single', question:'4.D₃=λD₂+', options:["D. ₃=λ"], answer:'', analysis:'' },
+  { id:'math3-2016-3', year:2016, subject:'ma3', topic:'ma-2', type:'single', question:'3.D₂=λ²+λ+2, 故(14)设袋中有红、白、黑球个1个，从中有效回地取球，每次取1个，直到三种颜色的求都取到时停止，则取球次数恰好为4的概率为 【答案】', options:["D. ₂=λ²+λ+2, 故(14)设袋中有红、白、黑球个1个，从中有效回地取球，每次取1个，直到三种颜色的求都取到时停止，则取球次数恰好为4的概率为"], answer:'', analysis:':要求前三次必须恰好取到两种不同颜色的球，第四次取到剩下一种颜色的球前三次恰好取到两种不同颜色球的概率为 在前三次恰好取到两种不同颜色的球的前提下，最后一次取到剩下一种颜色的球的概率为 故所求概率为 三、解答题：15—23小题，共94分.请将解答写在答题纸指定位置上.解答应写出文字说明、证明过 程或演算步骤.(15)(本题满分10分)求极限 【解析】由重要极限得，原式为(16)(本题满分10分)设某商品的最大需求量为1200件，该商品的需求函数Q=Q(p), 需求弹性, p 为单价(万元)( I) 求需求函数的表达式(Ⅱ)求p=100 万元时的边际收益，并说明其经济意义。【解析】(1)由弹性的计算公式可得，分离变量，得 ;两边同时积分，可得1nQ=1n(120-P)+C, 即 Q=C(120-P)(C为任意常数)。由于最大需求量为1200,可知Q(0)=1200, 故C=10, 因此Q=10(120-P)(Ⅱ)R=QP=10(120-P)P边际收益为 , 从而它的经济意义是需求量每提高1件，收益增加80万元。(17)(本题满分10分)设函数 (x&gt; 0), 求f\'(x), 并求f' },
 ];

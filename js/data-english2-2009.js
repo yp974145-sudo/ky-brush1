@@ -1,15 +1,16 @@
-// auto
+// auto-generated from reasonix (english)
 const QUESTIONS_ENGLISH2_2009 = [
-  { id:'en-2009-1', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第1题', options:["A. Suppose 假设 猜想","B. Consider 考虑","C. Observe 观察","D. Imagine 设想【答案】 B【考点】固定搭配【解析】本题考查的是“consider+名词性词组”的用法，表示“以……"], answer:"" },
-  { id:'en-2009-2', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第2题', options:["A. tended (to) 倾向于……","B. feared 害怕","C. happened(to)碰巧……","D. threatened (to) 威胁要去做……【答案】A【考点】动词搭配【解析】从空格后面的 to 可首先排除 B，因为"], answer:"" },
-  { id:'en-2009-3', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第3题', options:["A. thinner 较细的","B. stabler 较稳定的","C. lighter 更明亮的","D. dimmer 较暗的【答案】D【考点】逻辑关系【解析】空前内容谈到聪明的果蝇寿命相对普通果蝇要短，这里拿灯泡做比喻，相对"], answer:"" },
-  { id:'en-2009-4', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第4题', options:["A. tendency 趋向","B. advantage 优势","C. inclination 倾向","D. priority 优先【答案】 B【考点】词汇辨析【解析】前文谈到暗淡的灯泡寿命更长，接着说“不太明亮也是 ”，对比四个"], answer:"" },
-  { id:'en-2009-5', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第5题', options:["A. insists on 坚持","B. sums up 总之","C. turns out 结果是","D. puts forward 提出【答案】 C【考点】词组辨析【解析】该空所在句意为： ，智力是高成本的选择。显然这是对上文"], answer:"" },
-  { id:'en-2009-6', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第6题', options:["A. off 远离","B. behind 在……之后","C. over 在……之上","D. along 沿着【答案】 A【考点】词汇搭配【解析】空格所在的句意为：在 起跑线时很慢。四个选项代入句中，只有远离语义通"], answer:"" },
-  { id:'en-2009-7', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第7题', options:["A. incredible 难以置信的","B. spontaneous 自发的","C. inevitable 必然的","D. gradual 渐进的【答案】 D【考点】词汇辨析【解析】此空所在的语境为：因为智力依赖于学习——一个过程而不是本能。由"], answer:"" },
-  { id:'en-2009-8', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第8题', options:["A. fight 战斗","B. doubt 怀疑","C. stop 停止","D. think 思考【答案】 C【考点】逻辑关系【解析】空所在的内容为：很多其他物种都有学习的能力，而且它们明显学了一种技能"], answer:"" },
-  { id:'en-2009-9', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第9题', options:["A. invisible 看不见的","B. limited 有限的","C. indefinite 无限的","D. different 不同的【答案】 B【考点】逻辑关系【解析】空所在的语境为： 的智慧有适应性价值。从句意我们可以大概判"], answer:"" },
-  { id:'en-2009-18', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第18题', options:["A. Above all 首先","B. After all 毕竟","C. However 然而","D. Otherwise 否则【答案】 A【考点】逻辑搭配【解析】空所在的前后语境为：他们会测试……；它们会尽力去……； ，它"], answer:"" },
-  { id:'en-2009-19', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第19题', options:["A. fundamental 基本的","B. comprehensive 全面的","C. equivalent 相等的","D. hostile 敌对的【答案】 A【考点】逻辑搭配【解析】从 18 题我们已经分析出本句是作为一种强调的语义，能突出这一"], answer:"" },
-  { id:'en-2009-20', year:2009, subject:'en2', topic:'en-1', type:'single', question:'2009年真题 第20题', options:["A. By accident 偶然","B. In time 及时","C. So far 迄今为止","D. Better still 更好的是【答案】 C【考点】逻辑搭配【解析】空所在的前后语境为： ，仍未有定论。四个选项代入显"], answer:"" }
+  { id:'en-2009-1', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第1题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-2', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第2题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-3', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第3题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-4', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第4题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-5', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第5题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-6', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第6题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-7', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第7题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-8', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第8题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-9', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第9题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-18', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第18题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-19', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第19题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-20', year:2009, subject:'english2', topic:'en-1', type:'single', question:'2009年英语二 第20题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2009-24', year:2009, subject:'english2', topic:'en-2', type:'single', question:'2009年英语二 第24题 [Section II: Reading Comprehension (阅读理解)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'D', analysis:'' },
 ];

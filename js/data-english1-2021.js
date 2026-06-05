@@ -1,0 +1,23 @@
+// auto-generated from reasonix (english)
+const QUESTIONS_ENGLISH1_2021 = [
+  { id:'en-2021-1', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第1题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-2', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第2题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-3', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第3题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-4', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第4题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-5', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第5题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-6', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第6题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-7', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第7题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-8', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第8题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-9', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第9题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-10', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第10题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-11', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第11题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-12', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第12题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-13', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第13题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-14', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第14题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-15', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第15题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-16', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第16题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-17', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第17题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-18', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第18题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-19', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第19题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2021-20', year:2021, subject:'english1', topic:'en-1', type:'single', question:'2021年英语一 第20题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+];

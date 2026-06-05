@@ -1,0 +1,3360 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 1 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// ====== 文件: js/app.js ======
+// ============================================================
+// 考研刷题 - 核心逻辑 v3
+// 整合 Storage / Search / Auth / Exam 模块
+// ============================================================
+
+// ---- 全局状态 ----
+let currentFilter = { groups: [], subjects: [], years: [], topics: [], types: [] };
+
+const QUESTION_TYPE_FILTERS = {
+  single: { name: '单选', icon: '○' },
+  multi: { name: '多选', icon: '☐' },
+  fill: { name: '填空', icon: '✎' },
+  code: { name: '编程', icon: '💻' },
+};
+let currentQuestions = [], currentIndex = -1, selectedOption = null, selectedMulti = {};
+
+// 动态题库：静态数据 + localStorage 导入的题目
+function getQuestionBank() {
+  const imported = [];
+  try {
+    const raw = localStorage.getItem('ky-imported-questions');
+    if (raw) imported.push(...JSON.parse(raw));
+  } catch(e) {}
+  return [
+    ...(typeof QUESTIONS_408 !== 'undefined' ? QUESTIONS_408 : []),
+    ...(typeof QUESTIONS_408_EXTRA !== 'undefined' ? QUESTIONS_408_EXTRA : []),
+    ...(typeof QUESTIONS_MATH_2007 !== 'undefined' ? QUESTIONS_MATH_2007 : []),
+    ...(typeof QUESTIONS_MATH_2008 !== 'undefined' ? QUESTIONS_MATH_2008 : []),
+    ...(typeof QUESTIONS_MATH_2009 !== 'undefined' ? QUESTIONS_MATH_2009 : []),
+    ...(typeof QUESTIONS_MATH_2010 !== 'undefined' ? QUESTIONS_MATH_2010 : []),
+    ...(typeof QUESTIONS_MATH_2011 !== 'undefined' ? QUESTIONS_MATH_2011 : []),
+    ...(typeof QUESTIONS_MATH_2012 !== 'undefined' ? QUESTIONS_MATH_2012 : []),
+    ...(typeof QUESTIONS_MATH_2015 !== 'undefined' ? QUESTIONS_MATH_2015 : []),
+    ...(typeof QUESTIONS_MATH_2016 !== 'undefined' ? QUESTIONS_MATH_2016 : []),
+    ...(typeof QUESTIONS_MATH_2017 !== 'undefined' ? QUESTIONS_MATH_2017 : []),
+    ...(typeof QUESTIONS_POLITICS_1995 !== 'undefined' ? QUESTIONS_POLITICS_1995 : []),
+    ...(typeof QUESTIONS_POLITICS_1996 !== 'undefined' ? QUESTIONS_POLITICS_1996 : []),
+    ...(typeof QUESTIONS_POLITICS_1997 !== 'undefined' ? QUESTIONS_POLITICS_1997 : []),
+    ...(typeof QUESTIONS_POLITICS_2000 !== 'undefined' ? QUESTIONS_POLITICS_2000 : []),
+    ...(typeof QUESTIONS_POLITICS_2001 !== 'undefined' ? QUESTIONS_POLITICS_2001 : []),
+    ...(typeof QUESTIONS_POLITICS_2002 !== 'undefined' ? QUESTIONS_POLITICS_2002 : []),
+    ...(typeof QUESTIONS_POLITICS_2003 !== 'undefined' ? QUESTIONS_POLITICS_2003 : []),
+    ...(typeof QUESTIONS_POLITICS_2004 !== 'undefined' ? QUESTIONS_POLITICS_2004 : []),
+    ...(typeof QUESTIONS_POLITICS_2005 !== 'undefined' ? QUESTIONS_POLITICS_2005 : []),
+    ...(typeof QUESTIONS_POLITICS_2006 !== 'undefined' ? QUESTIONS_POLITICS_2006 : []),
+    ...(typeof QUESTIONS_POLITICS_2007 !== 'undefined' ? QUESTIONS_POLITICS_2007 : []),
+    ...(typeof QUESTIONS_POLITICS_2008 !== 'undefined' ? QUESTIONS_POLITICS_2008 : []),
+    ...(typeof QUESTIONS_POLITICS_2010 !== 'undefined' ? QUESTIONS_POLITICS_2010 : []),
+    ...(typeof QUESTIONS_POLITICS_2009 !== 'undefined' ? QUESTIONS_POLITICS_2009 : []),
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 2 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    ...(typeof QUESTIONS_POLITICS_2011 !== 'undefined' ? QUESTIONS_POLITICS_2011 : []),
+    ...(typeof QUESTIONS_POLITICS_2012 !== 'undefined' ? QUESTIONS_POLITICS_2012 : []),
+    ...(typeof QUESTIONS_POLITICS_2013 !== 'undefined' ? QUESTIONS_POLITICS_2013 : []),
+    ...(typeof QUESTIONS_POLITICS_2014 !== 'undefined' ? QUESTIONS_POLITICS_2014 : []),
+    ...(typeof QUESTIONS_POLITICS_2015 !== 'undefined' ? QUESTIONS_POLITICS_2015 : []),
+    ...(typeof QUESTIONS_POLITICS_2016 !== 'undefined' ? QUESTIONS_POLITICS_2016 : []),
+    ...(typeof QUESTIONS_POLITICS_2017 !== 'undefined' ? QUESTIONS_POLITICS_2017 : []),
+    ...(typeof QUESTIONS_POLITICS_2018 !== 'undefined' ? QUESTIONS_POLITICS_2018 : []),
+    ...(typeof QUESTIONS_POLITICS_2019 !== 'undefined' ? QUESTIONS_POLITICS_2019 : []),
+    ...(typeof QUESTIONS_POLITICS_2020 !== 'undefined' ? QUESTIONS_POLITICS_2020 : []),
+    ...(typeof QUESTIONS_POLITICS_2021 !== 'undefined' ? QUESTIONS_POLITICS_2021 : []),
+    ...(typeof QUESTIONS_POLITICS_2022 !== 'undefined' ? QUESTIONS_POLITICS_2022 : []),
+    ...(typeof QUESTIONS_POLITICS_2023 !== 'undefined' ? QUESTIONS_POLITICS_2023 : []),
+    ...(typeof QUESTIONS_POLITICS_2026 !== 'undefined' ? QUESTIONS_POLITICS_2026 : []),
+    ...(typeof QUESTIONS_ENGLISH1_1993 !== 'undefined' ? QUESTIONS_ENGLISH1_1993 : []),
+    ...(typeof QUESTIONS_ENGLISH1_1994 !== 'undefined' ? QUESTIONS_ENGLISH1_1994 : []),
+    ...(typeof QUESTIONS_ENGLISH1_1995 !== 'undefined' ? QUESTIONS_ENGLISH1_1995 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2003 !== 'undefined' ? QUESTIONS_ENGLISH1_2003 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2004 !== 'undefined' ? QUESTIONS_ENGLISH1_2004 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2005 !== 'undefined' ? QUESTIONS_ENGLISH1_2005 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2006 !== 'undefined' ? QUESTIONS_ENGLISH1_2006 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2007 !== 'undefined' ? QUESTIONS_ENGLISH1_2007 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2008 !== 'undefined' ? QUESTIONS_ENGLISH1_2008 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2009 !== 'undefined' ? QUESTIONS_ENGLISH1_2009 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2017 !== 'undefined' ? QUESTIONS_ENGLISH1_2017 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2018 !== 'undefined' ? QUESTIONS_ENGLISH1_2018 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2019 !== 'undefined' ? QUESTIONS_ENGLISH1_2019 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2020 !== 'undefined' ? QUESTIONS_ENGLISH1_2020 : []),
+    ...(typeof QUESTIONS_ENGLISH1_2024 !== 'undefined' ? QUESTIONS_ENGLISH1_2024 : []),
+    ...(typeof QUESTIONS_ENGLISH2_1986 !== 'undefined' ? QUESTIONS_ENGLISH2_1986 : []),
+    ...(typeof QUESTIONS_ENGLISH2_1996 !== 'undefined' ? QUESTIONS_ENGLISH2_1996 : []),
+    ...(typeof QUESTIONS_ENGLISH2_1998 !== 'undefined' ? QUESTIONS_ENGLISH2_1998 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2000 !== 'undefined' ? QUESTIONS_ENGLISH2_2000 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2001 !== 'undefined' ? QUESTIONS_ENGLISH2_2001 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2002 !== 'undefined' ? QUESTIONS_ENGLISH2_2002 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2003 !== 'undefined' ? QUESTIONS_ENGLISH2_2003 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2004 !== 'undefined' ? QUESTIONS_ENGLISH2_2004 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2005 !== 'undefined' ? QUESTIONS_ENGLISH2_2005 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2006 !== 'undefined' ? QUESTIONS_ENGLISH2_2006 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2007 !== 'undefined' ? QUESTIONS_ENGLISH2_2007 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2008 !== 'undefined' ? QUESTIONS_ENGLISH2_2008 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2009 !== 'undefined' ? QUESTIONS_ENGLISH2_2009 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2010 !== 'undefined' ? QUESTIONS_ENGLISH2_2010 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2011 !== 'undefined' ? QUESTIONS_ENGLISH2_2011 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2012 !== 'undefined' ? QUESTIONS_ENGLISH2_2012 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2013 !== 'undefined' ? QUESTIONS_ENGLISH2_2013 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2014 !== 'undefined' ? QUESTIONS_ENGLISH2_2014 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2015 !== 'undefined' ? QUESTIONS_ENGLISH2_2015 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2016 !== 'undefined' ? QUESTIONS_ENGLISH2_2016 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2017 !== 'undefined' ? QUESTIONS_ENGLISH2_2017 : []),
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 3 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    ...(typeof QUESTIONS_ENGLISH2_2018 !== 'undefined' ? QUESTIONS_ENGLISH2_2018 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2022 !== 'undefined' ? QUESTIONS_ENGLISH2_2022 : []),
+    ...(typeof QUESTIONS_ENGLISH2_2024 !== 'undefined' ? QUESTIONS_ENGLISH2_2024 : []),
+    ...imported
+  ];
+}
+
+// 全局使用函数获取最新题库
+function getBank() { return getQuestionBank(); }
+const QUESTION_BANK = getQuestionBank();
+
+// ---- Init ----
+function init() {
+  Storage.init();
+
+  // 从 Storage 同步到全局变量（兼容旧代码）
+  window.userAnswers = Storage.get('userAnswers');
+  window.markedQuestions = Storage.get('markedQuestions');
+  window.submittedQuestions = Storage.get('submittedQuestions');
+  window.wrongBook = Storage.get('wrongBook');
+
+  renderGroupFilters();
+  renderSubjectFilters();
+  renderYearFilters();
+  renderTopicFilters();
+  renderTypeFilters();
+  selectAllSubjects();
+  updateAllStats();
+
+  // 初始化搜索
+  Search.init('search-input');
+
+  // 初始化我的面板
+  Auth.init();
+
+  // 检查今日打卡
+  autoCheckin();
+
+  // 初始化每日一题
+  Daily.init();
+
+  // 初始化学习计划
+  Plan.init();
+
+  // 答题卡滑动
+  initSheetSwipe();
+
+  // 题目左右滑动（已移除，改用固定按钮）
+
+  // 深色模式
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 4 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  initDarkMode();
+}
+
+// ---- 打卡（每日自动） ----
+function autoCheckin() {
+  const today = new Date().toISOString().slice(0, 10);
+  const records = Storage.getCheckinRecords();
+  if (!records[today]) {
+    Storage.checkinToday();
+  }
+}
+
+// ---- 兼容旧代码的 saveToStorage ----
+function saveToStorage() {
+  Storage.set('userAnswers', window.userAnswers);
+  Storage.set('markedQuestions', window.markedQuestions);
+  Storage.set('submittedQuestions', window.submittedQuestions);
+  Storage.set('wrongBook', window.wrongBook);
+}
+
+// ---- Group Filters ----
+function renderGroupFilters() {
+  const c = document.getElementById('group-filters');
+  c.innerHTML = '';
+  for (const [k, g] of Object.entries(SUBJECT_GROUPS)) {
+    const chip = document.createElement('span');
+    chip.className = 'filter-chip';
+    chip.textContent = g.icon + ' ' + g.name;
+    chip.onclick = () => toggleGroup(k);
+    if (currentFilter.groups.includes(k)) chip.classList.add('active');
+    c.appendChild(chip);
+  }
+}
+
+function toggleGroup(key) {
+  const idx = currentFilter.groups.indexOf(key);
+  if (idx >= 0) currentFilter.groups.splice(idx, 1);
+  else currentFilter.groups.push(key);
+  currentFilter.subjects = Object.keys(SUBJECTS).filter(k =>
+    currentFilter.groups.length === 0 || currentFilter.groups.includes(SUBJECTS[k].group)
+  );
+  renderGroupFilters();
+  renderSubjectFilters();
+  renderTopicFilters();
+  applyFilter();
+}
+
+// ---- Subject Filters ----
+function renderSubjectFilters() {
+  const c = document.getElementById('subject-filters');
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 5 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  c.innerHTML = '';
+  const visibleSubjects = currentFilter.groups.length === 0
+    ? Object.keys(SUBJECTS)
+    : Object.keys(SUBJECTS).filter(k => currentFilter.groups.includes(SUBJECTS[k].group));
+  for (const k of visibleSubjects) {
+    const subj = SUBJECTS[k];
+    const chip = document.createElement('span');
+    chip.className = 'filter-chip';
+    chip.textContent = subj.icon + ' ' + subj.name;
+    chip.onclick = () => toggleSubject(k);
+    if (currentFilter.subjects.includes(k)) chip.classList.add('active');
+    c.appendChild(chip);
+  }
+}
+
+function toggleSubject(key) {
+  const idx = currentFilter.subjects.indexOf(key);
+  if (idx >= 0) currentFilter.subjects.splice(idx, 1);
+  else currentFilter.subjects.push(key);
+  renderSubjectFilters();
+  renderTopicFilters();
+  applyFilter();
+}
+
+function selectAllSubjects() {
+  currentFilter.groups = [];
+  currentFilter.subjects = Object.keys(SUBJECTS);
+  currentFilter.years = [];
+  currentFilter.topics = [];
+  currentFilter.types = [];
+  renderGroupFilters();
+  renderSubjectFilters();
+  renderYearFilters();
+  renderTopicFilters();
+  renderTypeFilters();
+  applyFilter();
+}
+
+// ---- Year Filters ----
+function renderYearFilters() {
+  const c = document.getElementById('year-filters');
+  c.innerHTML = '';
+  const all = document.createElement('span');
+  all.className = 'year-chip' + (currentFilter.years.length === 0 ? ' active' : '');
+  all.textContent = '全部';
+  all.onclick = () => { currentFilter.years = []; renderYearFilters(); applyFilter(); };
+  c.appendChild(all);
+  YEARS.forEach(y => {
+    const chip = document.createElement('span');
+    chip.className = 'year-chip' + (currentFilter.years.includes(y) ? ' active' : '');
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 6 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    chip.textContent = y;
+    chip.onclick = () => {
+      const i = currentFilter.years.indexOf(y);
+      if (i >= 0) currentFilter.years.splice(i, 1);
+      else currentFilter.years.push(y);
+      renderYearFilters(); applyFilter();
+    };
+    c.appendChild(chip);
+  });
+}
+
+// ---- Type Filters ----
+function renderTypeFilters() {
+  const c = document.getElementById('type-filters');
+  if (!c) return;
+  c.innerHTML = '';
+  Object.entries(QUESTION_TYPE_FILTERS).forEach(([k, v]) => {
+    const chip = document.createElement('span');
+    chip.className = 'filter-chip';
+    chip.textContent = v.icon + ' ' + v.name;
+    chip.onclick = () => toggleType(k);
+    if (currentFilter.types.includes(k)) chip.classList.add('active');
+    c.appendChild(chip);
+  });
+}
+
+function toggleType(key) {
+  const idx = currentFilter.types.indexOf(key);
+  if (idx >= 0) currentFilter.types.splice(idx, 1);
+  else currentFilter.types.push(key);
+  renderTypeFilters();
+  applyFilter();
+}
+
+// ---- Topic Filters ----
+function renderTopicFilters() {
+  const c = document.getElementById('topic-filters');
+  let subj = currentFilter.subjects.length === 1 ? currentFilter.subjects[0] : null;
+  c.innerHTML = '';
+  if (!subj) {
+    c.innerHTML = '<span style="font-size:12px;color:#999;">选择单个学科后显示知识点</span>';
+    return;
+  }
+  const lookupSubj = (subj === 'ma2' || subj === 'ma3') ? 'ma1' : (subj === 'en2' ? 'en1' : subj);
+  const topics = Object.entries(TOPICS).filter(([k, v]) => v.subject === lookupSubj);
+  topics.forEach(([key, tp]) => {
+    const chip = document.createElement('span');
+    chip.className = 'topic-chip';
+    chip.textContent = tp.name;
+    chip.title = tp.desc;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 7 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    chip.onclick = () => {
+      const i = currentFilter.topics.indexOf(key);
+      if (i >= 0) currentFilter.topics.splice(i, 1);
+      else currentFilter.topics.push(key);
+      renderTopicFilters(); applyFilter();
+    };
+    if (currentFilter.topics.includes(key)) chip.classList.add('active');
+    c.appendChild(chip);
+  });
+}
+
+// ---- Filter ----
+function applyFilter() {
+  // 如果正在考试中，不干扰
+  if (Exam.state === 'running') return;
+
+  mode = 'filter';
+  const topicSubjects = currentFilter.topics.map(t => {
+    const tp = TOPICS[t];
+    if (!tp) return t;
+    if (tp.subject === 'ma1') return ['ma1', 'ma2', 'ma3'];
+    if (tp.subject === 'en1') return ['en1', 'en2'];
+    return [tp.subject];
+  }).flat();
+
+  let filtered = getBank().filter(q => {
+    const s = currentFilter.subjects.length === 0 || currentFilter.subjects.includes(q.subject);
+    const y = currentFilter.years.length === 0 || currentFilter.years.includes(q.year);
+    const t = currentFilter.topics.length === 0 || topicSubjects.includes(q.subject);
+    const tp = currentFilter.types.length === 0 || currentFilter.types.includes(q.type);
+    return s && y && t && tp;
+  });
+
+  // 搜索二次过滤
+  filtered = Search.execute(filtered);
+  Search.updateUI();
+
+  currentQuestions = filtered;
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  currentQuestions.length > 0 ? showQuestion(0) : showWelcome();
+}
+
+// ---- Modes ----
+function startRandom() {
+  mode = 'random';
+  currentFilter.subjects = Object.keys(SUBJECTS);
+  currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
+  renderGroupFilters(); renderSubjectFilters(); renderYearFilters(); renderTopicFilters();
+  currentQuestions = [...getBank()];
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 8 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  shuffle(currentQuestions);
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  Search.keyword = '';
+  if (Search.inputEl) Search.inputEl.value = '';
+  renderSheet(); updateFilterStats(); showQuestion(0);
+}
+
+function reviewWrong() {
+  mode = 'wrong';
+  currentQuestions = getBank().filter(q => Storage.isWrong(q.id));
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  if (currentQuestions.length > 0) showQuestion(0);
+  else { alert('🎉 错题本为空！'); selectAllSubjects(); }
+}
+
+function showFavorites() {
+  mode = 'favorites';
+  currentQuestions = getBank().filter(q => Storage.isFavorite(q.id));
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  if (currentQuestions.length > 0) showQuestion(0);
+  else { alert('⭐ 收藏夹为空！'); selectAllSubjects(); }
+}
+
+function toggleWrongBook() { reviewWrong(); }
+
+// ---- 错题重做 ----
+function startWrongRedo() {
+  const wrongIds = Storage.getWrongIds();
+  if (wrongIds.length === 0) { alert('🎉 没有错题！'); return; }
+
+  const count = Math.min(wrongIds.length, parseInt(prompt(`共 ${wrongIds.length} 道错题，抽几题重做？`, Math.min(10, wrongIds.length))) || 10);
+  if (isNaN(count) || count <= 0) return;
+
+  const pool = getBank().filter(q => wrongIds.includes(q.id));
+  shuffle(pool);
+  currentQuestions = pool.slice(0, count);
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  mode = 'wrong-redo';
+  window._wrongRedoStats = { total: currentQuestions.length, correct: 0, wrong: 0, fixed: [] };
+  renderSheet(); updateFilterStats(); showQuestion(0);
+}
+
+// 重做模式提交后处理
+function _handleWrongRedoSubmit(qId, isCorrect) {
+  if (mode !== 'wrong-redo') return;
+  if (isCorrect) {
+    window._wrongRedoStats.correct++;
+    // 从错题本移除
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 9 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    Storage.get('wrongBook')[qId] = false;
+    delete Storage.get('wrongBook')[qId];
+    Storage._flush();
+    window._wrongRedoStats.fixed.push(qId);
+  } else {
+    window._wrongRedoStats.wrong++;
+  }
+
+  // 检查是否全部做完
+  const answered = window._wrongRedoStats.correct + window._wrongRedoStats.wrong;
+  if (answered >= window._wrongRedoStats.total) {
+    setTimeout(() => {
+      const s = window._wrongRedoStats;
+      alert(`📊 错题重做完成！\n\n✅ 正确: ${s.correct}/${s.total}\n🎉 移出错题本: ${s.fixed.length} 题\n❌ 仍错误: ${s.wrong} 题`);
+      mode = 'filter';
+      updateAllStats();
+      selectAllSubjects();
+    }, 500);
+  }
+}
+
+// ---- Show Question ----
+function showQuestion(index) {
+  if (index < 0 || index >= currentQuestions.length) return;
+  currentIndex = index; selectedOption = null; selectedMulti = {};
+  const q = currentQuestions[index];
+
+  document.getElementById('welcome').style.display = 'none';
+  const area = document.getElementById('question-area');
+  area.style.display = 'block';
+
+  // Navigation
+  document.getElementById('q-index').textContent = `第 ${index + 1}/${currentQuestions.length} 题`;
+  const topicInfo = TOPICS[q.topic];
+  const typeInfo = QUESTION_TYPES[q.type] || { name: q.type === 'code' ? '编程' : '未知', icon: q.type === 'code' ? '💻' : '?' };
+  const diff = DIFFICULTY[q.difficulty] || DIFFICULTY.medium;
+
+  // 题目标签（含搜索高亮）
+  const subjTag = `<span class="tag" style="background:${SUBJECTS[q.subject].color}20;color:${SUBJECTS[q.subject].color};border:1px solid ${SUBJECTS[q.subject].color}40;">${SUBJECTS[q.subject].icon} ${SUBJECTS[q.subject].name}</span>`;
+  document.getElementById('q-tag').innerHTML =
+    `${subjTag}
+     <span class="tag" style="background:#f0f0f0;">${q.year}年</span>
+     ${topicInfo ? `<span class="tag topic-clickable" style="background:#fff3e0;color:#e65100;border:1px solid #ffe0b2;cursor:pointer;" onclick="jumpToTopic('${q.topic}')" title="点击查看「${topicInfo.name}」全部题目">📌 ${Search.highlight(topicInfo.name)}</span>` : ''}
+     <span class="tag" style="background:${diff.bg};color:${diff.color};border:1px solid ${diff.color}40;" title="${diff.label}">${diff.stars}</span>
+     <span class="tag" style="background:#e8eaf6;color:#283593;border:1px solid #c5cae9;">${typeInfo.icon} ${typeInfo.name}</span>`;
+
+  // Passage
+  const passageEl = document.getElementById('q-passage');
+  if (q.passage) { passageEl.style.display = 'block'; passageEl.innerHTML = `<div class="passage-box">${q.passage}</div>`; }
+  else passageEl.style.display = 'none';
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 10 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+  // Question text with search highlight
+  document.getElementById('q-text').innerHTML = Search.highlight(q.question);
+
+  // 编程题：特殊处理
+  if (q.type === 'code') {
+    const optsEl = document.getElementById('q-options');
+    optsEl.style.display = 'block';
+    document.getElementById('q-fill').style.display = 'none';
+    document.getElementById('q-code').style.display = 'none';
+    document.getElementById('q-passage').style.display = 'none';
+    CodeEditor.render(optsEl, q);
+    document.getElementById('btn-submit').style.display = 'none';
+    document.getElementById('btn-mark').style.display = 'none';
+    document.getElementById('btn-fav').style.display = 'none';
+    document.getElementById('btn-next').style.display = 'none';
+    // 隐藏笔记区域
+    const noteArea = document.getElementById('note-area');
+    if (noteArea) noteArea.style.display = 'none';
+    renderSheet(); updateFilterStats();
+    return;
+  }
+
+  // Code
+  const codeEl = document.getElementById('q-code');
+  codeEl.style.display = q.code ? 'block' : 'none';
+  if (q.code) codeEl.textContent = q.code;
+
+  // Options
+  const optEl = document.getElementById('q-options');
+  const fillEl = document.getElementById('q-fill');
+  const submitted = Storage.isSubmitted(q.id);
+
+  if (q.type === 'fill') {
+    optEl.style.display = 'none'; fillEl.style.display = 'block';
+    const inp = document.getElementById('fill-answer');
+    inp.value = submitted ? (Storage.getAnswer(q.id) || '') : (Storage.getAnswer(q.id) || '');
+    inp.disabled = submitted;
+  } else {
+    optEl.style.display = 'flex'; fillEl.style.display = 'none';
+    optEl.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'option-item';
+      const isMulti = q.type === 'multi';
+      const letter = String.fromCharCode(65 + i);
+      const prefix = isMulti ? '☐' : '○';
+      div.innerHTML = `<span class="option-letter">${letter}</span><span>${Search.highlight(opt.substring(2).trim())}</span>`;
+
+      if (submitted) {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 11 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        div.classList.add('disabled');
+        const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
+        if (correctAnswers.includes(letter)) div.classList.add('correct-answer');
+        const userAns = Array.isArray(Storage.getAnswer(q.id)) ? Storage.getAnswer(q.id) : [Storage.getAnswer(q.id)];
+        if (userAns.includes(letter) && !correctAnswers.includes(letter)) div.classList.add('wrong-answer');
+      } else {
+        if (isMulti) {
+          if (selectedMulti[letter]) div.classList.add('selected');
+          else if (Storage.getAnswer(q.id) && Array.isArray(Storage.getAnswer(q.id)) && Storage.getAnswer(q.id).includes(letter)) div.classList.add('selected');
+        } else {
+          if (letter === selectedOption || (Storage.getAnswer(q.id) === letter && !Array.isArray(Storage.getAnswer(q.id)))) div.classList.add('selected');
+        }
+      }
+
+      div.onclick = () => {
+        if (submitted) return;
+        if (isMulti) {
+          if (selectedMulti[letter]) delete selectedMulti[letter];
+          else selectedMulti[letter] = true;
+          Storage.setAnswer(q.id, Object.keys(selectedMulti).sort());
+          saveToStorage();
+          showQuestion(currentIndex);
+        } else {
+          selectedOption = letter;
+          Storage.setAnswer(q.id, letter);
+          saveToStorage();
+          showQuestion(currentIndex);
+        }
+      };
+      optEl.appendChild(div);
+    });
+  }
+
+  // Buttons
+  document.getElementById('btn-submit').style.display = submitted ? 'none' : 'inline-flex';
+  const markBtn = document.getElementById('btn-mark');
+  markBtn.style.display = submitted ? 'none' : 'inline-flex';
+  markBtn.textContent = Storage.isMarked(q.id) ? '🏷 取消标记' : '🏷 标记';
+
+  // Favorite button
+  let favBtn = document.getElementById('btn-fav');
+  if (!favBtn) {
+    favBtn = document.createElement('button');
+    favBtn.id = 'btn-fav';
+    favBtn.className = 'btn btn-mark-btn';
+    document.getElementById('question-actions').appendChild(favBtn);
+  }
+  favBtn.textContent = Storage.isFavorite(q.id) ? '⭐ 已收藏' : '☆ 收藏';
+  favBtn.onclick = () => {
+    const isFav = Storage.toggleFavorite(q.id);
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 12 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    favBtn.textContent = isFav ? '⭐ 已收藏' : '☆ 收藏';
+  };
+
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  const btnPrev = document.getElementById('btn-prev');
+  if (btnPrev) btnPrev.style.display = currentIndex > 0 ? 'inline-flex' : 'none';
+  // 最后一题隐藏下一题
+  if (currentIndex >= currentQuestions.length - 1) {
+    document.getElementById('btn-next').style.display = 'none';
+  }
+
+  // Result
+  const resultArea = document.getElementById('result-area');
+  if (submitted) {
+    resultArea.style.display = 'block';
+    const userAns = Storage.getAnswer(q.id);
+    let isCorrect = false;
+    if (q.type === 'multi') {
+      const correct = (Array.isArray(q.answer) ? q.answer : [q.answer]).sort().join('');
+      const user = (Array.isArray(userAns) ? userAns : [userAns]).sort().join('');
+      isCorrect = correct === user;
+    } else if (q.type === 'fill') {
+      isCorrect = String(userAns || '').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+    } else {
+      isCorrect = userAns === q.answer;
+    }
+    resultArea.className = isCorrect ? 'result-correct' : 'result-wrong';
+    const correctDisplay = Array.isArray(q.answer) ? q.answer.join('') : q.answer;
+    resultArea.innerHTML = `
+      <div><span class="result-icon">${isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}</span></div>
+      <div style="margin-top:6px;"><strong>正确答案：${correctDisplay}</strong></div>
+      ${q.analysis ? `<div style="margin-top:10px;color:#555;"><strong>📖 解析：</strong>${q.analysis}</div>` : ''}
+    `;
+  } else {
+    resultArea.style.display = 'none';
+    if (q.type === 'multi' && Storage.getAnswer(q.id) && Array.isArray(Storage.getAnswer(q.id))) {
+      Storage.getAnswer(q.id).forEach(l => selectedMulti[l] = true);
+    }
+    if (q.type !== 'multi' && Storage.getAnswer(q.id) && !Array.isArray(Storage.getAnswer(q.id)) && !submitted) {
+      selectedOption = Storage.getAnswer(q.id);
+    }
+  }
+
+  // 笔记区域
+  let noteArea = document.getElementById('note-area');
+  if (!noteArea) {
+    noteArea = document.createElement('div');
+    noteArea.id = 'note-area';
+    noteArea.innerHTML = `
+      <div class="note-header">📝 个人笔记</div>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 13 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      <textarea id="note-textarea" class="note-textarea" placeholder="记下你的思路、易错点..." oninput="saveNoteDebounced()"></textarea>`;
+    document.getElementById('question-body').appendChild(noteArea);
+  }
+  noteArea.style.display = 'block';
+  const nta = document.getElementById('note-textarea');
+  nta.value = Storage.getNote(q.id) || '';
+  nta.dataset.qId = q.id;
+
+  renderSheet(); updateFilterStats();
+  document.getElementById('content').scrollTop = 0;
+}
+
+// 笔记自动保存（500ms 防抖，锁定题目 ID 防竞态）
+let noteTimer = null;
+function saveNoteDebounced() {
+  clearTimeout(noteTimer);
+  const qId = document.getElementById('note-textarea')?.dataset?.qId;
+  noteTimer = setTimeout(() => {
+    const text = document.getElementById('note-textarea').value;
+    Storage.setNote(qId, text);
+  }, 500);
+}
+
+function showWelcome() {
+  document.getElementById('question-area').style.display = 'none';
+  document.getElementById('welcome').style.display = 'block';
+  renderSheet();
+}
+
+// ---- Submit ----
+function submitAnswer() {
+  const q = currentQuestions[currentIndex];
+  if (q.type === 'fill') {
+    const val = document.getElementById('fill-answer').value;
+    if (!val.trim()) return;
+    Storage.setAnswer(q.id, val.trim());
+  } else if (q.type === 'multi') {
+    const keys = Object.keys(selectedMulti);
+    if (keys.length === 0 && (!Storage.getAnswer(q.id) || !Array.isArray(Storage.getAnswer(q.id)))) return;
+    if (keys.length > 0) Storage.setAnswer(q.id, keys.sort());
+  } else {
+    if (!selectedOption && !Storage.getAnswer(q.id)) return;
+    if (selectedOption) Storage.setAnswer(q.id, selectedOption);
+  }
+  Storage.markSubmitted(q.id);
+
+  // Check
+  const userAns = Storage.getAnswer(q.id);
+  let isCorrect = false;
+  if (q.type === 'multi') {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 14 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    const correct = (Array.isArray(q.answer) ? q.answer : [q.answer]).sort().join('');
+    const user = (Array.isArray(userAns) ? userAns : [userAns]).sort().join('');
+    isCorrect = correct === user;
+  } else if (q.type === 'fill') {
+    isCorrect = String(userAns || '').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+  } else {
+    isCorrect = userAns === q.answer;
+  }
+
+  if (!isCorrect) Storage.addWrong(q.id);
+
+  // 错题重做追踪
+  _handleWrongRedoSubmit(q.id, isCorrect);
+
+  // 学习计划进度追踪
+  Plan.onQuestionSubmitted(q.id, isCorrect);
+
+  // 每日一题完成检测
+  if (Daily.getQuestion && Daily.getQuestion() && Daily.getQuestion().id === q.id && isCorrect) {
+    Daily.markAnswered();
+  }
+
+  // 打卡
+  Storage.checkinToday();
+  saveToStorage();
+
+  // 原地更新：结果区 + 按钮状态 + 选项颜色（不重建DOM）
+  const resultArea = document.getElementById('result-area');
+  resultArea.style.display = 'block';
+  resultArea.className = isCorrect ? 'result-correct' : 'result-wrong';
+  const correctDisplay = Array.isArray(q.answer) ? q.answer.join('') : q.answer;
+  resultArea.innerHTML = `
+    <div><span class="result-icon">${isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}</span></div>
+    <div style="margin-top:6px;"><strong>正确答案：${correctDisplay}</strong></div>
+    ${q.analysis ? `<div style="margin-top:10px;color:#555;"><strong>📖 解析：</strong>${q.analysis}</div>` : ''}`;
+
+  // 更新选项颜色
+  const optsEl = document.getElementById('q-options');
+  if (optsEl) {
+    const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const myAns = isCorrect ? correctAnswers : (Array.isArray(userAns) ? userAns : [userAns]);
+    optsEl.querySelectorAll('.option-item').forEach(el => {
+      el.classList.add('disabled');
+      const letter = el.querySelector('.option-letter').textContent;
+      if (correctAnswers.includes(letter)) el.classList.add('correct-answer');
+      else if (myAns.includes(letter) && !correctAnswers.includes(letter)) el.classList.add('wrong-answer');
+    });
+  }
+
+  // 隐藏提交/标记按钮，显示下一题
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 15 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  document.getElementById('btn-submit').style.display = 'none';
+  document.getElementById('btn-mark').style.display = 'none';
+  const favBtn = document.getElementById('btn-fav');
+  if (favBtn) favBtn.style.display = 'none';
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  const btnPrev = document.getElementById('btn-prev');
+  if (btnPrev) btnPrev.style.display = 'inline-flex';
+
+  // 禁用填空输入
+  const fillEl = document.getElementById('fill-answer');
+  if (fillEl) fillEl.disabled = true;
+
+  // 轻量更新答题卡和统计
+  renderSheet(); updateAllStats(); updateFilterStats();
+}
+
+function toggleMark() {
+  const q = currentQuestions[currentIndex];
+  if (Storage.isSubmitted(q.id)) return;
+  Storage.toggleMarked(q.id);
+  saveToStorage(); renderSheet();
+  showQuestion(currentIndex);
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) showQuestion(currentIndex - 1);
+}
+function nextQuestion() {
+  if (currentIndex < currentQuestions.length - 1) showQuestion(currentIndex + 1);
+}
+
+// ---- Answer Sheet ----
+function renderSheet() {
+  const grid = document.getElementById('sheet-grid');
+  grid.innerHTML = '';
+  if (currentQuestions.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#999;text-align:center;">暂无题目</div>';
+    return;
+  }
+  currentQuestions.forEach((q, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'sheet-cell';
+    cell.textContent = i + 1;
+    cell.title = `${SUBJECTS[q.subject].name} ${q.year}年 Q${i+1}`;
+    cell.onclick = () => showQuestion(i);
+    if (i === currentIndex) cell.classList.add('current');
+    if (Storage.isSubmitted(q.id)) {
+      const userAns = Storage.getAnswer(q.id);
+      let isCorrect = false;
+      if (q.type === 'multi') {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 16 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
+        const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
+        isCorrect = c === u;
+      } else if (q.type === 'fill') {
+        isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      } else {
+        isCorrect = userAns === q.answer;
+      }
+      cell.classList.add(isCorrect ? 'correct-cell' : 'wrong-cell');
+    }
+    if (Storage.isMarked(q.id)) cell.classList.add('marked-cell');
+    grid.appendChild(cell);
+  });
+}
+
+// ---- Stats ----
+function updateAllStats() {
+  const done = Storage.getSubmittedIds().length;
+  let corr = 0;
+  const bank = getBank();
+  bank.forEach(q => {
+    if (!Storage.isSubmitted(q.id)) return;
+    const userAns = Storage.getAnswer(q.id);
+    let isCorrect = false;
+    if (q.type === 'multi') {
+      const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
+      const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
+      isCorrect = c === u;
+    } else if (q.type === 'fill') {
+      isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+    } else {
+      isCorrect = userAns === q.answer;
+    }
+    if (isCorrect) corr++;
+  });
+  document.getElementById('stat-total').textContent = bank.length;
+  document.getElementById('stat-correct').textContent = corr;
+  document.getElementById('stat-wrong').textContent = done - corr;
+  document.getElementById('stat-rate').textContent = done > 0 ? Math.round(corr/done*100)+'%' : '--';
+  document.getElementById('wrong-count').textContent = Storage.getWrongIds().length;
+  document.getElementById('fav-count').textContent = Storage.getFavoriteIds().length;
+  const fc2 = document.getElementById('fav-count2');
+  if (fc2) fc2.textContent = Storage.getFavoriteIds().length;
+}
+
+function updateFilterStats() {
+  document.getElementById('filter-count').textContent = currentQuestions.length;
+  const done = currentQuestions.filter(q => Storage.isSubmitted(q.id)).length;
+  let corr = 0;
+  currentQuestions.forEach(q => {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 17 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    if (!Storage.isSubmitted(q.id)) return;
+    const userAns = Storage.getAnswer(q.id);
+    let isCorrect = false;
+    if (q.type === 'multi') {
+      const c = (Array.isArray(q.answer)?q.answer:[q.answer]).sort().join('');
+      const u = (Array.isArray(userAns)?userAns:[userAns]).sort().join('');
+      isCorrect = c === u;
+    } else if (q.type === 'fill') {
+      isCorrect = String(userAns||'').trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+    } else {
+      isCorrect = userAns === q.answer;
+    }
+    if (isCorrect) corr++;
+  });
+  document.getElementById('filter-done').textContent = done;
+  document.getElementById('filter-rate').textContent = done > 0 ? Math.round(corr/done*100)+'%' : '--';
+}
+
+// ---- Reset ----
+function resetProgress() {
+  if (!confirm('确定要重置所有答题记录吗？此操作不可恢复。')) return;
+  Storage.reset();
+  window.userAnswers = Storage.get('userAnswers');
+  window.markedQuestions = Storage.get('markedQuestions');
+  window.submittedQuestions = Storage.get('submittedQuestions');
+  window.wrongBook = Storage.get('wrongBook');
+  selectedOption = null; selectedMulti = {};
+  updateAllStats(); applyFilter();
+}
+
+// ---- Utils ----
+function shuffle(a) { for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
+
+// ---- Keyboard ----
+document.addEventListener('keydown', (e) => {
+  // 如果焦点在搜索框或输入框，不处理快捷键
+  if (document.activeElement && (document.activeElement.id === 'search-input' || document.activeElement.id === 'fill-answer' || document.activeElement.id === 'ce-textarea')) return;
+  if (Exam.state === 'running') return; // 考试中不处理
+
+  if (currentIndex < 0 || currentQuestions.length === 0) return;
+  const q = currentQuestions[currentIndex];
+  if (Storage.isSubmitted(q.id)) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); if (currentIndex < currentQuestions.length-1) showQuestion(currentIndex+1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); if (currentIndex > 0) showQuestion(currentIndex-1); }
+    return;
+  }
+  if (q.type === 'fill') {
+    if (e.key === 'Enter') { e.preventDefault(); submitAnswer(); }
+    return;
+  }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 18 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  const key = e.key.toUpperCase();
+  if (['A','B','C','D','E'].includes(key)) {
+    if (q.type === 'multi') {
+      if (selectedMulti[key]) delete selectedMulti[key]; else selectedMulti[key] = true;
+      Storage.setAnswer(q.id, Object.keys(selectedMulti).sort());
+      saveToStorage();
+      showQuestion(currentIndex);
+    } else {
+      selectOptionUniversal(key);
+    }
+  }
+  if (e.key === 'Enter') { e.preventDefault(); submitAnswer(); }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); if (currentIndex < currentQuestions.length-1) showQuestion(currentIndex+1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); if (currentIndex > 0) showQuestion(currentIndex-1); }
+  // Ctrl+S 收藏当前题
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); Storage.toggleFavorite(q.id); document.getElementById('btn-fav').textContent = Storage.isFavorite(q.id) ? '⭐ 已收藏' : '☆ 收藏'; }
+});
+
+function selectOptionUniversal(letter) {
+  selectedOption = letter;
+  Storage.setAnswer(currentQuestions[currentIndex].id, letter);
+  saveToStorage();
+  showQuestion(currentIndex);
+}
+
+// ---- 深色模式 ----
+function initDarkMode() {
+  const saved = localStorage.getItem('ky-dark');
+  if (saved === '1' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark');
+  }
+  // 监听系统变化
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('ky-dark')) {
+      document.body.classList.toggle('dark', e.matches);
+    }
+  });
+}
+function toggleDarkMode() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('ky-dark', isDark ? '1' : '0');
+}
+
+// ---- Header Dropdown ----
+function toggleHeaderMore() {
+  const d = document.getElementById('header-more-drop');
+  d.classList.toggle('show');
+}
+function closeHeaderMore() {
+  const d = document.getElementById('header-more-drop');
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 19 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  if (d) d.classList.remove('show');
+}
+// 点击别处关闭下拉
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.header-more-wrap')) closeHeaderMore();
+});
+
+// ---- Start ----
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('show');
+}
+
+// 答题卡开关
+function toggleSheet() {
+  const sheet = document.getElementById('answer-sheet');
+  if (sheet.classList.contains('open')) closeSheet();
+  else openSheet();
+}
+function openSheet() {
+  const sheet = document.getElementById('answer-sheet');
+  const overlay = document.getElementById('sheet-overlay');
+  sheet.classList.add('open');
+  if (overlay) overlay.classList.add('show');
+  document.body.style.overflow = 'hidden'; // 锁定背景滚动
+}
+function closeSheet() {
+  const sheet = document.getElementById('answer-sheet');
+  const overlay = document.getElementById('sheet-overlay');
+  sheet.classList.remove('open');
+  sheet.style.transform = '';
+  if (overlay) overlay.classList.remove('show');
+  document.body.style.overflow = ''; // 恢复滚动
+}
+
+// 答题卡触摸下滑关闭
+function initSheetSwipe() {
+  const sheet = document.getElementById('answer-sheet');
+  let startY = 0, dragging = false;
+
+  sheet.addEventListener('touchstart', function(e) {
+    if (!sheet.classList.contains('open')) return;
+    const touchY = e.touches[0].clientY;
+    const sheetTop = sheet.getBoundingClientRect().top;
+    const grid = document.getElementById('sheet-grid');
+    const atTop = grid.scrollTop <= 0;
+    const inHeader = (touchY - sheetTop) < 80;
+    if (!inHeader && !atTop) return;
+    startY = touchY;
+    dragging = true;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 20 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    sheet.style.transition = 'none';
+  }, { passive: false });
+
+  sheet.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy > 0) {
+      e.preventDefault();
+      sheet.style.transform = `translateY(${dy}px)`;
+    }
+  }, { passive: false });
+
+  sheet.addEventListener('touchend', function(e) {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    const dy = e.changedTouches[0].clientY - startY;
+    if (dy > 80) closeSheet();
+    else sheet.style.transform = '';
+  });
+}
+
+// ---- 移动端搜索面板 ----
+function toggleMobileSearch() {
+  const panel = document.getElementById('mobile-search-panel');
+  const input = document.getElementById('mobile-search-input');
+  const isOpen = panel.classList.contains('show');
+  if (isOpen) {
+    panel.classList.remove('show');
+  } else {
+    panel.classList.add('show');
+    input.value = Search.getKeyword();
+    input.focus();
+    renderMobileSearchResults();
+  }
+}
+
+function renderMobileSearchResults() {
+  const container = document.getElementById('mobile-search-result');
+  const input = document.getElementById('mobile-search-input');
+  if (!container) return;
+  const kw = input.value.trim().toLowerCase();
+  if (!kw) {
+    container.innerHTML = '<div style="text-align:center;color:#999;padding:24px;">输入关键词开始搜索</div>';
+    return;
+  }
+  const results = getBank().filter(q => {
+    if (q.id.toLowerCase().includes(kw)) return true;
+    if (q.question.toLowerCase().includes(kw)) return true;
+    if (q.options && q.options.some(o => o.toLowerCase().includes(kw))) return true;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 21 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    if (q.analysis && q.analysis.toLowerCase().includes(kw)) return true;
+    return false;
+  }).slice(0, 50);
+  if (results.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#999;padding:24px;">没有找到匹配的题目</div>';
+    return;
+  }
+  container.innerHTML = results.map((q, i) => `
+    <div class="ms-result-item" onclick="jumpToMobileSearchResult('${q.id}', '${q.subject}')">
+      <span class="ms-result-idx">${i + 1}</span>
+      <span>${q.question.slice(0, 60)}...</span>
+      <span class="ms-result-meta">${SUBJECTS[q.subject]?.name || ''} · ${q.year}</span>
+    </div>
+  `).join('');
+}
+
+function jumpToMobileSearchResult(qId, subject) {
+  currentFilter.subjects = [subject];
+  currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
+  mode = 'filter';
+  renderGroupFilters(); renderSubjectFilters(); renderTopicFilters(); renderYearFilters();
+  currentQuestions = getBank().filter(q => q.subject === subject);
+  const idx = currentQuestions.findIndex(q => q.id === qId);
+  renderSheet(); updateFilterStats();
+  showQuestion(idx >= 0 ? idx : 0);
+  toggleMobileSearch();
+}
+
+// ---- 题目左右滑动 ----
+function initQuestionSwipe() {
+  let startX = 0, startY = 0, swiping = false;
+
+  document.addEventListener('touchstart', function(e) {
+    // 不在刷题模式或考试中，不处理
+    if (currentIndex < 0 || currentQuestions.length === 0) return;
+    if (typeof Exam !== 'undefined' && Exam.state === 'running') return;
+    // 如果点击的是按钮/链接/输入框，不拦截
+    if (e.target.closest('button, a, input, textarea, select, .sheet-cell, .option-item, .nav-btn, .btn')) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    swiping = true;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    // 水平滑动超过 30px，放宽方向判断
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 0.7) {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 22 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      if (dx < 0 && currentIndex < currentQuestions.length - 1) {
+        showQuestion(currentIndex + 1);   // 左划 → 下一题
+      } else if (dx > 0 && currentIndex > 0) {
+        showQuestion(currentIndex - 1);   // 右划 → 上一题
+      }
+    }
+  });
+}
+
+function jumpToTopic(topicKey) {
+  const topic = TOPICS[topicKey];
+  if (!topic) return;
+  const baseSubj = topic.subject;
+  let subjectsToSelect = [baseSubj];
+  if (baseSubj === 'ma1') subjectsToSelect = ['ma1','ma2','ma3'];
+  if (baseSubj === 'en1') subjectsToSelect = ['en1','en2'];
+  currentFilter.subjects = subjectsToSelect;
+  currentFilter.topics = [topicKey];
+  currentFilter.years = [];
+  currentFilter.groups = [];
+  mode = 'filter';
+  renderGroupFilters();
+  renderSubjectFilters();
+  renderTopicFilters();
+  renderYearFilters();
+  applyFilter();
+  document.getElementById('content').scrollTop = 0;
+}
+
+// ---- 模拟考试快捷入口 ----
+function startExam() {
+  Exam.start();
+}
+
+function showCodeQuestions() {
+  mode = 'filter';
+  currentFilter.subjects = ['ds', 'co', 'os', 'cn'];
+  currentFilter.years = []; currentFilter.topics = []; currentFilter.groups = [];
+  renderGroupFilters(); renderSubjectFilters(); renderTopicFilters(); renderYearFilters();
+  currentQuestions = getBank().filter(q => q.type === 'code');
+  currentIndex = -1; selectedOption = null; selectedMulti = {};
+  renderSheet(); updateFilterStats();
+  if (currentQuestions.length > 0) showQuestion(0);
+  else alert('没有编程题');
+}
+
+// 页面离开提醒（考试进行中）
+window.addEventListener('beforeunload', (e) => {
+  if (Exam.state === 'running') {
+    e.preventDefault();
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 23 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    e.returnValue = '考试正在进行中，确定离开吗？';
+    return e.returnValue;
+  }
+});
+
+init();
+
+// ====== 文件: js/storage.js ======
+// ============================================================
+// 考研刷题 - 统一存储层（多账户支持）v3
+// ============================================================
+
+const STORAGE_KEY = 'ky-brush';
+const STORAGE_USER_KEY = 'ky-user';
+
+const Storage = {
+  _data: null,
+  _currentUser: null,
+  _listeners: {},
+
+  init() {
+    const raw = this._loadFromLS(STORAGE_KEY);
+    // 兼容旧版数据
+    if (raw && raw.userAnswers && !raw._accounts) {
+      // 旧版单用户数据迁移
+      this._data = { _currentUser: null, _accounts: { '__default__': raw } };
+      this._currentUser = null;
+      this._flush();
+    } else {
+      this._data = raw || { _currentUser: null, _accounts: {} };
+    }
+    // 恢复上次登录的用户
+    const saved = this._loadFromLS(STORAGE_USER_KEY);
+    if (saved && saved.nickname && this._data._accounts[saved.nickname]) {
+      this.switchTo(saved.nickname);
+    }
+    // 确保至少有一个活跃账户（访客模式）
+    if (!this._currentUser) {
+      const keys = Object.keys(this._data._accounts);
+      if (keys.length > 0) {
+        this.switchTo(keys[0]);
+      } else {
+        // 创建一个访客账户以保证数据写入正常
+        this._data._accounts['__guest__'] = this._newAccount();
+        this._currentUser = '__guest__';
+        this._data._currentUser = '__guest__';
+        this._flush();
+      }
+    }
+    return this._data;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 24 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  },
+
+  // ---- 账户管理 ----
+  switchTo(nickname) {
+    if (!this._data._accounts[nickname]) {
+      this._data._accounts[nickname] = this._newAccount();
+    }
+    this._currentUser = nickname;
+    this._data._currentUser = nickname;
+    this._flush();
+  },
+
+  createAccount(nickname) {
+    if (this._data._accounts[nickname]) return false;
+    this._data._accounts[nickname] = this._newAccount();
+    this.switchTo(nickname);
+    return true;
+  },
+
+  deleteAccount(nickname) {
+    delete this._data._accounts[nickname];
+    if (this._currentUser === nickname) {
+      this._currentUser = null;
+      this._data._currentUser = null;
+    }
+    this._flush();
+  },
+
+  listAccounts() {
+    return Object.keys(this._data._accounts).map(name => ({
+      name,
+      submitted: Object.keys(this._data._accounts[name].submittedQuestions || {}).length,
+      streak: this._data._accounts[name].checkin?.streak || 0
+    }));
+  },
+
+  getCurrentUser() {
+    return this._currentUser;
+  },
+
+  // ---- 通用读写 ----
+  _acc() {
+    if (!this._currentUser || !this._data._accounts[this._currentUser]) return null;
+    return this._data._accounts[this._currentUser];
+  },
+
+  get(key) {
+    const acc = this._acc();
+    if (acc) return acc[key];
+    // 无账户时返回根级别数据，没有则返回空对象
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 25 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    return this._data[key] || {};
+  },
+
+  set(key, val) {
+    const acc = this._acc();
+    if (acc) { acc[key] = val; }
+    else { this._data[key] = val; }
+    this._flush();
+    this._emit(key, val);
+  },
+
+  getAll() {
+    const acc = this._acc();
+    return acc ? { ...acc } : { ...this._data };
+  },
+
+  // ---- 题目快捷方法 ----
+  getAnswer(qId)     { return this.get('userAnswers')[qId]; },
+  setAnswer(qId, a)   { this.get('userAnswers')[qId] = a; this._flush(); },
+  isSubmitted(qId)    { return !!this.get('submittedQuestions')[qId]; },
+  markSubmitted(qId)  { this.get('submittedQuestions')[qId] = true; this._flush(); },
+  isMarked(qId)       { return !!this.get('markedQuestions')[qId]; },
+  toggleMarked(qId)   {
+    const m = this.get('markedQuestions');
+    m[qId] ? delete m[qId] : (m[qId] = true);
+    this._flush();
+    return m[qId];
+  },
+  isWrong(qId)        { return !!this.get('wrongBook')[qId]; },
+  addWrong(qId)       { this.get('wrongBook')[qId] = true; this._flush(); },
+  isFavorite(qId)     { return !!this.get('favorites')[qId]; },
+  toggleFavorite(qId) {
+    const f = this.get('favorites');
+    f[qId] ? delete f[qId] : (f[qId] = true);
+    this._flush();
+    return f[qId];
+  },
+  setNote(qId, text)  { this.get('notes')[qId] = text; this._flush(); },
+  getNote(qId)        { return this.get('notes')[qId] || ''; },
+
+  getWrongIds()       { return Object.keys(this.get('wrongBook')); },
+  getFavoriteIds()    { return Object.keys(this.get('favorites')); },
+  getSubmittedIds()   { return Object.keys(this.get('submittedQuestions')); },
+
+  // ---- 打卡 ----
+  checkinToday() {
+    const c = this.get('checkin');
+    const today = new Date().toISOString().slice(0, 10);
+    if (!c.records[today]) c.records[today] = { count: 0 };
+    c.records[today].count++;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 26 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    this._calcStreak();
+    this._flush();
+    return c.records[today].count;
+  },
+  getCheckinRecords() { return this.get('checkin').records; },
+  getStreak()         { return this.get('checkin').streak; },
+  _calcStreak() {
+    const c = this.get('checkin');
+    let streak = 0; const d = new Date();
+    while (true) {
+      const key = d.toISOString().slice(0, 10);
+      if (c.records[key]) { streak++; d.setDate(d.getDate() - 1); }
+      else break;
+    }
+    c.streak = streak;
+  },
+
+  // ---- 考试记录（全局共享）----
+  saveExam(record) {
+    const exams = JSON.parse(localStorage.getItem('ky-exams') || '[]');
+    record.id = Date.now(); record.date = new Date().toISOString();
+    record.user = this._currentUser;
+    exams.unshift(record);
+    if (exams.length > 50) exams.length = 50;
+    localStorage.setItem('ky-exams', JSON.stringify(exams));
+  },
+  getExams() {
+    return JSON.parse(localStorage.getItem('ky-exams') || '[]');
+  },
+
+  // ---- 用户信息 ----
+  getUser() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_USER_KEY)); } catch(e) { return null; }
+  },
+  setUser(user) {
+    localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(user));
+  },
+  clearUser() {
+    localStorage.removeItem(STORAGE_USER_KEY);
+  },
+
+  // ---- 导出导入 ----
+  exportData() {
+    return JSON.stringify(this._data, null, 2);
+  },
+  importData(json) {
+    try {
+      const data = JSON.parse(json);
+      if (data._accounts) {
+        for (const name of Object.keys(data._accounts)) {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 27 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+          if (!this._data._accounts[name]) this._data._accounts[name] = data._accounts[name];
+        }
+      }
+      this._flush();
+      return true;
+    } catch(e) { return false; }
+  },
+
+  // ---- 重置 ----
+  reset() {
+    if (this._currentUser) {
+      this._data._accounts[this._currentUser] = this._newAccount();
+    }
+    this._flush();
+  },
+
+  // ---- 内部 ----
+  _newAccount() {
+    return {
+      userAnswers: {}, markedQuestions: {}, submittedQuestions: {},
+      wrongBook: {}, favorites: {}, notes: {},
+      checkin: { records: {}, streak: 0 }
+    };
+  },
+  _loadFromLS(key) {
+    try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
+  },
+  _flush() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this._data));
+  },
+  on(key, fn) {
+    if (!this._listeners[key]) this._listeners[key] = [];
+    this._listeners[key].push(fn);
+  },
+  _emit(key, val) {
+    if (this._listeners[key]) this._listeners[key].forEach(fn => fn(val));
+  }
+};
+
+// ====== 文件: js/search.js ======
+// ============================================================
+// 考研刷题 - 题目搜索模块 v3
+// ============================================================
+
+const Search = {
+  keyword: '',
+  debounceTimer: null,
+  debounceMs: 300,
+  results: [],     // 匹配的 question id 数组
+  inputEl: null,
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 28 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+  // ---- 初始化 ----
+  init(inputId) {
+    this.inputEl = document.getElementById(inputId);
+    if (!this.inputEl) return;
+    this.inputEl.addEventListener('input', () => this.onInput());
+    this.inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { this.clear(); }
+    });
+    // 清除按钮
+    const clearBtn = document.getElementById('search-clear');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => this.clear());
+    }
+  },
+
+  // ---- 输入处理 ----
+  onInput() {
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => {
+      this.keyword = this.inputEl.value.trim();
+      this.updateUI();
+      if (typeof applyFilter === 'function') applyFilter();
+    }, this.debounceMs);
+  },
+
+  // ---- 搜索执行 ----
+  execute(questions) {
+    if (!this.keyword) {
+      this.results = [];
+      return questions; // 无关键词时返回全部
+    }
+    const kw = this.keyword.toLowerCase();
+    this.results = [];
+    return questions.filter(q => {
+      if (this._match(q, kw)) {
+        this.results.push(q.id);
+        return true;
+      }
+      return false;
+    });
+  },
+
+  // ---- 匹配逻辑 ----
+  _match(q, kw) {
+    // 题号
+    if (q.id.toLowerCase().includes(kw)) return true;
+    // 题干
+    if (q.question.toLowerCase().includes(kw)) return true;
+    // 选项
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 29 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    if (q.options) {
+      for (const opt of q.options) {
+        if (opt.toLowerCase().includes(kw)) return true;
+      }
+    }
+    // 解析
+    if (q.analysis && q.analysis.toLowerCase().includes(kw)) return true;
+    // 代码块
+    if (q.code && q.code.toLowerCase().includes(kw)) return true;
+    // 知识点
+    if (typeof TOPICS !== 'undefined' && TOPICS[q.topic]) {
+      if (TOPICS[q.topic].name.includes(kw)) return true;
+      if (TOPICS[q.topic].desc.toLowerCase().includes(kw)) return true;
+    }
+    // 学科
+    if (typeof SUBJECTS !== 'undefined' && SUBJECTS[q.subject]) {
+      if (SUBJECTS[q.subject].name.includes(kw)) return true;
+    }
+    // 年份
+    if (String(q.year).includes(kw)) return true;
+    // 难度
+    if (q.difficulty) {
+      if (kw === '简单' && q.difficulty === 'easy') return true;
+      if (kw === '中等' && q.difficulty === 'medium') return true;
+      if (kw === '较难' || kw === '难' && q.difficulty === 'hard') return true;
+    }
+    return false;
+  },
+
+  // ---- 高亮 ----
+  highlight(text) {
+    if (!this.keyword || !text) return text;
+    const escaped = this.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    return String(text).replace(regex, '<mark class="search-highlight">$1</mark>');
+  },
+
+  // ---- 当前搜索状态 ----
+  getResultCount() {
+    return this.results.length;
+  },
+
+  getKeyword() {
+    return this.keyword;
+  },
+
+  isActive() {
+    return this.keyword.length > 0;
+  },
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 30 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  // ---- 清除 ----
+  clear() {
+    this.keyword = '';
+    if (this.inputEl) this.inputEl.value = '';
+    this.results = [];
+    this.updateUI();
+    if (typeof applyFilter === 'function') applyFilter();
+  },
+
+  // ---- UI ----
+  updateUI() {
+    const countEl = document.getElementById('search-count');
+    const clearBtn = document.getElementById('search-clear');
+    if (countEl) {
+      countEl.style.display = this.isActive() ? 'inline' : 'none';
+      countEl.textContent = this.isActive() ? `找到 ${this.getResultCount()} 题` : '';
+    }
+    if (clearBtn) {
+      clearBtn.style.display = this.isActive() ? 'flex' : 'none';
+    }
+  }
+};
+
+// 便捷函数：在 applyFilter 中调用
+function applySearchFilter(questions) {
+  return Search.execute(questions);
+}
+
+// ====== 文件: js/auth.js ======
+// ============================================================
+// 考研刷题 - 我的面板（多账户）v3
+// ============================================================
+
+const Auth = {
+  _user: null,
+
+  init() {
+    this._user = Storage.getUser();
+    if (!this._user && Storage.getCurrentUser()) {
+      this._user = { nickname: Storage.getCurrentUser() };
+    }
+    this._updateUI();
+  },
+
+  isLoggedIn() {
+    return !!(this._user && this._user.nickname && Storage.getCurrentUser());
+  },
+
+  showMyPanel() {
+    this._ensureOverlay();
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 31 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    transition: transform 0.3s ease, visibility 0s 0s;
+    pointer-events: auto; visibility: visible;
+  }
+  .sheet-handle {
+    display: block; width: 36px; height: 5px; background: #d0d0d0;
+    border-radius: 3px; margin: 10px auto 6px; flex-shrink: 0;
+  }
+  .sheet-top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 16px 10px; border-bottom: 1px solid var(--border);
+    margin-bottom: 0; flex-shrink: 0;
+  }
+  .sheet-top h3 { font-size: 15px; }
+  .sheet-close-btn { display: flex; }
+  #sheet-grid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px; padding: 12px 16px; overflow-y: auto; flex: 1;
+  }
+  .sheet-cell { font-size: 11px; }
+  .sheet-legend {
+    padding: 8px 16px 20px; border-top: 1px solid var(--border); flex-shrink: 0;
+  }
+
+  /* 底部导航栏 */
+  #mobile-nav {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+    height: 48px; background: var(--card); border-top: 1px solid var(--border);
+    z-index: 280; align-items: center; justify-content: space-around;
+    padding: 0 2px;
+  }
+  .nav-btn {
+    flex: 1; border: none; background: none; font-size: 11px;
+    padding: 4px 2px; cursor: pointer; color: var(--text);
+    font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn:active { background: #f0f0f0; border-radius: 6px; }
+
+  /* 移动端搜索面板 */
+  #mobile-search-panel {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 48px;
+    background: var(--bg); z-index: 290; flex-direction: column;
+  }
+  #mobile-search-panel.show { display: flex; }
+  .ms-panel-top {
+    display: flex; align-items: center; padding: 10px 12px;
+    background: #fff; border-bottom: 1px solid var(--border); gap: 8px;
+  }
+  .ms-panel-top .search-input {
+    flex: 1; background: #f5f5f5; border: none; border-radius: 8px;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 32 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    padding: 8px 12px; font-size: 15px; outline: none; font-family: inherit;
+    color: var(--text);
+  }
+  .ms-panel-result { flex: 1; overflow-y: auto; padding: 12px; }
+  .ms-result-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px;
+    background: #fff; border-radius: 8px; margin-bottom: 8px;
+    cursor: pointer; font-size: 13px; transition: background 0.1s;
+  }
+  .ms-result-item:active { background: #f0f0f0; }
+  .ms-result-idx { font-weight: 700; color: var(--primary); min-width: 30px; }
+  .ms-result-meta { font-size: 10px; color: #999; }
+}
+
+/* ============================================================
+   平板端 (769-1100px)
+   ============================================================ */
+@media (min-width: 769px) and (max-width: 1100px) {
+  #main { grid-template-columns: 200px 1fr; }
+  #answer-sheet { display: none; }
+  #sheet-grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ============================================================
+   新功能组件样式
+   ============================================================ */
+
+/* ---- Login Modal ---- */
+.login-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center;
+}
+.login-card {
+  background: #fff; border-radius: 14px; padding: 24px; width: 90%; max-width: 380px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.login-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+}
+.login-header h3 { font-size: 17px; }
+.login-close { cursor: pointer; font-size: 18px; color: #999; padding: 4px; }
+.login-close:hover { color: #333; }
+.login-sub { font-size: 12px; color: #999; margin-bottom: 16px; }
+.login-form { display: flex; flex-direction: column; gap: 14px; }
+.input-group { display: flex; flex-direction: column; gap: 4px; }
+.input-group label { font-size: 12px; color: #666; font-weight: 600; }
+.input-group input {
+  padding: 10px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px;
+  font-size: 15px; outline: none; font-family: inherit;
+  transition: border-color 0.2s;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 33 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+}
+.input-group input:focus { border-color: var(--primary); }
+.code-row { display: flex; gap: 8px; }
+.code-row input { flex: 1; }
+.btn-code {
+  background: #f0f0f0; border: none; padding: 10px 12px; border-radius: 8px;
+  font-size: 12px; cursor: pointer; white-space: nowrap; font-family: inherit;
+  color: #333; min-width: 90px;
+}
+.btn-code:hover { background: #e0e0e0; }
+.btn-code:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-full-login {
+  width: 100%; justify-content: center; padding: 11px; font-size: 15px;
+  margin-top: 4px;
+}
+.btn-danger-text {
+  background: none; border: none; color: #f54a45; cursor: pointer;
+  font-size: 13px; padding: 8px; margin-top: 8px; font-family: inherit;
+}
+.login-hint { font-size: 11px; color: #bbb; text-align: center; margin: 0; }
+.login-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+.login-error {
+  margin-top: 10px; padding: 8px 12px; background: #fff0f0;
+  color: #f54a45; border-radius: 6px; font-size: 12px;
+}
+
+/* ---- 我的面板 ---- */
+.me-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.me-header h3 { font-size: 17px; }
+.me-close { cursor: pointer; font-size: 18px; color: #999; padding: 4px; }
+.me-form { display: flex; flex-direction: column; gap: 14px; }
+.me-error { padding: 8px 12px; background: #fff0f0; color: #f54a45; border-radius: 6px; font-size: 12px; }
+.me-divider {
+  display: flex; align-items: center; gap: 10px; margin: 8px 0;
+  color: #bbb; font-size: 11px;
+}
+.me-divider::before, .me-divider::after {
+  content: ''; flex: 1; height: 1px; background: #e0e0e0;
+}
+body.dark .me-divider::before, body.dark .me-divider::after { background: #3a3a5c; }
+.me-hint { font-size: 11px; color: #bbb; text-align: center; margin: 0; }
+.me-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+.me-desc { font-size: 12px; color: #888; margin-bottom: 4px; line-height: 1.6; }
+.me-stats-row { display: flex; gap: 0; justify-content: space-around; padding: 8px 0 12px; }
+.me-stat { text-align: center; flex: 1; }
+.me-stat strong { display: block; font-size: 15px; color: var(--text); }
+.me-stat span { font-size: 10px; color: var(--text-secondary); }
+.me-actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+.me-actions-grid .btn-me-action { font-size: 12px; padding: 8px 4px; justify-content: center; }
+.me-actions .btn-me-action { font-size: 13px; }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 34 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.me-account-list { display: flex; flex-direction: column; gap: 4px; }
+.me-account-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px;
+  border-radius: 8px; cursor: pointer; background: #f8f9fa;
+  transition: background 0.15s;
+}
+.me-account-item:hover { background: #e8f0ff; }
+.me-acc-active { background: var(--primary-light); border: 1px solid var(--primary); }
+.me-acc-info { flex: 1; }
+.me-acc-name { font-size: 14px; font-weight: 600; }
+.me-acc-meta { font-size: 11px; color: #999; }
+.me-profile { text-align: center; padding: 4px 0 12px; }
+.me-actions { display: flex; flex-direction: column; gap: 6px; }
+.btn-me-action { justify-content: center; padding: 10px; font-size: 14px; border: 1px solid #ddd; color: #333; background: #fafafa; width: 100%; }
+
+/* ---- User Panel ---- */
+.user-info { text-align: center; padding: 12px 0; }
+.user-avatar { font-size: 48px; margin-bottom: 6px; }
+.user-name { font-size: 18px; font-weight: 700; }
+.user-phone { font-size: 12px; color: #999; margin-bottom: 12px; }
+.user-stats { display: flex; justify-content: center; gap: 16px; margin-bottom: 12px; }
+.ustat { display: flex; flex-direction: column; align-items: center; }
+.ustat strong { font-size: 20px; color: var(--primary); }
+.ustat span { font-size: 10px; color: #999; }
+.user-actions { display: flex; flex-direction: column; gap: 8px; }
+
+/* ---- Exam Panel ---- */
+#exam-panel {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 300; flex-direction: column;
+}
+#exam-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; height: 48px; background: #1a1a2e; color: #fff;
+  flex-shrink: 0;
+}
+.exam-h-left { display: flex; align-items: center; gap: 8px; }
+.exam-h-right { display: flex; align-items: center; gap: 10px; }
+.exam-icon { font-size: 18px; }
+.exam-title { font-weight: 700; font-size: 15px; }
+.exam-progress { font-size: 13px; opacity: 0.8; }
+.exam-timer {
+  font-size: 22px; font-weight: 700; font-family: "JetBrains Mono", "Consolas", monospace;
+  letter-spacing: 2px;
+}
+.exam-timer.timer-warning { color: #f5a623; }
+.exam-timer.timer-danger { color: #f54a45; animation: blink 0.8s infinite; }
+@keyframes blink { 50% { opacity: 0.3; } }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 35 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+#exam-body {
+  display: flex; flex: 1; overflow: hidden;
+}
+#exam-question-area {
+  flex: 1; padding: 16px; overflow-y: auto; background: #fff;
+  margin: 8px; border-radius: 10px; box-shadow: var(--shadow);
+}
+#exam-sheet-area {
+  width: 220px; padding: 14px; background: #fff; margin: 8px 8px 8px 0;
+  border-radius: 10px; box-shadow: var(--shadow); overflow-y: auto;
+}
+#exam-sheet-area h4 { font-size: 12px; color: #999; margin-bottom: 10px; }
+#exam-sheet-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;
+}
+
+/* ---- Exam Config ---- */
+#exam-config {
+  max-width: 480px; margin: 40px auto; background: #fff;
+  padding: 32px; border-radius: 14px; box-shadow: var(--shadow);
+}
+#exam-config h2 { margin-bottom: 20px; text-align: center; }
+.exam-config-form { display: flex; flex-direction: column; gap: 18px; }
+.config-row { display: flex; flex-direction: column; gap: 6px; }
+.config-row label { font-size: 13px; font-weight: 600; color: #555; }
+.config-select {
+  padding: 10px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px;
+  font-size: 14px; outline: none; font-family: inherit; background: #fafafa;
+}
+.config-select:focus { border-color: var(--primary); }
+.config-slider-wrap {
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+}
+.config-slider-wrap input[type=range] { flex: 1; accent-color: var(--primary); }
+.exam-start-btn { padding: 14px; font-size: 16px; justify-content: center; margin-top: 8px; }
+.exam-cancel-btn { justify-content: center; }
+
+/* ---- Exam Options ---- */
+.options-grid { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.exam-option { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+#exam-q-nav {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 1px solid #eee;
+  font-size: 13px; font-weight: 600;
+}
+#exam-q-text { font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
+#exam-q-code {
+  background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 8px;
+  font-size: 13px; line-height: 1.5; overflow-x: auto; margin-bottom: 10px;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 36 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  font-family: "JetBrains Mono", "Consolas", monospace;
+}
+#exam-q-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; justify-content: space-between; }
+
+/* ---- Score Card ---- */
+.score-card {
+  display: flex; align-items: center; gap: 24px;
+  padding: 20px; background: #fafafa; border-radius: 12px; margin-bottom: 16px;
+}
+.score-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  border: 6px solid var(--correct);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.score-num { font-size: 28px; font-weight: 700; color: #333; }
+.score-label { font-size: 11px; color: #999; }
+.score-detail { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #555; }
+.score-detail strong { font-size: 18px; }
+
+/* ---- Review List ---- */
+#exam-result-area {
+  flex: 1; overflow-y: auto; padding: 16px;
+}
+.review-list h3 { margin-bottom: 10px; font-size: 15px; }
+.review-item {
+  display: flex; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; margin-bottom: 6px; font-size: 13px;
+}
+.review-correct { background: var(--correct-bg); border-left: 3px solid var(--correct); }
+.review-wrong { background: var(--wrong-bg); border-left: 3px solid var(--wrong); }
+.review-idx { font-weight: 700; flex-shrink: 0; min-width: 32px; }
+.review-body { flex: 1; }
+.review-question { margin-bottom: 4px; color: #555; }
+.review-answers { display: flex; gap: 12px; font-size: 12px; color: #777; }
+.review-analysis { margin-top: 6px; font-size: 12px; color: #555; }
+
+/* ---- 移动端适配 ---- */
+@media (max-width: 768px) {
+  .search-bar { max-width: none; margin: 0 4px; }
+  .search-input { font-size: 12px; }
+  #exam-body { flex-direction: column; }
+  #exam-sheet-area {
+    width: auto; margin: 0 8px 8px;
+    max-height: 160px;
+  }
+  #exam-sheet-grid { grid-template-columns: repeat(10, 1fr); }
+  #exam-question-area { margin: 0 8px 8px; }
+  .score-card { flex-direction: column; text-align: center; }
+  .stats-overview { grid-template-columns: repeat(3, 1fr); }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 37 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  .stats-row { flex-direction: column; }
+  .stats-half { flex: none; width: 100%; }
+  .plan-grid { grid-template-columns: 1fr; }
+  .share-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   统计仪表盘样式
+   ============================================================ */
+
+#stats-panel {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 300; flex-direction: column;
+}
+#stats-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; height: 48px; background: #1a1a2e; color: #fff;
+  flex-shrink: 0;
+}
+.stats-h-left { display: flex; align-items: center; gap: 8px; }
+#stats-body {
+  flex: 1; overflow-y: auto; padding: 16px; max-width: 900px;
+  margin: 0 auto; width: 100%;
+}
+
+/* ---- 概览卡片 ---- */
+.stats-overview {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: #fff; border-radius: 10px; padding: 14px 10px;
+  text-align: center; box-shadow: var(--shadow);
+}
+.stat-card-icon { font-size: 22px; margin-bottom: 4px; }
+.stat-card-val { font-size: 22px; font-weight: 700; color: #333; }
+.stat-card-label { font-size: 10px; color: #999; margin-top: 2px; }
+
+/* ---- Section ---- */
+.stats-section {
+  background: #fff; border-radius: 10px; padding: 16px;
+  box-shadow: var(--shadow); margin-bottom: 12px;
+}
+.stats-section h3 { font-size: 14px; margin-bottom: 12px; color: #555; }
+.stats-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.stats-half { flex: 1; }
+
+/* ---- 打卡日历 ---- */
+.calendar-wrap { overflow-x: auto; overflow-y: visible; padding-bottom: 6px; }
+.calendar-months { display: flex; padding-left: 0; margin-bottom: 2px; }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 38 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.cal-months-inner { display: flex; }
+.cal-month-label {
+  width: 13px; font-size: 9px; color: #999; text-align: left;
+  flex-shrink: 0; margin-right: 2px;
+}
+.calendar-months { display: flex; margin-bottom: 2px; padding-left: 0; }
+.calendar-months .cal-month-label { width: 13px; font-size: 9px; color:#999; flex-shrink:0; margin-right:2px; }
+.calendar-grid { display: flex; gap: 0; }
+.calendar-grid .cal-cell { margin-right: 2px; margin-bottom: 2px; }
+.cal-cell {
+  width: 13px; height: 13px; border-radius: 2px;
+  display: inline-block; flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .cal-cell { width: 11px; height: 11px; }
+  .calendar-months .cal-month-label { font-size: 7px; width: 11px; }
+}
+.cal-empty { background: transparent; }
+.cal-l0 { background: #ebedf0; }
+.cal-l1 { background: #c6e48b; }
+.cal-l2 { background: #7bc96f; }
+.cal-l3 { background: #239a3b; }
+.cal-l4 { background: #196127; }
+.cal-today { box-shadow: 0 0 0 2px #3370ff; }
+.calendar-legend {
+  display: flex; align-items: center; gap: 3px; margin-top: 6px;
+  font-size: 9px; color: #999; justify-content: flex-end;
+}
+.cal-legend-cell { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ---- 趋势图 ---- */
+.trend-chart {
+  display: flex; align-items: flex-end; gap: 12px;
+  justify-content: center; height: 170px; padding: 8px 0;
+}
+.trend-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.trend-val { font-size: 11px; font-weight: 600; color: #666; }
+.trend-bar {
+  width: 28px; background: var(--primary); border-radius: 4px 4px 0 0;
+  min-height: 4px; transition: height 0.3s;
+}
+.trend-label { font-size: 9px; color: #999; white-space: nowrap; }
+
+/* ---- 薄弱知识点 ---- */
+.weak-list { display: flex; flex-direction: column; gap: 8px; }
+.weak-empty { color: #999; font-size: 13px; padding: 20px; text-align: center; }
+.weak-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 6px; cursor: pointer;
+  font-size: 12px; transition: background 0.15s;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 39 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+}
+.weak-item:hover { background: #f5f6f8; }
+.weak-name { width: 80px; flex-shrink: 0; font-weight: 500; }
+.weak-bar-bg {
+  flex: 1; height: 6px; background: #f0f0f0;
+  border-radius: 3px; overflow: hidden;
+}
+.weak-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.weak-rate { width: 32px; text-align: right; font-weight: 600; font-size: 12px; }
+.weak-count { font-size: 10px; color: #999; width: 36px; text-align: right; }
+
+/* ---- 各科正确率 ---- */
+.subject-bars { display: flex; flex-direction: column; gap: 12px; }
+.subject-bar-item {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; padding: 6px 8px; border-radius: 6px;
+  transition: background 0.15s;
+}
+.subject-bar-item:hover { background: #f5f6f8; }
+.sb-top { display: none; }
+.sb-name { width: 60px; flex-shrink: 0; font-size: 12px; font-weight: 500; }
+.sb-num { font-size: 10px; color: #999; width: 44px; text-align: right; flex-shrink: 0; }
+.sb-bar-bg {
+  flex: 1; height: 10px; background: #f0f0f0;
+  border-radius: 5px; overflow: hidden;
+}
+.sb-bar-fill { height: 100%; border-radius: 5px; transition: width 0.3s; }
+.sb-rate { width: 36px; text-align: right; font-size: 12px; font-weight: 600; color: #555; flex-shrink: 0; }
+
+/* ---- 考试历史 ---- */
+.exam-history { display: flex; flex-direction: column; gap: 6px; }
+.exam-hist-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: 6px; font-size: 12px; background: #fafafa;
+}
+.exam-hist-date { color: #999; width: 80px; }
+.exam-hist-subj { flex: 1; }
+.exam-hist-score { font-weight: 700; min-width: 36px; }
+.exam-hist-detail { color: #666; min-width: 50px; }
+.exam-hist-time { color: #999; }
+
+/* ---- 操作按钮 ---- */
+.stats-actions {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+}
+
+/* ---- 笔记 ---- */
+#note-area {
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+}
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 40 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.note-header { font-size: 12px; color: #999; margin-bottom: 6px; font-weight: 600; }
+.note-textarea {
+  width: 100%; min-height: 60px; padding: 10px; border: 1.5px solid #e0e0e0;
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+  resize: vertical; outline: none; line-height: 1.6;
+  transition: border-color 0.2s;
+}
+.note-textarea:focus { border-color: #a0c4ff; }
+
+/* ============================================================
+   每日一题样式
+   ============================================================ */
+.daily-card-welcome {
+  max-width: 480px; margin: 0 auto 20px; background: #fff;
+  border-radius: 10px; padding: 16px; box-shadow: var(--shadow);
+  text-align: left; border-left: 4px solid #3370ff;
+}
+.daily-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.daily-badge {
+  background: #e8f0ff; color: #3370ff; font-size: 11px;
+  font-weight: 600; padding: 2px 10px; border-radius: 12px;
+}
+.daily-date { font-size: 11px; color: #999; }
+.daily-done {
+  margin-left: auto; font-size: 12px; color: var(--correct);
+  font-weight: 600;
+}
+.daily-tags { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.daily-question {
+  font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 10px;
+}
+.daily-btn { font-size: 13px; padding: 6px 16px; }
+.daily-btn-done {
+  background: #f0f0f0; color: #999; border: 1px solid #ddd;
+  font-size: 13px; padding: 6px 16px; border-radius: 6px;
+}
+.daily-empty { color: #ccc; font-size: 13px; text-align: center; padding: 12px; }
+
+/* ============================================================
+   学习计划样式
+   ============================================================ */
+#plan-panel {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 300; flex-direction: column;
+}
+#plan-header-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; height: 48px; background: #1a1a2e; color: #fff;
+  flex-shrink: 0;
+}
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 41 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+#plan-body {
+  flex: 1; overflow-y: auto; padding: 16px; max-width: 800px;
+  margin: 0 auto; width: 100%;
+}
+
+/* ---- Plan Grid ---- */
+.plan-header { margin-bottom: 14px; }
+.plan-header .plan-title { font-size: 18px; font-weight: 700; display: block; margin-bottom: 4px; }
+.plan-desc { font-size: 12px; color: #999; }
+.plan-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  margin-bottom: 8px;
+}
+.plan-card {
+  background: #fff; border-radius: 12px; padding: 20px;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 2px solid transparent;
+}
+.plan-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
+.plan-card-icon { font-size: 36px; margin-bottom: 8px; }
+.plan-card-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.plan-card-desc { font-size: 12px; color: #888; margin-bottom: 8px; line-height: 1.5; }
+.plan-card-meta { font-size: 11px; color: #bbb; margin-bottom: 12px; }
+.plan-card-btn { width: 100%; justify-content: center; }
+
+/* ---- Plan Progress ---- */
+.plan-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.plan-day { font-size: 13px; color: var(--primary); font-weight: 600; }
+.plan-overall-bar {
+  height: 8px; background: #f0f0f0; border-radius: 4px;
+  margin: 8px 0; overflow: hidden;
+}
+.plan-overall-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+.plan-overall-stats { display: flex; gap: 16px; font-size: 12px; color: #666; margin-bottom: 12px; }
+
+.plan-stages { display: flex; flex-direction: column; gap: 6px; }
+.plan-stage {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: #fff; border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer;
+  transition: background 0.15s; border-left: 3px solid transparent;
+}
+.plan-stage:hover { background: #f5f8ff; }
+.plan-stage.stage-done { border-left-color: var(--correct); background: #f6fdf9; }
+.stage-day {
+  min-width: 40px; font-size: 11px; font-weight: 600;
+  color: var(--primary); background: var(--primary-light);
+  padding: 2px 6px; border-radius: 4px; text-align: center;
+}
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 42 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.stage-info { flex: 1; min-width: 0; }
+.stage-label { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.stage-goal { font-size: 11px; color: #999; }
+.stage-bar {
+  width: 60px; height: 4px; background: #f0f0f0;
+  border-radius: 2px; overflow: hidden; flex-shrink: 0;
+}
+.stage-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; transition: width 0.3s; }
+
+/* ---- Skill Tree ---- */
+.skill-tree { background: #fff; border-radius: 10px; padding: 16px; box-shadow: var(--shadow); }
+.st-root { margin-bottom: 14px; }
+.st-subject {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; margin-bottom: 6px;
+  background: #f9fafb; border-radius: 6px;
+  font-weight: 600; font-size: 14px;
+}
+.st-subj-icon { font-size: 18px; }
+.st-topics { display: flex; flex-direction: column; gap: 3px; padding-left: 16px; }
+.st-topic {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 4px; cursor: pointer;
+  font-size: 12px; transition: background 0.15s;
+}
+.st-topic:hover { background: #f0f4ff; }
+.st-tp-name { width: 80px; flex-shrink: 0; color: #555; }
+.st-tp-bar {
+  flex: 1; height: 5px; background: #f0f0f0;
+  border-radius: 3px; overflow: hidden;
+}
+.st-tp-fill { height: 100%; border-radius: 3px; transition: width 0.3s; min-width: 0; }
+.st-tp-num { font-size: 10px; color: #bbb; width: 32px; text-align: right; }
+.st-tp-rate { font-size: 10px; font-weight: 600; width: 28px; text-align: right; }
+
+/* ============================================================
+   分享卡片样式
+   ============================================================ */
+.share-card-wrap {
+  background: #fff; border-radius: 14px; padding: 24px;
+  width: 90%; max-width: 420px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.share-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.share-card-header h3 { font-size: 17px; }
+.share-card-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px; padding: 20px; color: #fff;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 43 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  margin-bottom: 14px;
+}
+.share-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.share-logo { font-size: 18px; font-weight: 700; }
+.share-date { font-size: 11px; opacity: 0.8; }
+.share-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  text-align: center; margin-bottom: 12px;
+}
+.share-stat {}
+.share-stat-val { font-size: 28px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+.share-stat-label { font-size: 10px; opacity: 0.85; margin-top: 2px; }
+.share-exam {
+  background: rgba(255,255,255,0.15); border-radius: 8px;
+  padding: 8px 12px; margin-bottom: 10px;
+}
+.share-exam-label { font-size: 10px; opacity: 0.7; margin-bottom: 2px; }
+.share-exam-info { font-size: 12px; font-weight: 500; }
+.share-footer { display: flex; gap: 12px; font-size: 11px; opacity: 0.8; }
+.share-actions { display: flex; gap: 8px; margin-top: 4px; }
+.share-hint { font-size: 11px; color: #bbb; text-align: center; margin-top: 8px; }
+
+/* ============================================================
+   代码编辑器样式
+   ============================================================ */
+.code-editor-wrap {
+  border: 1.5px solid #ddd; border-radius: 8px; overflow: hidden;
+  background: #1e1e2e; margin-bottom: 12px;
+}
+.ce-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; background: #2d2d3d; border-bottom: 1px solid #3d3d4d;
+}
+.ce-lang-tag { color: #cdd6f4; font-size: 12px; font-weight: 600; }
+.ce-hint { color: #888; font-size: 11px; }
+.ce-main {
+  display: flex; min-height: 180px; max-height: 400px;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px; line-height: 1.6;
+}
+.ce-line-numbers {
+  padding: 10px 8px; color: #636d83; background: #252535;
+  text-align: right; user-select: none; overflow: hidden;
+  min-width: 36px; border-right: 1px solid #3d3d4d;
+}
+.ce-line-numbers span { display: block; }
+.ce-textarea {
+  flex: 1; padding: 10px 12px; background: #1e1e2e; color: #cdd6f4;
+  border: none; outline: none; resize: none; font-family: inherit;
+  font-size: inherit; line-height: inherit; tab-size: 2;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 44 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  overflow: auto; white-space: pre;
+}
+.ce-textarea::placeholder { color: #555; }
+.ce-footer {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; background: #2d2d3d; border-top: 1px solid #3d3d4d;
+}
+.ce-status { font-size: 12px; font-weight: 500; }
+.ce-pass { color: #00b96b; }
+.ce-fail { color: #f54a45; }
+.ce-running { color: #f5a623; }
+
+/* ---- 输出结果 ---- */
+.ce-output {
+  padding: 10px 12px; background: #fafafa; border-top: 1px solid #ddd;
+  font-size: 13px; line-height: 1.6;
+}
+.ce-loading { color: #999; font-size: 13px; }
+.ce-result { padding: 10px 12px; border-radius: 6px; }
+.ce-result-pass { background: #e6f9f1; border-left: 4px solid #00b96b; }
+.ce-result-fail { background: #fff0f0; border-left: 4px solid #f54a45; }
+.ce-result-error { background: #fff8e1; border-left: 4px solid #f5a623; }
+.ce-result-title { font-weight: 600; margin-bottom: 4px; font-size: 13px; }
+.ce-result-detail { font-size: 12px; color: #666; margin-bottom: 6px; }
+.ce-output-text, .ce-error-text {
+  background: #1e1e2e; color: #cdd6f4; padding: 10px; border-radius: 6px;
+  font-size: 12px; font-family: "JetBrains Mono", "Consolas", monospace;
+  overflow-x: auto; line-height: 1.5; white-space: pre-wrap;
+}
+.ce-error-text { color: #f54a45; }
+
+/* ---- 参考答案 ---- */
+.ce-reference {
+  margin-top: 10px; padding: 10px 12px;
+  background: #f0f4ff; border-radius: 6px;
+  border-left: 4px solid #3370ff;
+}
+.ce-ref-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.ce-ref-code {
+  background: #1e1e2e; color: #cdd6f4; padding: 10px; border-radius: 6px;
+  font-size: 12px; font-family: "JetBrains Mono", "Consolas", monospace;
+  overflow-x: auto; line-height: 1.5; white-space: pre-wrap;
+}
+.ce-ref-analysis { margin-top: 6px; font-size: 12px; color: #555; line-height: 1.6; }
+
+/* ============================================================
+   考研全流程指南
+   ============================================================ */
+#kaoyan-panel {
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 45 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  background: var(--bg); z-index: 100; overflow-y: auto;
+  flex-direction: column; padding: 16px; display: none;
+}
+.kg-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; max-width: 900px; margin-left: auto; margin-right: auto; width: 100%;
+}
+.kg-header h2 { font-size: 20px; }
+
+/* 顶部状态栏 */
+.kg-topbar {
+  display: flex; gap: 16px; max-width: 900px; margin: 0 auto 20px; width: 100%;
+  flex-wrap: wrap;
+}
+.kg-progress-ring {
+  background: var(--card); border-radius: 16px; padding: 16px 24px;
+  text-align: center; box-shadow: var(--shadow); min-width: 100px;
+}
+.kg-progress-num { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+.kg-progress-label { font-size: 11px; color: var(--text-secondary); }
+.kg-next-box {
+  flex: 1; background: var(--card); border-radius: 16px; padding: 16px 20px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px; min-width: 200px;
+}
+.kg-next-label { font-size: 11px; color: var(--text-secondary); }
+.kg-next-title { font-size: 18px; font-weight: 700; }
+.kg-next-countdown { font-size: 13px; color: var(--text-secondary); }
+.kg-next-countdown strong { color: var(--primary); font-size: 20px; }
+
+/* 时间线 */
+.kg-section-title {
+  font-size: 16px; font-weight: 700; max-width: 900px;
+  margin: 0 auto 12px; width: 100%;
+}
+.kg-timeline {
+  max-width: 900px; margin: 0 auto 24px; width: 100%;
+  display: flex; flex-direction: column; gap: 0;
+}
+.kg-stage {
+  padding: 14px 16px; border-left: 3px solid #e0e0e0;
+  margin-left: 12px; position: relative; background: var(--card);
+  border-radius: 0 8px 8px 0; margin-bottom: 8px; box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.kg-stage.kg-passed { opacity: 0.55; }
+.kg-stage.kg-current { border-left-width: 4px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+.kg-stage.kg-future { opacity: 0.6; background: #fafafa; }
+body.dark .kg-stage.kg-future { background: #1e1e38; }
+
+.kg-stage-head {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 46 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.kg-stage-dot {
+  width: 12px; height: 12px; border-radius: 50%; position: absolute;
+  left: -8px; top: 18px;
+}
+.kg-stage-title { font-weight: 700; font-size: 15px; }
+.kg-stage-date { font-size: 11px; color: var(--text-secondary); font-family: monospace; }
+.kg-badge-now {
+  background: var(--primary); color: #fff; font-size: 10px;
+  padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.kg-badge-done {
+  background: var(--correct); color: #fff; font-size: 10px;
+  padding: 2px 6px; border-radius: 10px; font-weight: 600;
+}
+
+.kg-progress-bar {
+  height: 4px; background: #eee; border-radius: 2px; margin-bottom: 10px;
+}
+body.dark .kg-progress-bar { background: #3a3a5c; }
+.kg-progress-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+.kg-task-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.kg-task {
+  font-size: 13px; padding: 5px 8px; border-radius: 4px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; transition: background 0.1s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.kg-task:hover { background: #f5f5f5; }
+body.dark .kg-task:hover { background: #2a2a50; }
+.kg-task-done { text-decoration: line-through; color: #999; }
+.kg-task-check { font-size: 14px; flex-shrink: 0; }
+
+.kg-tip {
+  margin-top: 8px; font-size: 12px; color: var(--text-secondary);
+  background: #fff8e0; padding: 8px 10px; border-radius: 6px; line-height: 1.5;
+}
+.kg-toggle { margin-left: auto; font-size: 14px; color: #999; flex-shrink: 0; }
+.kg-stage-body { overflow: hidden; transition: max-height 0.3s ease; }
+.kg-collapsed .kg-stage-body { display: none; }
+.kg-stage-head { cursor: pointer; }
+.kg-collapsible { cursor: pointer; user-select: none; }
+.kg-collapsible:hover { color: var(--primary); }
+.kg-closed + .kg-links-grid,
+.kg-closed + .kg-res-grid { display: none; }
+body.dark .kg-tip { background: #2a2a30; }
+
+/* 链接区 */
+.kg-links-grid {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 47 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px; max-width: 900px; margin: 0 auto 24px; width: 100%;
+}
+.kg-link {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+  background: var(--card); border-radius: 8px; text-decoration: none;
+  color: var(--text); box-shadow: var(--shadow); font-size: 13px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.kg-link:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.kg-link-icon { font-size: 18px; flex-shrink: 0; }
+.kg-link-name { flex: 1; font-weight: 500; }
+.kg-link-tag {
+  font-size: 10px; background: #f0f0f0; padding: 2px 6px;
+  border-radius: 4px; color: #888;
+}
+body.dark .kg-link-tag { background: #3a3a5c; }
+
+/* 资源区 */
+.kg-res-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px; max-width: 900px; margin: 0 auto 24px; width: 100%;
+}
+.kg-res-card {
+  background: var(--card); border-radius: 10px; padding: 14px; box-shadow: var(--shadow);
+}
+.kg-res-subj { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+.kg-res-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.kg-res-tag {
+  font-size: 11px; background: #f0f4ff; color: var(--primary);
+  padding: 3px 8px; border-radius: 12px; white-space: nowrap;
+}
+body.dark .kg-res-tag { background: #2a2a50; }
+
+/* ============================================================
+   考研规划器
+   ============================================================ */
+#planner-panel {
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 100; overflow-y: auto;
+  flex-direction: column; padding: 16px; display: none;
+}
+.pl-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; max-width: 960px; margin-left: auto; margin-right: auto; width: 100%;
+}
+.pl-header h2 { font-size: 20px; }
+
+.pl-config-card {
+  max-width: 500px; margin: 0 auto; background: var(--card);
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 48 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  border-radius: 14px; padding: 24px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.pl-config-row { display: flex; flex-direction: column; gap: 6px; }
+.pl-config-row label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.pl-select {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: inherit; background: var(--card); color: var(--text);
+  outline: none;
+}
+.pl-select:focus { border-color: var(--primary); }
+.pl-subj-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl-subj-chip {
+  padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
+  cursor: pointer; font-size: 13px; transition: all 0.15s; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.pl-subj-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* 概览 */
+#pl-plan-area { max-width: 960px; margin: 20px auto 0; width: 100%; }
+.pl-overview {
+  display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+  background: var(--card); border-radius: 14px; padding: 20px 24px;
+  box-shadow: var(--shadow); margin-bottom: 20px;
+}
+.pl-overview-ring {
+  text-align: center; min-width: 90px;
+}
+.pl-overview-num { font-size: 36px; font-weight: 800; color: var(--primary); display: block; }
+.pl-overview-label { font-size: 11px; color: var(--text-secondary); }
+.pl-overview-info { font-size: 14px; line-height: 1.8; }
+.pl-overview-info strong { color: var(--primary); font-size: 22px; }
+
+.pl-section-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 12px; margin-top: 8px;
+}
+
+/* 四阶段卡片 */
+.pl-phases-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;
+}
+.pl-phase-card {
+  background: var(--card); border-radius: 10px; padding: 14px;
+  box-shadow: var(--shadow);
+}
+.pl-phase-card.pl-phase-passed { opacity: 0.5; }
+.pl-phase-card.pl-phase-current { box-shadow: 0 2px 16px rgba(0,0,0,0.12); transform: scale(1.02); }
+.pl-phase-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.pl-phase-num {
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 49 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  width: 24px; height: 24px; border-radius: 50%; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+.pl-phase-title { font-weight: 700; font-size: 14px; }
+.pl-phase-label { font-size: 10px; color: var(--text-secondary); background: #f0f0f0; padding: 2px 6px; border-radius: 8px; }
+.pl-phase-date { font-size: 11px; color: var(--text-secondary); font-family: monospace; margin-bottom: 6px; }
+.pl-phase-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 6px; }
+.pl-phase-hours { font-size: 11px; font-weight: 600; color: var(--primary); }
+body.dark .pl-phase-label { background: #3a3a5c; }
+
+/* 科目表格 */
+.pl-subj-block {
+  background: var(--card); border-radius: 12px; box-shadow: var(--shadow);
+  margin-bottom: 16px; overflow: hidden;
+}
+.pl-subj-title {
+  font-weight: 700; font-size: 15px; padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.pl-table-wrap { overflow-x: auto; }
+.pl-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.pl-table th {
+  text-align: left; padding: 10px 16px; font-size: 11px;
+  color: var(--text-secondary); font-weight: 600;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.pl-table td {
+  padding: 8px 16px; border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.pl-table tr:last-child td { border-bottom: none; }
+.pl-topic-name { font-weight: 500; }
+.pl-acc-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  font-weight: 600; font-family: monospace;
+}
+.pl-acc-ok { background: #e6f9f1; color: #00b96b; }
+.pl-acc-low { background: #fff0f0; color: #f54a45; }
+body.dark .pl-acc-ok { background: #1a3a2a; }
+body.dark .pl-acc-low { background: #3a1a1a; }
+
+.pl-dot {
+  display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid #ddd; margin-right: 4px; vertical-align: middle;
+}
+.pl-dot.pl-dot-filled { border-color: transparent; }
+body.dark .pl-dot { border-color: #555; }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 50 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+.pl-goal-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+
+/* 程度条 */
+.pl-level-bar { display: flex; gap: 3px; }
+.pl-lv {
+  width: 22px; height: 8px; border-radius: 4px; background: #e0e0e0;
+  cursor: pointer; transition: all 0.15s;
+}
+.pl-lv:hover { transform: scaleY(1.6); }
+.pl-lv.pl-lv-on { background: var(--primary); }
+body.dark .pl-lv { background: #3a3a5c; }
+
+/* 图例 */
+.pl-legend {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-secondary); margin-top: 16px;
+}
+.pl-legend-item { display: flex; align-items: center; gap: 4px; }
+.pl-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ============================================================
+   题库管理
+   ============================================================ */
+#bank-panel {
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 100; overflow-y: auto;
+  flex-direction: column; padding: 16px; display: none;
+}
+.bm-header {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  max-width: 960px; margin: 0 auto 12px; width: 100%;
+}
+.bm-header h2 { font-size: 20px; white-space: nowrap; }
+.bm-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.bm-tab {
+  padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--card); cursor: pointer; font-size: 12px;
+  font-family: inherit; color: var(--text); transition: all 0.15s;
+}
+.bm-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.bm-tab:hover:not(.active) { border-color: var(--primary); }
+
+.bm-body { max-width: 960px; margin: 0 auto; width: 100%; }
+.bm-section { margin-bottom: 12px; }
+.bm-section h4 { font-size: 14px; margin-bottom: 6px; }
+.bm-hint { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.bm-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 51 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+body.dark .bm-hint code { background: #3a3a5c; }
+
+.bm-textarea {
+  width: 100%; min-height: 280px; padding: 14px; font-size: 13px;
+  font-family: "JetBrains Mono", "Consolas", monospace;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  background: var(--card); color: var(--text); resize: vertical;
+  outline: none; line-height: 1.6;
+}
+.bm-textarea:focus { border-color: var(--primary); }
+
+.bm-actions { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+.bm-topic-refs { display: flex; flex-wrap: wrap; gap: 4px; }
+.bm-topic-ref {
+  font-size: 11px; padding: 3px 8px; border-radius: 12px;
+  background: #f0f4ff; color: var(--primary); cursor: pointer;
+  font-family: monospace; user-select: none; transition: all 0.1s;
+}
+.bm-topic-ref:hover { background: var(--primary); color: #fff; }
+body.dark .bm-topic-ref { background: #2a2a50; }
+
+/* 预览 */
+.bm-q-preview {
+  background: var(--card); border-radius: 8px; padding: 12px 16px;
+  margin-bottom: 8px; box-shadow: var(--shadow); border-left: 3px solid var(--primary);
+}
+.bm-q-phead { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.bm-q-pbody { font-size: 13px; margin-bottom: 4px; }
+.bm-q-popt { font-size: 12px; padding: 2px 0 2px 8px; color: var(--text-secondary); }
+.bm-q-pcode {
+  background: #1e1e2e; color: #cdd6f4; padding: 8px; border-radius: 6px;
+  font-size: 11px; font-family: "JetBrains Mono", monospace; margin-top: 4px;
+}
+.bm-q-panalysis { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+.bm-q-card {
+  background: var(--card); border-radius: 8px; padding: 10px 14px;
+  margin-bottom: 6px; box-shadow: var(--shadow);
+}
+.bm-q-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bm-q-id { font-weight: 700; color: var(--primary); min-width: 28px; }
+.bm-q-title { font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bm-q-tag {
+  font-size: 10px; background: #f0f0f0; padding: 2px 6px;
+  border-radius: 4px; color: #888; white-space: nowrap;
+}
+body.dark .bm-q-tag { background: #3a3a5c; }
+
+/* 手动添加表单 */
+.bm-form { display: flex; flex-direction: column; gap: 10px; max-width: 600px; }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 52 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.bm-field { display: flex; flex-direction: column; gap: 4px; }
+.bm-field label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.bm-input {
+  padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; background: var(--card); color: var(--text);
+  outline: none; resize: vertical;
+}
+.bm-input:focus { border-color: var(--primary); }
+.bm-select {
+  padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; background: var(--card); color: var(--text);
+  outline: none;
+}
+.bm-row { display: flex; gap: 10px; }
+.bm-row .bm-field { flex: 1; }
+
+.bm-msg {
+  text-align: center; padding: 12px; border-radius: 8px;
+  background: #e6f9f1; color: #00b96b; font-weight: 600; margin-top: 12px;
+}
+.bm-error {
+  text-align: center; padding: 12px; border-radius: 8px;
+  background: #fff0f0; color: #f54a45;
+}
+.bm-quick-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; padding: 8px 12px; background: var(--card);
+  border-radius: 8px; font-size: 13px;
+}
+.bm-ocr-card {
+  background: var(--card); border-radius: 8px; padding: 12px 16px;
+  margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.bm-ocr-card h5 { font-size: 13px; margin-bottom: 4px; }
+.bm-ocr-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.bm-ocr-card a { color: var(--primary); }
+body.dark .bm-msg { background: #1a3a2a; }
+body.dark .bm-error { background: #3a1a1a; }
+
+/* 移动端 */
+@media (max-width: 768px) {
+  #bank-panel { top: 44px; padding: 10px; }
+  .bm-row { flex-direction: column; }
+  .bm-textarea { min-height: 200px; }
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+  #planner-panel { top: 44px; padding: 10px; }
+  .pl-phases-grid { grid-template-columns: repeat(2, 1fr); }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 53 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  .pl-table { font-size: 11px; }
+  .pl-table td, .pl-table th { padding: 6px 8px; }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  #kaoyan-panel { top: 44px; padding: 10px; }
+  .kg-topbar { flex-direction: column; gap: 10px; }
+  .kg-progress-ring { min-width: auto; }
+  .kg-links-grid { grid-template-columns: repeat(2, 1fr); }
+  .kg-res-grid { grid-template-columns: 1fr; }
+  .kg-stage { margin-left: 8px; padding: 10px 12px; }
+  .kg-stage-title { font-size: 14px; }
+}
+
+// ====== 文件: index.html ======
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>考研刷题 - 408 · 数学 · 政治 · 英语</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="考研刷题">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+  <header id="header">
+    <button class="btn btn-icon mobile-only" id="btn-menu" onclick="toggleSidebar()" aria-label="菜单">☰</button>
+    <div class="logo">
+      <span class="logo-icon">📚</span>
+      <span class="logo-text">考研刷题</span>
+    </div>
+
+    <!-- 搜索栏 -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="搜题目、知识点、关键字..." autocomplete="off">
+      <span id="search-count" class="search-count" style="display:none;"></span>
+      <button id="search-clear" class="search-clear" style="display:none;" onclick="Search.clear()">✕</button>
+    </div>
+
+    <div class="header-stats desktop-only">
+      <span class="stat-item">📝 <strong id="stat-total">0</strong></span>
+      <span class="stat-item correct">✅ <strong id="stat-correct">0</strong></span>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 54 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      <span class="stat-item wrong">❌ <strong id="stat-wrong">0</strong></span>
+      <span class="stat-item">📊 <strong id="stat-rate">--</strong></span>
+    </div>
+    <div class="header-actions desktop-only">
+      <button class="btn btn-outline" onclick="startExam()">⏱ 考试</button>
+      <button class="btn btn-outline" onclick="toggleWrongBook()">📋 错题 <span id="wrong-count" class="badge">0</span></button>
+      <button class="btn btn-outline" id="btn-login-ui" onclick="Auth.showMyPanel()">登录</button>
+      <div class="header-more-wrap">
+        <button class="btn btn-outline" onclick="toggleHeaderMore()">⋯ 更多</button>
+        <div class="header-more-drop" id="header-more-drop">
+          <button class="drop-item" onclick="showFavorites();closeHeaderMore()">⭐ 收藏 <span id="fav-count2" class="badge">0</span></button>
+          <button class="drop-item" onclick="Stats.show();closeHeaderMore()">📊 统计</button>
+          <button class="drop-item" onclick="PlanUI.show();closeHeaderMore()">📋 计划</button>
+          <button class="drop-item" onclick="ShareCard.show();closeHeaderMore()">📤 分享</button>
+          <button class="drop-item" onclick="Planner.show();closeHeaderMore()">📋 学习规划器</button>
+          <button class="drop-item" onclick="BankManager.show();closeHeaderMore()">📦 题库管理</button>
+          <button class="drop-item" onclick="toggleScratchpad();closeHeaderMore()">💻 代码草稿板</button>
+          <button class="drop-item" onclick="KaoyanGuide.show();closeHeaderMore()">📅 考研指南</button>
+          <button class="drop-item" onclick="toggleDarkMode();closeHeaderMore()">🌓 深色模式</button>
+          <button class="drop-item" onclick="resetProgress();closeHeaderMore()">🔄 重置</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-icon mobile-only" id="btn-sheet" onclick="toggleSheet()" aria-label="答题卡">📋</button>
+    <button class="btn btn-icon mobile-only" id="btn-me" onclick="Auth.showMyPanel()" aria-label="我的" style="font-size:16px;">👤</button>
+  </header>
+
+  <!-- 移动端筛选遮罩 -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div id="main">
+    <aside id="sidebar">
+      <div class="sidebar-header mobile-only">
+        <span>🔍 筛选</span>
+        <button class="btn btn-icon" onclick="toggleSidebar()">✕</button>
+      </div>
+      <div class="filter-section">
+        <h3>📂 科目组</h3>
+        <div id="group-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>📚 学科</h3>
+        <div id="subject-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>🏷 知识点</h3>
+        <div id="topic-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>📅 年份</h3>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 55 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        <div id="year-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>📝 题型</h3>
+        <div id="type-filters"></div>
+      </div>
+      <div class="filter-section">
+        <h3>⚡ 模式</h3>
+        <button class="btn btn-full" onclick="startRandom()">🎲 随机刷题</button>
+        <button class="btn btn-full" style="margin-top:6px;" onclick="reviewWrong()">🔁 浏览错题</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#f54a45;" onclick="startWrongRedo()">🔄 错题重做</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#e65100;" onclick="startExam()">⏱ 模拟考试</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#f5a623;color:#fff;" onclick="showFavorites()">⭐ 我的收藏</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#4CAF50;" onclick="KaoyanGuide.show()">📅 考研指南</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#9C27B0;" onclick="Planner.show()">📋 学习规划器</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#607D8B;" onclick="BankManager.show()">📦 题库管理</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#1e1e2e;color:#cdd6f4;" onclick="showCodeQuestions()">💻 编程题 (18)</button>
+        <button class="btn btn-full" style="margin-top:6px;background:#0d1117;color:#58a6ff;border:1px solid #30363d;" onclick="toggleScratchpad()">💻 代码草稿板</button>
+      </div>
+      <div class="filter-section stats-box">
+        <h3>📊 当前筛选</h3>
+        <div><span class="label">总题数：</span><strong id="filter-count">0</strong></div>
+        <div><span class="label">已完成：</span><strong id="filter-done">0</strong></div>
+        <div><span class="label">正确率：</span><strong id="filter-rate">--</strong></div>
+      </div>
+    </aside>
+
+    <main id="content">
+      <div id="welcome">
+        <div class="welcome-icon">🎯</div>
+        <h2>考研公共课刷题</h2>
+        <p>408计算机 · 数学一/二/三 · 政治 · 英语一/二</p>
+        <p class="welcome-sub">覆盖历年真题，支持单选/多选/填空 · 搜索搜题 · 模拟考试</p>
+
+        <!-- 每日一题卡片 -->
+        <div id="daily-card" class="daily-card-welcome"></div>
+
+        <div class="quick-actions">
+          <button class="btn btn-primary" onclick="startRandom()">🎲 随机刷题</button>
+          <button class="btn btn-secondary" onclick="selectAllSubjects()">📝 全部浏览</button>
+          <button class="btn btn-secondary" onclick="startExam()">⏱ 模拟考试</button>
+        </div>
+      </div>
+
+      <div id="question-area" style="display:none;">
+        <div id="question-nav">
+          <span id="q-index"></span>
+          <span id="q-tag"></span>
+        </div>
+        <div id="question-body">
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 56 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+          <div id="q-passage" style="display:none;"></div>
+          <div id="q-text"></div>
+          <pre id="q-code" style="display:none;"></pre>
+          <div id="q-options"></div>
+          <div id="q-fill" style="display:none;">
+            <input type="text" id="fill-answer" class="fill-input" placeholder="输入你的答案..." onkeydown="if(event.key==='Enter')submitAnswer()">
+          </div>
+        </div>
+        <div id="question-actions">
+          <button class="btn btn-primary" id="btn-submit" onclick="submitAnswer()">✓ 提交</button>
+          <button class="btn btn-mark-btn" id="btn-mark" onclick="toggleMark()">🏷 标记</button>
+          <button class="btn btn-secondary" id="btn-prev" style="display:none;" onclick="prevQuestion()">◀ 上一题</button>
+          <button class="btn btn-secondary" id="btn-next" style="display:none;" onclick="nextQuestion()">→ 下一题</button>
+        </div>
+        <div id="result-area" style="display:none;"></div>
+      </div>
+    </main>
+
+    <aside id="answer-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-top">
+        <h3>📋 答题卡</h3>
+        <button class="sheet-close-btn" onclick="toggleSheet()" aria-label="关闭">✕</button>
+      </div>
+      <div id="sheet-grid"></div>
+      <div class="sheet-legend">
+        <span><span class="dot undone"></span>未答</span>
+        <span><span class="dot correct-dot"></span>对</span>
+        <span><span class="dot wrong-dot"></span>错</span>
+        <span><span class="dot marked"></span>标记</span>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 移动端答题卡遮罩 -->
+  <div id="sheet-overlay" onclick="toggleSheet()"></div>
+
+  <!-- 代码草稿板（底部滑出） -->
+  <div id="scratchpad-overlay" onclick="toggleScratchpad()"></div>
+  <div id="scratchpad">
+    <div class="scratch-handle"></div>
+    <div class="scratch-top">
+      <span>💻 代码草稿板</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <select id="scratch-lang" class="scratch-lang-select" onchange="Scratchpad._onLangChange()">
+          <option value="js">JavaScript</option>
+          <option value="c">C 语言</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="Scratchpad.run()">▶ 运行</button>
+        <button class="sheet-close-btn" onclick="toggleScratchpad()" aria-label="关闭">✕</button>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 57 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      </div>
+    </div>
+    <textarea id="scratch-code" class="scratch-editor" placeholder="在这里写代码...&#10;&#10;// JavaScript 示例:&#10;console.log('Hello World');" spellcheck="false"></textarea>
+    <div id="scratch-output" class="scratch-output"></div>
+  </div>
+
+  <!-- 移动端搜索面板 -->
+  <div id="mobile-search-panel">
+    <div class="ms-panel-top">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="mobile-search-input" class="search-input" placeholder="搜题目、知识点、关键字..." autocomplete="off">
+      <button class="btn btn-icon" onclick="toggleMobileSearch()" style="color:var(--text);font-size:18px;">✕</button>
+    </div>
+    <div id="mobile-search-result" class="ms-panel-result"></div>
+  </div>
+
+  <!-- 移动端底部栏 -->
+  <nav id="mobile-nav" class="mobile-only">
+    <button class="nav-btn nav-btn-search" onclick="toggleMobileSearch()">🔍 搜索</button>
+    <button class="nav-btn" onclick="showFavorites()">⭐ 收藏</button>
+    <button class="nav-btn" onclick="toggleSheet()" id="nav-sheet">📋 答题卡</button>
+    <button class="nav-btn" onclick="reviewWrong()">❌ 错题</button>
+    <button class="nav-btn" onclick="toggleScratchpad()">💻 草稿</button>
+    <button class="nav-btn" onclick="Auth.showMyPanel()">👤 我的</button>
+  </nav>
+</div>
+
+<!-- 模拟考试面板（动态渲染） -->
+<div id="exam-panel" style="display:none;"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/subjects.js"></script>
+<script src="js/data-408.js"></script>
+<script src="js/data-408-extra.js"></script>
+<script src="js/data-math-2007.js"></script>
+<script src="js/data-math-2008.js"></script>
+<script src="js/data-math-2009.js"></script>
+<script src="js/data-math-2010.js"></script>
+<script src="js/data-math-2011.js"></script>
+<script src="js/data-math-2012.js"></script>
+<script src="js/data-math-2015.js"></script>
+<script src="js/data-math-2016.js"></script>
+<script src="js/data-math-2017.js"></script>
+<script src="js/data-politics-1995.js"></script>
+<script src="js/data-politics-1996.js"></script>
+<script src="js/data-politics-1997.js"></script>
+<script src="js/data-politics-2000.js"></script>
+<script src="js/data-politics-2001.js"></script>
+<script src="js/data-politics-2002.js"></script>
+<script src="js/data-politics-2003.js"></script>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 58 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<script src="js/data-politics-2004.js"></script>
+<script src="js/data-politics-2005.js"></script>
+<script src="js/data-politics-2006.js"></script>
+<script src="js/data-politics-2007.js"></script>
+<script src="js/data-politics-2008.js"></script>
+<script src="js/data-politics-2009.js"></script>
+<script src="js/data-politics-2010.js"></script>
+<script src="js/data-politics-2011.js"></script>
+<script src="js/data-politics-2012.js"></script>
+<script src="js/data-politics-2013.js"></script>
+<script src="js/data-politics-2014.js"></script>
+<script src="js/data-politics-2015.js"></script>
+<script src="js/data-politics-2016.js"></script>
+<script src="js/data-politics-2017.js"></script>
+<script src="js/data-politics-2018.js"></script>
+<script src="js/data-politics-2019.js"></script>
+<script src="js/data-politics-2020.js"></script>
+<script src="js/data-politics-2021.js"></script>
+<script src="js/data-politics-2022.js"></script>
+<script src="js/data-politics-2023.js"></script>
+<script src="js/data-politics-2026.js"></script>
+<script src="js/data-english1-1993.js"></script>
+<script src="js/data-english1-1994.js"></script>
+<script src="js/data-english1-1995.js"></script>
+<script src="js/data-english1-2003.js"></script>
+<script src="js/data-english1-2004.js"></script>
+<script src="js/data-english1-2005.js"></script>
+<script src="js/data-english1-2006.js"></script>
+<script src="js/data-english1-2007.js"></script>
+<script src="js/data-english1-2008.js"></script>
+<script src="js/data-english1-2009.js"></script>
+<script src="js/data-english1-2017.js"></script>
+<script src="js/data-english1-2018.js"></script>
+<script src="js/data-english1-2019.js"></script>
+<script src="js/data-english1-2020.js"></script>
+<script src="js/data-english1-2024.js"></script>
+<script src="js/data-english2-1986.js"></script>
+<script src="js/data-english2-1996.js"></script>
+<script src="js/data-english2-1998.js"></script>
+<script src="js/data-english2-2000.js"></script>
+<script src="js/data-english2-2001.js"></script>
+<script src="js/data-english2-2002.js"></script>
+<script src="js/data-english2-2003.js"></script>
+<script src="js/data-english2-2004.js"></script>
+<script src="js/data-english2-2005.js"></script>
+<script src="js/data-english2-2006.js"></script>
+<script src="js/data-english2-2007.js"></script>
+<script src="js/data-english2-2008.js"></script>
+<script src="js/data-english2-2009.js"></script>
+<script src="js/data-english2-2010.js"></script>
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 59 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<script src="js/data-english2-2011.js"></script>
+<script src="js/data-english2-2012.js"></script>
+<script src="js/data-english2-2013.js"></script>
+<script src="js/data-english2-2014.js"></script>
+<script src="js/data-english2-2015.js"></script>
+<script src="js/data-english2-2016.js"></script>
+<script src="js/data-english2-2017.js"></script>
+<script src="js/data-english2-2018.js"></script>
+<script src="js/data-english2-2022.js"></script>
+<script src="js/data-english2-2024.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/search.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/exam-mode.js"></script>
+<script src="js/stats-dashboard.js"></script>
+<script src="js/daily-challenge.js"></script>
+<script src="js/study-plan.js"></script>
+<script src="js/kaoyan-guide.js"></script>
+<script src="js/kaoyan-planner.js"></script>
+<script src="js/bank-manager.js"></script>
+<script src="js/scratchpad.js"></script>
+<script src="js/share-card.js"></script>
+<script src="js/code-editor.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</body>
+</html>
+
+// ====== 文件: sw.js ======
+// 考研刷题 - Service Worker
+// 缓存核心文件，支持离线访问
+
+const CACHE = 'ky-brush-v2';
+const ASSETS = [
+  '/408-brush/',
+  '/408-brush/index.html',
+  '/408-brush/css/style.css',
+  '/408-brush/js/app.js',
+  '/408-brush/js/storage.js',
+  '/408-brush/js/search.js',
+  '/408-brush/js/subjects.js',
+  '/408-brush/js/data.js',
+  '/408-brush/js/data-408.js',
+  '/408-brush/js/data-math.js',
+  '/408-brush/js/data-politics.js',
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  软件名称：考研公共课刷题平台    版本号：V1.0    第 60 页
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  '/408-brush/js/data-english.js',
+  '/408-brush/manifest.json'
+];
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+  ));
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(cached =>
+      cached || fetch(e.request).then(resp => {
+        if (resp.ok) {
+          const clone = resp.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return resp;
+      })
+    )
+  );
+});
+
+// ====== 文件: manifest.json ======
+{
+  "name": "考研刷题 - 408·数学·政治·英语",
+  "short_name": "考研刷题",
+  "description": "考研公共课刷题，覆盖408计算机、数学、政治、英语历年真题",
+  "start_url": "/408-brush/",
+  "scope": "/408-brush/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1a1a2e",
+  "background_color": "#f5f6f8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
+
+

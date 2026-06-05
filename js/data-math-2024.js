@@ -1,11 +1,22 @@
-// 2024数学
+// auto-generated v2
 const QUESTIONS_MATH_2024 = [
-  { id:'math-2024-4', year:2024, subject:'ma3', topic:'ma-3', type:'single', question:'已知lnanxn,则na2n=()', options:["A. _1","B. _1","D. 16363【答案】A"], answer:"" },
-  { id:'math-2024-10', year:2024, subject:'ma3', topic:'ma-9', type:'single', question:'设随机变量X,Y相互独立，且均服从参数为λ的指数分布，令Z=X_Y,则下列随机变量与Z同分布的是()X+Y', options:["A. X+Y","C. 2X","D. X2【答案】D"], answer:"B" },
-  { id:'math-2024-11', year:2024, subject:'ma3', topic:'ma-3', type:'fill', question:'【答案】3', options:[], answer:"" },
-  { id:'math-2024-12', year:2024, subject:'ma3', topic:'ma-8', type:'fill', question:'【答案】ln', options:[], answer:"" },
-  { id:'math-2024-13', year:2024, subject:'ma3', topic:'ma-8', type:'fill', question:'函数f(x,y)=2x3_9x2_6y4+12x+24y的极值点是【答案】(1,1)', options:[], answer:"" },
-  { id:'math-2024-14', year:2024, subject:'ma3', topic:'ma-8', type:'fill', question:'【答案】', options:[], answer:"" },
-  { id:'math-2024-15', year:2024, subject:'ma3', topic:'ma-8', type:'fill', question:'【答案】', options:[], answer:"" },
-  { id:'math-2024-16', year:2024, subject:'ma3', topic:'ma-8', type:'fill', question:'【答案】501623', options:[], answer:"" }
+  { id:'math1-2024-1', year:2024, subject:'ma1', topic:'ma-1', type:'single', question:'1.则A.f(x) 为奇函数，g(x)为偶函数 B.f(x) 为偶函数，g(x)为奇函数 C.f(x) 与 g(x) 均为奇函数D.f(x) 与 g(x) 均为周期函数', options:["A. f(x) 为奇函数，g(x)为偶函数", "B. f(x) 为偶函数，g(x)为奇函数", "C. f(x) 与 g(x) 均为奇函数", "D. f(x) 与 g(x) 均为周期函数"], answer:'C设P=P(x,y,z),Q=Q(x,y,', analysis:'' },
+  { id:'math1-2024-2', year:2024, subject:'ma1', topic:'ma-1', type:'single', question:'2.∑ 为曲面z=√ 1-x²-y²(x≥0,y≥0)A.B.C.D.', options:[], answer:'Az)', analysis:'' },
+  { id:'math1-2024-3', year:2024, subject:'ma1', topic:'ma-2', type:'single', question:'3.的和函数为In(2+x), 则A. B. C. D.', options:[], answer:'A', analysis:'' },
+  { id:'math1-2024-4', year:2024, subject:'ma1', topic:'ma-2', type:'single', question:'4.A.B.C.设函数f(x) 在区间(-1,1)内有定义，, 则当 时 ，f\'(0)=m.当f\'(0)=m 时 ，时 ，f\'(0)=m.当f\'(0)=m 时 ，D.', options:["C. 设函数f(x) 在区间(-1,1)内有定义，, 则当 时 ，f'(0)=m.当f'(0)=m 时 ，时 ，f'(0)=m.当f'(0)=m 时 ，"], answer:'B在空间直角坐标系O-xy:', analysis:'' },
+  { id:'math1-2024-5', year:2024, subject:'ma1', topic:'ma-3', type:'single', question:'5.A.m=1,n=2B.m=n=2C.m=2,n=3D.m=n=3', options:["A. m=1,n=2", "B. m=n=2", "C. m=2,n=3", "D. m=n=3"], answer:'B设向量', analysis:'' },
+  { id:'math1-2024-6', year:2024, subject:'ma1', topic:'ma-8', type:'single', question:'6.A.a=1,b≠-1B.a=1,b=-1C.a≠-2,b=2D.a=-2,b=2', options:["A. a=1,b≠-1", "B. a=1,b=-1", "C. a≠-2,b=2", "D. a=-2,b=2"], answer:'D3阶天巨阵A的秩为2,非零向量α满足Aα=0,', analysis:'' },
+  { id:'math1-2024-7', year:2024, subject:'ma1', topic:'ma-8', type:'single', question:'7.A.A³ 的迹为2B.A³ 的迹为5C. A⁵的迹为7 D.A⁵ 的迹为9', options:["A. ³ 的迹为2", "A. ³ 的迹为5", "A. ⁵的迹为7", "A. ⁵ 的迹为9"], answer:'A', analysis:'' },
+  { id:'math1-2024-8', year:2024, subject:'ma1', topic:'ma-8', type:'single', question:'设随机变量X 与Y 独 立 ，X 服从N(0,2) 的正态分布，Y 服从N(-2,2) 的正态分 布，若P{2X+Y&lt;a}=P{X&gt;Y}, 则a=A.-2-√ 10 B.-2+√ 10 C.-2-√6D.-2+√6', options:["A. -2-√ 10", "B. -2+√ 10", "C. -2-√6", "D. -2+√6"], answer:'B设随机变量X的概率密度为,在X=x', analysis:'' },
+  { id:'math1-2024-9', year:2024, subject:'ma1', topic:'ma-9', type:'single', question:'9.A. B. C. D.', options:[], answer:'D', analysis:'' },
+  { id:'math1-2024-10', year:2024, subject:'ma1', topic:'ma-9', type:'single', question:'设随机变量X,Y 相互独立，且均服从参数为λ的指数分布，令Z=|X-Y|, 则下列随机 变量与Z 同分布的是A.X+YBC.2XD.X', options:["A. X+Y"], answer:'D二、填空题：11～16小题，每小题5分，共30分，请将答案写在答题纸指定位置上。若', analysis:'' },
+  { id:'math1-2024-11', year:2024, subject:'ma1', topic:'ma-4', type:'fill', question:'11.,则 a=', options:[], answer:'6z=f', analysis:'' },
+  { id:'math1-2024-12', year:2024, subject:'ma1', topic:'ma-4', type:'fill', question:'12.', options:[], answer:'513.若函数f(x)-x+1', analysis:'' },
+  { id:'math1-2024-14', year:2024, subject:'ma1', topic:'ma-4', type:'fill', question:'14.微分方程!,满足条件y( 1)=0 的解为', options:[], answer:'设实矩阵', analysis:'' },
+  { id:'math1-2024-15', year:2024, subject:'ma1', topic:'ma-4', type:'fill', question:'15.(a¹Aβ²≤a¹Aaβ Aβ 都成立，则a 的取值范围是', options:[], answer:'a≥016.随机试验每次成功的概率为P,', analysis:'' },
+  { id:'math1-2024-17', year:2024, subject:'ma1', topic:'ma-2', type:'essay', question:'17.', options:[], answer:'√2+1n(1+√2)-218.设f(x,y)=x³+y³-(x+y)²+3,', analysis:'' },
+  { id:'math1-2024-19', year:2024, subject:'ma1', topic:'ma-2', type:'essay', question:'19.', options:[], answer:'(1)泰勒公式', analysis:'' },
+  { id:'math1-2024-20', year:2024, subject:'ma1', topic:'ma-6', type:'essay', question:'已知有向曲线L 为球面x²+y²+z²=2x 与平面2x-z-1=0的交线从z 轴正向往z 轴负向看 去为逆时针方向，计算曲线积分ʃ(6xyz-yz²)dx+2x²zdy+xyzdz', options:[], answer:'已知数列{x.a.{z}', analysis:'' },
+  { id:'math1-2024-21', year:2024, subject:'ma1', topic:'ma-8', type:'essay', question:'21.', options:[], answer:'x,=8+(-2)&quot;,ya=-8+(-2)&quot;,=n=12', analysis:'' },
+  { id:'math1-2024-22', year:2024, subject:'ma1', topic:'ma-8', type:'essay', question:'22.设 总 体 X~U(0,6),θ 未 知 ， X₁,X₂…X, 为 简 单 随 机 样 本 ，X(m)=max(X₁,X₂…X),T=cX()“(1)求c 时，使得T 为θ的无偏估计，(2)记h(c)=E(T,-θ)², 求c 使得h(c) 取最小值.', options:[], answer:'(1)', analysis:'' },
 ];

@@ -1,17 +1,17 @@
-// auto
+// auto-generated from reasonix (english)
 const QUESTIONS_ENGLISH2_2008 = [
-  { id:'en-2008-1', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第1题', options:["A. selected 挑选，选拔","B. prepared 准备，打算，愿意(做某事)","C. obliged 迫使，责成","D. pleased 高兴【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-2', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第2题', options:["A. unique 独一无二的","B. particular 特殊的，独特的","C. special 特殊的，特别的","D. rare 罕见的，珍贵的【答案】 D【考点】 固定搭配【难度系数】"], answer:"" },
-  { id:'en-2008-3', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第3题', options:["A. of","B. with","C. in","D. against【答案】 A【考点】 介词搭配【难度系数】"], answer:"" },
-  { id:'en-2008-4', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第4题', options:["A. subsequently 后来，随后","B. presently 目前，不久","C. previously 先前， 以前","D. lately 最近【答案】 C【考点】 逻辑搭配【难度系数】"], answer:"" },
-  { id:'en-2008-5', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第5题', options:["A. Only 只，仅仅，表示强调","B. So 表因果","C. Even 甚至，连，强调出乎意料","D. Hence 表因果【答案】 C【考点】 逻辑搭配【难度系数】"], answer:"" },
-  { id:'en-2008-16', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第16题', options:["A. (at the) thought (of) 一想到 [C] (at the) cost (of) 以……的代价","B. (at the) sight (of) 一看到[D] (at the) risk (of) 冒……的风险【答案】 A【考","C. protests 对……提出异议","D. objects 反对【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-8', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第8题', options:["A. (in) progress 在进行中","B. (in) fact 事实上","C. (in) need 在危难(急)中","D. (in) question 正被讨论的，谈论中的【答案】 D【考点】 固定搭配【难度系数】"], answer:"" },
-  { id:'en-2008-9', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第9题', options:["A. attaining 获得，达到","B. scoring 得分","C. reaching 达到，实现","D. calculating 计算，核算【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-10', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第10题', options:["A. normal 正常的","B. common 共同的","C. mean 平均的","D. total 总的【答案】 C【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-11', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第11题', options:["A. unconsciously 无意识地，不知不觉地","B. disproportionately 不成比例地","C. indefinitely 不确定地，无期限地","D. unaccountably 无法解释地，不能说明地【答案】 B【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-12', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第12题', options:["A. missions 使命，任务","B. fortunes 财富，运气","C. interests 兴趣","D. careers 事业，职业【答案】 D【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-6', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第6题', options:["A. assessing 评定，评价","B. supervising 监督，管理","C. administering 管理，执行","D. valuing 尊重，重视【答案】 D【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-7', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第7题', options:["A. development 发展","B. origin 起源，起因","C. consequence 结果","D. instrument 工具，手段【答案】 C【考点】 词义辨析【难度系数】"], answer:"" },
-  { id:'en-2008-20', year:2008, subject:'en2', topic:'en-1', type:'single', question:'2008年真题 第20题', options:["A. paradoxical 矛盾的, 似是而非的","B. incompatible 不相容的，不能并存的，矛盾的","C. inevitable 不可避免的","D. continuous 连续的，持续的【答案】 A【考点】 词义辨析【难度系数】"], answer:"" }
+  { id:'en-2008-1', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第1题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-2', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第2题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-3', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第3题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-4', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第4题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-5', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第5题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-6', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第6题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-7', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第7题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-8', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第8题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-9', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第9题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-10', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第10题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-11', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第11题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-12', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第12题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-16', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第16题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
+  { id:'en-2008-20', year:2008, subject:'english2', topic:'en-1', type:'single', question:'2008年英语二 第20题 [Section I: Use of English (完形填空)]', options:["A. ...", "B. ...", "C. ...", "D. ..."], answer:'A', analysis:'' },
 ];
